@@ -2,8 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import * as serviceWorker from './serviceWorker';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
-import Judge1 from './components/Judge1';
-import Judge2 from './components/Judge2';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import './index.scss';
+import Judge1 from './components/Judge1.jsx';
+import Judge2 from './components/Judge2.jsx';
 
 ReactDOM.render(
     <Router>
