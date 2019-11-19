@@ -2,10 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import * as serviceWorker from './serviceWorker';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import './index.scss';
+import './styles/index.scss';
 import Judge1 from './components/Judge1.jsx';
 import Judge2 from './components/Judge2.jsx';
+import Judge3 from './components/Judge3.jsx';
 
 ReactDOM.render(
     <Router>
@@ -13,8 +13,14 @@ ReactDOM.render(
             <Route exact path='/'>
                 <Judge1 />
             </Route>
+            <Route path='/Judge1'>
+                <Judge1 />
+            </Route>
             <Route path='/Judge2'>
                 <Judge2 />
+            </Route>
+            <Route path='/Judge3'>
+                <Judge3 />
             </Route>
         </div>
     </Router>,

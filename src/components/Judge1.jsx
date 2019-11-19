@@ -1,31 +1,22 @@
 import React from 'react';
-import { Image, Form, Button, InputGroup } from 'react-bootstrap';
+import { Image, Form, Button } from 'react-bootstrap';
+import InputGroupComponent from './InputGroupComponent';
 
 const Judge1 = () => {
   return (
     <div >
-        <Image className='logo-img' src='./images/coda.svg' alt='CODA logo' />
-        <Form className='login-form'>
-          <Form.Group className='login-form-email' controlId='formBasicEmail'>
-            {/* <Form.Label>email</Form.Label> */}
-            <i class='far fa-envelope'></i>
-            <InputGroup className="mb-3">
-              <InputGroup.Prepend>
-                <InputGroup.Text>
-                  <i class='far fa-envelope'></i>
-                </InputGroup.Text>
-              </InputGroup.Prepend>
-              <Form.Control type='email' />
-            </InputGroup>
-            
+        <Image className='img-logo img-logo--home' src='./images/coda.svg' alt='CODA logo' />
+
+        <Form className='form form--login'>
+          <Form.Group controlId='formBasicEmail'>
+            <InputGroupComponent type='email' />
           </Form.Group>
 
-          <Form.Group className='login-form-password' controlId='formBasicPassword'>
-            <Form.Label>password</Form.Label>
-            <Form.Control type='password' />
+          <Form.Group controlId='formBasicPassword'>
+            <InputGroupComponent type='password' />
           </Form.Group>
 
-          <Button variant='primary'>LOGIN</Button>
+          <Button className='button action-button--submit'>LOGIN</Button>
         </Form>
     </div>
   );

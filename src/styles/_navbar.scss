@@ -1,0 +1,11 @@
+.navbar {
+    background: $black;
+    color: $offWhite;
+    padding: 0;
+
+    &__text {
+        margin: 18px auto;
+        font-size: 20px;
+        font-weight: bold;
+    }
+}

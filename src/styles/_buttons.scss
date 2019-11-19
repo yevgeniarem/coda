@@ -1,0 +1,15 @@
+.action-button {
+    &--submit {
+        height: 60px;
+        width: 440px;
+        background: $blue;
+        font-weight: bold;
+        border-radius: 50px;
+        border: none;
+
+        &:focus {
+            outline: none;
+            box-shadow: none;
+        }
+    }
+}

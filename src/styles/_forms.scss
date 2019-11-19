@@ -1,0 +1,35 @@
+.form {
+    display: block;
+    text-align: center;
+
+    &--login {
+        margin-top: 60px;
+    }
+}
+
+.text-input {
+    background: $mediumGrey;
+    height: 60px;
+    color: $white;
+    border-radius: 50px;
+    border: 0;
+
+    &--icon-left {
+        height: 60px;
+        width: 440px;
+        margin: 0 auto;
+
+        &__icon {
+            background: $mediumGrey;
+            border: 0;
+            border-radius: 50px;
+        }
+    }
+
+    &:focus {
+        outline: none;
+        box-shadow: none;
+        background: $mediumGrey;
+        color: $white;
+    }
+}
