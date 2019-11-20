@@ -1,64 +1,55 @@
 .img-logo {
-    &--home {
-        display: block;
-        height: 70px;
-        width: 400px;
-        margin: 279px auto 0 auto;
-    }
+  &--home {
+    display: block;
+    height: 70px;
+    width: 400px;
+    margin: 279px auto 0 auto;
+  }
 }
 
 .icon {
-    color: $white;
-    height: 17px;
-    width: 41px;
+  color: $white;
+  height: 17px;
+  width: 41px;
 }
 
 .img-event {
-    &__row {
-        @extend .no-gutters;
+  &__row {
+    @extend .no-gutters;
+  }
+
+  margin-top: 160px;
+
+  &__col-left {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  &__container {
+    height: 205px;
+    width: 205px;
+    padding: 30px;
+    background: $black;
+    margin: 15px;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:hover {
+      box-shadow: 0px 0px 20px black;
+      transform: scale(1.08);
+      transition: all 0.2s ease-out;
     }
+  }
 
-    margin-top: 160px;
+  &__img {
+    height: 100%;
+    width: 100%;
 
-    &__col-left {
-        display: flex;
-        justify-content: flex-end;
+    &--big {
+      height: 50%;
+      width: 50%;
     }
-
-    &__container {
-        height: 205px;
-        width: 205px;
-        background: $black;
-        margin: 15px;
-        border-radius: 15px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        &:hover {
-           box-shadow: 0px 0px 20px black;
-           transform: scale(1.08);
-           transition: all 0.2s ease-out;
-        }
-    }
-
-    &--jump {
-        height: 36.5px;
-        width: 161px;
-    }
-
-    &--nuvo {
-        height: 42px;
-        width: 150px;
-    }
-
-    &--24seven {
-        height: 26px;
-        width: 150px;
-    }
-
-    &--tda {
-        height: 74px;
-        width: 106px;
-    }
+  }
 }
