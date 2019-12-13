@@ -9,7 +9,7 @@
 
 .icon {
   color: $white;
-  height: 17px;
+  height: 30px;
   width: 41px;
 }
 
@@ -43,13 +43,10 @@
     }
   }
 
-  &__img {
-    height: 100%;
-    width: 100%;
-
-    &--big {
-      height: 50%;
-      width: 50%;
-    }
+  &--big {
+    @extend .mx-auto;
+    @extend .d-block;
+    width: 60%;
+    margin-bottom: 50px;
   }
 }

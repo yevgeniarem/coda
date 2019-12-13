@@ -1,12 +1,12 @@
-import React from "react";
+import React from 'react';
 import classNames from 'classnames';
-import { InputGroup, Form } from "react-bootstrap";
+import { InputGroup, Form } from 'react-bootstrap';
 
 const InputGroupComponent = ({ type }) => {
-    const iconClasses = {
-        email: 'far fa-envelope',
-        password: 'fas fa-lock',
-    };
+  const iconClasses = {
+    email: 'far fa-envelope',
+    password: 'fas fa-lock'
+  };
 
   return (
     <InputGroup className="text-input text-input--icon-left mb-3">

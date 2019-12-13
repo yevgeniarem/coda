@@ -1,15 +1,69 @@
-.action-button {
-    &--submit {
-        height: 60px;
-        width: 440px;
-        background: $blue;
-        font-weight: bold;
-        border-radius: 50px;
-        border: none;
+.button {
+  &:focus {
+    outline: none;
+    box-shadow: none;
+  }
+}
 
-        &:focus {
-            outline: none;
-            box-shadow: none;
-        }
+.action-button {
+  &--submit {
+    height: 60px;
+    width: 440px;
+    background: $blue;
+    font-weight: bold;
+    border-radius: 50px;
+    border: none;
+
+    &:hover {
+      background: darken($blue, 5%);
     }
+
+    &:active {
+      background-color: darken($blue, 10%) !important;
+      outline: none;
+      box-shadow: none !important;
+    }
+  }
+
+  &--navigation {
+    height: 40px;
+    width: 128px;
+    border-radius: 50px;
+    border: none;
+    font-size: 15px;
+    color: $white;
+    margin-right: 20px;
+  }
+
+  &--grey {
+    background: $buttonGrey;
+
+    &:hover {
+      background: darken($buttonGrey, 5%);
+    }
+
+    &:active {
+      background-color: darken($buttonGrey, 10%) !important;
+      outline: none;
+      box-shadow: none !important;
+    }
+  }
+
+  &--blue {
+    background: $blue;
+
+    &:hover {
+      background: darken($blue, 5%);
+    }
+
+    &:active {
+      background-color: darken($blue, 10%) !important;
+      outline: none;
+      box-shadow: none !important;
+    }
+  }
+}
+
+.button-wrapper {
+  text-align: right;
 }

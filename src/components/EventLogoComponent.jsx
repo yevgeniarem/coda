@@ -4,7 +4,7 @@ import { Image } from 'react-bootstrap';
 const EventLogoComponent = ({ className, imgSrc, imgAlt }) => {
   return (
     <div className="img-event__container">
-      <Image className="img-event__img" src={imgSrc} alt={imgAlt} />
+      <Image className={className} src={imgSrc} alt={imgAlt} />
     </div>
   );
 };

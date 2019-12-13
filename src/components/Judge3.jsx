@@ -1,30 +1,59 @@
 import React from 'react';
-import { Image, Dropdown } from 'react-bootstrap';
+import { Image } from 'react-bootstrap';
 import NavbarComponent from './NavbarComponent';
-import EventLogoComponent from './EventLogoComponent';
+import SelectInputComponent from './SelectInputComponent';
+import NavButtonsComponent from './NavButtonsComponent';
 
 const Judge3 = () => {
+  const tourDates = [
+    {
+      id: 1,
+      event: 'jump',
+      city: 'St. Louis',
+      date: 'December 7-9, 2019'
+    },
+    {
+      id: 2,
+      event: 'jump',
+      city: 'Detroit',
+      date: 'January 1-5, 2020'
+    },
+    {
+      id: 3,
+      event: 'jump',
+      city: 'Chicago',
+      date: 'January 12-14, 2020'
+    },
+    {
+      id: 4,
+      event: 'jump',
+      city: 'Los Angeles',
+      date: 'February 9-13, 2020'
+    },
+    {
+      id: 5,
+      event: 'jump',
+      city: 'San Francisco',
+      date: 'February 20-24, 2020'
+    }
+  ];
+
   return (
     <div>
-      <NavbarComponent type="chooseYourCity" text="CHOOSE YOUR CITY:" />
+      <NavbarComponent type="chooseYourCity" text="CHOOSE YOUR CITY" />
 
-      <div className="selector-container">
-        <EventLogoComponent className="img-event" />
+      <div className="main-container">
         <Image
-          className="img-event__img--big"
+          className="img-event--big"
           src="https://assets.dance360.com/coda/7.svg"
-          alt="judge logo"
+          alt="jump logo"
         />
 
-        <Dropdown>
-          <Dropdown.Toggle id="dropdown-basic">{}</Dropdown.Toggle>
+        <div className="main-container__middle-container">
+          <SelectInputComponent options={tourDates} />
+        </div>
 
-          <Dropdown.Menu>
-            <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
-            <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
-            <Dropdown.Item href="#/action-3">Something else</Dropdown.Item>
-          </Dropdown.Menu>
-        </Dropdown>
+        <NavButtonsComponent button1="BACK" button2="NEXT" />
       </div>
     </div>
   );

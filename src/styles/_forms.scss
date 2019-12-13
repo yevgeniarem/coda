@@ -1,35 +1,81 @@
 .form {
-    display: block;
-    text-align: center;
+  display: block;
+  text-align: center;
 
-    &--login {
-        margin-top: 60px;
-    }
+  &-control:focus {
+    color: white;
+    background: $mediumGrey;
+    box-shadow: none;
+  }
+
+  &--login {
+    margin-top: 60px;
+  }
+
+  &__select-wrapper {
+    position: relative;
+    display: inline-block; //new
+    color: white; //new
+  }
+
+  &__select-input {
+    background: $mediumGrey;
+    height: 60px;
+    width: 480px;
+    color: $white;
+    font-size: 14px;
+    border: none;
+    margin: 0 auto;
+    border-radius: 50px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    padding-left: 22px;
+    padding-right: 22px;
+  }
+
+  &__select-wrapper::after {
+    font-family: 'Font Awesome 5 Free';
+    content: '\f078';
+    font-size: 22px;
+    position: absolute;
+    top: 27%;
+    right: 1em;
+    display: inline-block;
+    font-style: normal;
+    font-variant: normal;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    font-weight: 900;
+    color: #7e7f82;
+    pointer-events: none;
+  }
 }
 
 .text-input {
-    background: $mediumGrey;
+  background: $mediumGrey;
+  height: 60px;
+  color: $white;
+  border-radius: 50px;
+  border: 0;
+
+  &--icon-left {
     height: 60px;
+    width: 440px;
+    margin: 0 auto;
+
+    &__icon {
+      background: $mediumGrey;
+      border: 0;
+      border-radius: 50px;
+      margin-left: 12px;
+    }
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: none;
+    background: $mediumGrey;
     color: $white;
-    border-radius: 50px;
-    border: 0;
-
-    &--icon-left {
-        height: 60px;
-        width: 440px;
-        margin: 0 auto;
-
-        &__icon {
-            background: $mediumGrey;
-            border: 0;
-            border-radius: 50px;
-        }
-    }
-
-    &:focus {
-        outline: none;
-        box-shadow: none;
-        background: $mediumGrey;
-        color: $white;
-    }
+  }
 }

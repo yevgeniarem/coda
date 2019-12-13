@@ -1,33 +1,33 @@
-import React from "react";
-import { Container, Row, Col } from "react-bootstrap";
-import EventLogoComponent from "./EventLogoComponent";
-import NavbarComponent from "./NavbarComponent";
+import React from 'react';
+import { Container, Row, Col } from 'react-bootstrap';
+import EventLogoComponent from './EventLogoComponent';
+import NavbarComponent from './NavbarComponent';
 
 const Judge2 = () => {
   const events = [
     {
       id: 7,
-      name: "jump",
+      name: 'jump',
       row: 1,
-      position: "left"
+      position: 'left'
     },
     {
       id: 8,
-      name: "nuvo",
+      name: 'nuvo',
       row: 1,
-      position: "right"
+      position: 'right'
     },
     {
       id: 18,
-      name: "24seven",
+      name: '24seven',
       row: 2,
-      position: "left"
+      position: 'left'
     },
     {
       id: 14,
-      name: "tda",
+      name: 'tda',
       row: 2,
-      position: "right"
+      position: 'right'
     }
   ];
 
@@ -46,7 +46,7 @@ const Judge2 = () => {
 
   return (
     <div>
-      <NavbarComponent type="chooseYourEvent" text="CHOOSE YOUR EVENT:" />
+      <NavbarComponent type="chooseYourEvent" text="CHOOSE YOUR EVENT" />
 
       <Container className="img-event">
         <Row className="img-event__row">{generateLogosByRowNum(1)}</Row>
