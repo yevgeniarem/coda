@@ -50,7 +50,11 @@ const Judge3 = () => {
         />
 
         <div className="main-container__middle-container">
-          <SelectInputComponent options={tourDates} />
+          <SelectInputComponent
+            options={tourDates}
+            formatType="twoVar"
+            name="CHOOSE YOUR CITY"
+          />
         </div>
 
         <NavButtonsComponent button1="BACK" button2="NEXT" />
