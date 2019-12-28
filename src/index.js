@@ -8,6 +8,7 @@ import Judge1 from './components/Judge1.jsx';
 import Judge2 from './components/Judge2.jsx';
 import Judge3 from './components/Judge3.jsx';
 import Judge4 from './components/Judge4.jsx';
+import Judge5 from './components/Judge5.jsx';
 
 ReactDOM.render(
   <Router>
@@ -26,6 +27,9 @@ ReactDOM.render(
       </Route>
       <Route path="/Judge4">
         <Judge4 />
+      </Route>
+      <Route path="/Judge5">
+        <Judge5 />
       </Route>
     </div>
   </Router>,

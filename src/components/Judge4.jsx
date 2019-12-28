@@ -13,18 +13,18 @@ const Judge4 = () => {
     { id: 16, judge: 'Jordan Amerson' }
   ];
   const judgePositions = [
-    { id: 21, judgePosition: 'head judge' },
-    { id: 22, judgePosition: 'secondary judge' },
-    { id: 23, judgePosition: 'assistant judge' }
+    { id: 21, judgePosition: 'Head Judge' },
+    { id: 22, judgePosition: 'Secondary Judge' },
+    { id: 23, judgePosition: 'Assistant Judge' }
   ];
   const teacherJudge = [
-    { id: 31, teacherJudge: 'yes' },
-    { id: 32, teacherJudge: 'no' }
+    { id: 31, teacherJudge: 'Yes' },
+    { id: 32, teacherJudge: 'No' }
   ];
   const finals = [
-    { id: 41, finals: 'quarterfinals' },
-    { id: 42, finals: 'semifinals' },
-    { id: 43, finals: 'finals' }
+    { id: 41, finals: 'Quarterfinals' },
+    { id: 42, finals: 'Semifinals' },
+    { id: 43, finals: 'Finals' }
   ];
   return (
     <div>

@@ -3,10 +3,22 @@
   color: $offWhite;
   padding: 0;
   box-shadow: 0px 0px 20px darken($black, 5%);
+  height: 60px;
+
+  &__main-header {
+    margin: 18px auto;
+  }
 
   &__text {
-    margin: 18px auto;
+    width: 268px;
+    height: 16px;
     font-size: 20px;
-    font-weight: bold;
+    font-weight: 900;
+    margin-bottom: 0px;
+    letter-spacing: 1.43px;
+  }
+
+  &__subtext {
+    font-size: 15px;
   }
 }
