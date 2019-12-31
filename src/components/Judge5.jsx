@@ -110,9 +110,10 @@ const Judge5 = () => {
       <NavbarComponent
         type="scoreSheet"
         text="#101 - ALL THAT JAZZ (AB)"
-        subtext="Teen - Lyrical Solo"
+        subtext="Teen · Lyrical Solo"
+        menu="true"
+        judgeInfo="#1 PETER KIM"
       />
-      <div></div>
     </div>
   );
 };

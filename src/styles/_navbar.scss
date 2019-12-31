@@ -10,7 +10,6 @@
   }
 
   &__text {
-    width: 268px;
     height: 16px;
     font-size: 20px;
     font-weight: 900;
@@ -19,6 +18,33 @@
   }
 
   &__subtext {
-    font-size: 15px;
+    margin: 7px auto 0px auto;
+    text-align: center;
+    opacity: 0.5;
+    font-size: 12px;
+    font-weight: 500;
+  }
+
+  &__judge-profile {
+    margin: 16px;
+    display: inline;
+  }
+
+  &__judge-profile-text {
+    font-weight: 900;
+    font-size: 14px;
+    letter-spacing: 1px;
+    text-align: right;
+    width: 100px;
+    line-height: 14px;
+  }
+
+  &__col {
+    padding: 0px;
+    margin-right: 12px;
+
+    &--last {
+      margin-right: 30px;
+    }
   }
 }

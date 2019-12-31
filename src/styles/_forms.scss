@@ -3,7 +3,7 @@
   text-align: center;
 
   &-control:focus {
-    color: white;
+    color: $white;
     background: $mediumGrey;
     box-shadow: none;
   }
@@ -21,6 +21,9 @@
     height: 60px;
     width: 480px;
     color: $white;
+    font-family: Arial;
+    font-size: 14px;
+    font-weight: bold;
     border: none;
     margin: 0 auto;
     border-radius: 50px;
@@ -29,13 +32,12 @@
     appearance: none;
     padding-left: 22px;
     padding-right: 22px;
-    width: 45px;
   }
 
   &__select-wrapper {
     position: relative;
     display: inline-block;
-    color: white;
+    color: $white;
     padding-bottom: 15px;
   }
 
