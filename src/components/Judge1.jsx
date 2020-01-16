@@ -3,11 +3,6 @@ import { Image, Form, Button } from 'react-bootstrap';
 import InputGroupComponent from './InputGroupComponent';
 
 const Judge1 = () => {
-  const login = [
-    { username: 'jane', password: 'testtest' },
-    { username: 'jason', password: 'testtest' }
-  ];
-
   return (
     <div>
       <Image
@@ -16,7 +11,7 @@ const Judge1 = () => {
         alt="CODA logo"
       />
 
-      <Form className="form form--login">
+      <Form onSubmit={} className="form form--login">
         <Form.Group controlId="formBasicEmail">
           <InputGroupComponent type="email" />
         </Form.Group>

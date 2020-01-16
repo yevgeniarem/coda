@@ -15,7 +15,7 @@ const InputGroupComponent = ({ type }) => {
           <i class={classNames('icon', 'fa-lg', iconClasses[type])}></i>
         </InputGroup.Text>
       </InputGroup.Prepend>
-      <Form.Control className="text-input" type={type} />
+      <Form.Control className="text-input" type={type} onChange={} />
     </InputGroup>
   );
 };
