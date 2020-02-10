@@ -105,6 +105,8 @@ const Judge5 = () => {
     }
   ];
 
+  console.log(danceInfo);
+
   return (
     <div>
       <NavbarComponent
