@@ -4,3 +4,21 @@ export const updateLogin = e => {
     payload: e
   };
 };
+
+export const authLogin = () => {
+  return {
+    type: 'AUTH_LOGIN'
+  };
+};
+
+export const invalidLogin = () => {
+  return {
+    type: 'INVALID_LOGIN'
+  };
+};
+
+export const handleModalClose = () => {
+  return {
+    type: 'HANDLE_MODAL_CLOSE'
+  };
+};

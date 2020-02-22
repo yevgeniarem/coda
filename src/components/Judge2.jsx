@@ -35,7 +35,7 @@ const Judge2 = () => {
     events
       .filter(e => e.row === rowNum)
       .map(e => (
-        <Col className={`img-event__col-${e.position}`}>
+        <Col className={`img-event__col-${e.position}`} key={e.id}>
           <EventLogoComponent
             className={`img-event--${e.name}`}
             imgSrc={`https://assets.dance360.com/coda/${e.id}.svg`}

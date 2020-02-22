@@ -57,6 +57,12 @@
     color: #7e7f82;
     pointer-events: none;
   }
+
+  &__error-message {
+    color: #b4b5b5;
+    font-size: 15.25px;
+    margin-top: 1px;
+  }
 }
 
 .text-input {
@@ -73,6 +79,7 @@
     height: 60px;
     width: 440px;
     margin: 0 auto;
+    margin-bottom: 0 !important;
 
     &__icon {
       background: $mediumGrey;
