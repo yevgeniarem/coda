@@ -27,15 +27,10 @@
 }
 
 .img-event {
-  &__row {
-    @extend .no-gutters;
-  }
-
   margin-top: 160px;
 
-  &__col-left {
-    display: flex;
-    justify-content: flex-end;
+  &__col {
+    padding: 0;
   }
 
   &__container {
@@ -53,6 +48,10 @@
       box-shadow: 0px 0px 20px black;
       transform: scale(1.08);
       transition: all 0.2s ease-out;
+    }
+
+    &--isLeft {
+      float: right;
     }
   }
 
