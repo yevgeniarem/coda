@@ -22,3 +22,10 @@ export const handleModalClose = () => {
     type: 'HANDLE_MODAL_CLOSE'
   };
 };
+
+export const createEvents = payload => {
+  return {
+    type: 'CREATE_EVENTS',
+    payload
+  };
+};
