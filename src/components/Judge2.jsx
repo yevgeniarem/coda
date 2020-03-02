@@ -8,7 +8,7 @@ import axios from 'axios';
 
 const Judge2 = () => {
   const dispatch = useDispatch();
-  const events = useSelector(state => state.events);
+  const events = useSelector(state => state.events.events);
 
   useEffect(() => {
     axios

@@ -1,10 +1,15 @@
 import React from 'react';
 import { Image } from 'react-bootstrap';
-import { Redirect } from 'react-router';
+import { useHistory } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { updateCurrentEvent } from '../redux/actions/appActions';
 
 const EventLogoComponent = ({ imgSrc, imgAlt, index }) => {
-  const handleClick = () => {
-    return <Redirect to="/Judge3" />;
+  const history = useHistory();
+  const dispatch = useDispatch();
+  const handleClick = e => {
+    history.push('/Judge3');
+    dispatch(updateCurrentEvent(e));
   };
 
   return (

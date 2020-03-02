@@ -8,16 +8,16 @@ import {
   invalidLogin,
   handleModalClose
 } from '../redux/actions/appActions';
-import { Redirect } from 'react-router';
+import { useHistory } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import Modal from 'react-bootstrap/Modal';
 
 const Judge1 = () => {
   const name = useSelector(state => state.login.name);
   const password = useSelector(state => state.login.password);
-  const isLoggedIn = useSelector(state => state.login.isLoggedIn);
   const isInvalid = useSelector(state => state.login.isInvalid);
   const dispatch = useDispatch();
+  const history = useHistory();
 
   const { handleSubmit, register, errors } = useForm({
     validateCriteriaMode: 'all'
@@ -31,15 +31,12 @@ const Judge1 = () => {
       })
       .then(res => {
         dispatch(authLogin());
+        history.push('/Judge2');
       })
       .catch(error => {
         dispatch(invalidLogin());
       });
   };
-
-  if (isLoggedIn === true) {
-    return <Redirect to="/Judge2" />;
-  }
 
   return (
     <>

@@ -29,3 +29,10 @@ export const createEvents = payload => {
     payload
   };
 };
+
+export const updateCurrentEvent = payload => {
+  return {
+    type: 'UPDATE_CURRENT_EVENT',
+    payload
+  };
+};

@@ -16,11 +16,11 @@ const SelectInputComponent = ({ options, formatType, variable, name }) => {
           as="select"
           className="form__select-input form__first-input"
         >
-          <option value="" disabled selected>
+          <option value="" disabled defaultValue>
             {name}
           </option>
           {options.map(e => (
-            <option>{format(e)}</option>
+            <option key={e.id}>{format(e)}</option>
           ))}
         </Form.Control>
       </div>

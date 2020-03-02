@@ -1,10 +1,30 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { Image } from 'react-bootstrap';
 import NavbarComponent from './NavbarComponent';
 import SelectInputComponent from './SelectInputComponent';
 import NavButtonsComponent from './NavButtonsComponent';
+import axios from 'axios';
 
 const Judge3 = () => {
+  const { eventID, seasonID } = useSelector(state => state.events);
+
+  useEffect(() => {
+    axios
+      .get(`https://api.d360test.com/api/coda/tour-dates`, {
+        params: {
+          event_id: 'INT',
+          season_id: 'INT'
+        }
+      })
+      .then(function(response) {
+        console.log(response);
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
+  }, []);
+
   const tourDates = [
     {
       id: 1,
