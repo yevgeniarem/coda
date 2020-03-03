@@ -25,6 +25,7 @@ const Judge2 = () => {
     events.map((e, i) => (
       <Col xs={6} key={e.id} className="img-event__col">
         <EventLogoComponent
+          id={e.id}
           imgSrc={`https://assets.dance360.com/coda/${e.id}.svg`}
           imgAlt={`clickable ${e.name} logo`}
           index={i}

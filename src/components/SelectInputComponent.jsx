@@ -4,7 +4,8 @@ import { Form } from 'react-bootstrap';
 const SelectInputComponent = ({ options, formatType, variable, name }) => {
   let format;
   if (formatType === 'twoVar') {
-    format = e => e.city + ' - ' + e.date;
+    //manipulate date
+    format = e => e.eventCity + ' - ' + e.startDate;
   }
   if (formatType === 'oneVar') {
     format = e => e[variable];

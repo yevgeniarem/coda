@@ -36,3 +36,10 @@ export const updateCurrentEvent = payload => {
     payload
   };
 };
+
+export const createEventCitiesList = payload => {
+  return {
+    type: 'CREATE_EVENT_CITIES_LIST',
+    payload
+  };
+};

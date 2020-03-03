@@ -13,9 +13,7 @@ import { useForm } from 'react-hook-form';
 import Modal from 'react-bootstrap/Modal';
 
 const Judge1 = () => {
-  const name = useSelector(state => state.login.name);
-  const password = useSelector(state => state.login.password);
-  const isInvalid = useSelector(state => state.login.isInvalid);
+  const { name, password, isInvalid } = useSelector(state => state.login);
   const dispatch = useDispatch();
   const history = useHistory();
 

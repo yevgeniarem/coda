@@ -4,12 +4,12 @@ import { useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { updateCurrentEvent } from '../redux/actions/appActions';
 
-const EventLogoComponent = ({ imgSrc, imgAlt, index }) => {
+const EventLogoComponent = ({ id, imgSrc, imgAlt, index }) => {
   const history = useHistory();
   const dispatch = useDispatch();
-  const handleClick = e => {
+  const handleClick = () => {
     history.push('/Judge3');
-    dispatch(updateCurrentEvent(e));
+    dispatch(updateCurrentEvent(id));
   };
 
   return (
