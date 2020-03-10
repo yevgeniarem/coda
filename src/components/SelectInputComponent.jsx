@@ -2,10 +2,24 @@ import React from 'react';
 import { Form } from 'react-bootstrap';
 
 const SelectInputComponent = ({ options, formatType, variable, name }) => {
-  let format;
+  let format, dates;
+  var moment = require('moment');
   if (formatType === 'twoVar') {
-    //manipulate date
-    format = e => e.eventCity + ' - ' + e.startDate;
+    format = e => {
+      if (
+        moment.utc(e.startDate).format('MMM') ===
+        moment.utc(e.endDate).format('MMM')
+      ) {
+        dates = `${moment.utc(e.startDate).format('MMM D')}-${moment
+          .utc(e.endDate)
+          .format('D, YYYY')}`;
+      } else {
+        dates = `${moment.utc(e.startDate).format('MMM D')}-${moment
+          .utc(e.endDate)
+          .format('MMM D, YYYY')}`;
+      }
+      return e.eventCity + ' - ' + dates;
+    };
   }
   if (formatType === 'oneVar') {
     format = e => e[variable];
