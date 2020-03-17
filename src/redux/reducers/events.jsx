@@ -1,7 +1,8 @@
 const initialState = {
   events: [],
   currentEvent: '',
-  eventCitiesList: []
+  eventCitiesList: [],
+  selectedCity: ''
 };
 
 const events = (state = initialState, action) => {
@@ -32,6 +33,7 @@ const events = (state = initialState, action) => {
         });
       });
       return { ...state, eventCitiesList: [...eventCitiesList] };
+
     default:
       return state;
   }

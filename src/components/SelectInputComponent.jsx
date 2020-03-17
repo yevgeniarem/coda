@@ -1,10 +1,22 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Form } from 'react-bootstrap';
+import moment from 'moment';
 
-const SelectInputComponent = ({ options, formatType, variable, name }) => {
-  let format, dates;
-  var moment = require('moment');
+const SelectInputComponent = ({ inputs, formatType, variable, name }) => {
+  let format, mappedInputs;
+  const [selectedCity, setSelectedCity] = useState();
+
+  useEffect(() => {
+    if (formatType === 'twoVar') {
+      const { id } =
+        inputs.find(e => moment.utc(e.startDate).isSameOrAfter(moment.utc())) ||
+        {};
+      setSelectedCity(id);
+    }
+  }, [inputs, formatType]);
+
   if (formatType === 'twoVar') {
+    let dates;
     format = e => {
       if (
         moment.utc(e.startDate).format('MMM') ===
@@ -21,22 +33,34 @@ const SelectInputComponent = ({ options, formatType, variable, name }) => {
       return e.eventCity + ' - ' + dates;
     };
   }
+
   if (formatType === 'oneVar') {
     format = e => e[variable];
   }
+
+  const handleChange = e => {
+    setSelectedCity(Number(e.target.value));
+  };
+
+  mappedInputs = inputs.map(e => {
+    return (
+      <option key={e.id} value={e.id}>
+        {format(e)}
+      </option>
+    );
+  });
+
   return (
     <Form className="form--main-container">
       <div className="form__select-wrapper">
         <Form.Control
           as="select"
           className="form__select-input form__first-input"
+          value={selectedCity}
+          onChange={handleChange}
         >
-          <option value="" disabled defaultValue>
-            {name}
-          </option>
-          {options.map(e => (
-            <option key={e.id}>{format(e)}</option>
-          ))}
+          <option disabled>{name}</option>
+          {mappedInputs}
         </Form.Control>
       </div>
     </Form>

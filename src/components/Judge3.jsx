@@ -40,7 +40,7 @@ const Judge3 = () => {
 
         <div className="main-container__middle-container">
           <SelectInputComponent
-            options={eventCitiesList}
+            inputs={eventCitiesList}
             formatType="twoVar"
             name="CHOOSE YOUR CITY"
           />
