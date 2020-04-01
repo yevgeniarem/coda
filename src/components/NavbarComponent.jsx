@@ -28,7 +28,7 @@ const NavbarComponent = ({ type, text, subtext, menu, judgeInfo }) => {
               src="./images/judge.png"
               roundedCircle
             />
-            <i class="col col-auto navbar__col navbar__col--last fas fa-caret-down"></i>
+            <i className="col col-auto navbar__col navbar__col--last fas fa-caret-down"></i>
           </div>
         </div>
       );

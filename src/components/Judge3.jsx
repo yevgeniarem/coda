@@ -43,10 +43,15 @@ const Judge3 = () => {
             inputs={eventCitiesList}
             formatType="twoVar"
             name="CHOOSE YOUR CITY"
+            variable="tourDateId"
           />
         </div>
 
-        <NavButtonsComponent button1="BACK" button2="NEXT" />
+        <NavButtonsComponent
+          button1="BACK"
+          button2="NEXT"
+          disabled="notDisabled"
+        />
       </div>
     </div>
   );
