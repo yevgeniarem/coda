@@ -1,9 +1,10 @@
 const initialState = {
-  tourDateId: '',
-  judge: 'default',
-  position: 'default',
-  teacherJudge: 'default',
-  competitionGroup: 2
+  tourDateId: 2187, //''
+  judge: 50, //'default'
+  position: 1, //'default'
+  teacherJudge: 1, //'default'
+  competitionGroup: 2,
+  judgeList: []
 };
 
 const inputs = (state = initialState, action) => {
@@ -12,6 +13,11 @@ const inputs = (state = initialState, action) => {
       return {
         ...state,
         [action.variable]: action.id
+      };
+    case 'UPDATE_JUDGE_LIST':
+      return {
+        ...state,
+        judgeList: action.payload
       };
     default:
       return state;

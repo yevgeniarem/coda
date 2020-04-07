@@ -2,7 +2,7 @@ const initialState = {
   events: [],
   currentEvent: '',
   eventCitiesList: [],
-  selectedCity: ''
+  currentTourDate: ''
 };
 
 const events = (state = initialState, action) => {
@@ -33,7 +33,6 @@ const events = (state = initialState, action) => {
         });
       });
       return { ...state, eventCitiesList: [...eventCitiesList] };
-
     default:
       return state;
   }

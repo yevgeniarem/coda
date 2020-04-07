@@ -6,13 +6,13 @@ import SelectInputComponent from './SelectInputComponent';
 import NavButtonsComponent from './NavButtonsComponent';
 import Modal from 'react-bootstrap/Modal';
 import { Button } from 'react-bootstrap';
-import { runModal } from '../redux/actions/appActions';
+import { runModal, updateJudgeList } from '../redux/actions/appActions';
 import { useHistory } from 'react-router-dom';
 
 const Judge4 = () => {
-  const [judge, setJudge] = useState();
   const [competitionGroup, setCompetitionGroup] = useState();
   const modalJudgeName = useSelector(state => state.modals.judgeName);
+  const judgeList = useSelector(state => state.inputs.judgeList);
   const dispatch = useDispatch();
   const history = useHistory();
 
@@ -20,13 +20,15 @@ const Judge4 = () => {
     axios
       .get(`https://api.d360test.com/api/coda/judges`)
       .then(function(judge) {
-        setJudge(
-          judge.data.map(judge => {
-            return {
-              judge: `${judge.fname} ${judge.lname}`,
-              id: judge.id
-            };
-          })
+        dispatch(
+          updateJudgeList(
+            judge.data.map(judge => {
+              return {
+                judge: `${judge.fname} ${judge.lname}`,
+                id: judge.id
+              };
+            })
+          )
         );
       })
       .catch(function(error) {
@@ -45,7 +47,7 @@ const Judge4 = () => {
           })
         );
       });
-  }, []);
+  }, [dispatch]);
 
   const positions = [
     { id: 1, position: 1 },
@@ -101,7 +103,7 @@ const Judge4 = () => {
         <div className="main-container__title">JUDGE INFORMATION</div>
         <div className="main-container__middle-container">
           <SelectInputComponent
-            inputs={judge}
+            inputs={judgeList}
             formatType="oneVar"
             variable="judge"
             name="Judge"

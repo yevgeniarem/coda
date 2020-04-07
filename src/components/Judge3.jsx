@@ -50,6 +50,7 @@ const Judge3 = () => {
         <NavButtonsComponent
           button1="BACK"
           button2="NEXT"
+          location="judge3"
           disabled="notDisabled"
         />
       </div>

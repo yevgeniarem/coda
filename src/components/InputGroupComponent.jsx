@@ -1,16 +1,16 @@
 import React from 'react';
-import classNames from 'classnames';
 import { InputGroup, Form } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 import { updateLogin } from '../redux/actions/appActions';
 import { ErrorMessage } from 'react-hook-form';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const InputGroupComponent = ({ type, register, errors }) => {
   const dispatch = useDispatch();
 
   const iconClasses = {
-    name: 'far fa-envelope',
-    password: 'fas fa-lock'
+    name: ['far', 'envelope'],
+    password: ['fas', 'lock']
   };
 
   const handleChange = e =>
@@ -20,7 +20,7 @@ const InputGroupComponent = ({ type, register, errors }) => {
       <InputGroup className="text-input text-input--icon-left mb-3">
         <InputGroup.Prepend>
           <InputGroup.Text className="text-input--icon-left__icon">
-            <i className={classNames('icon', 'fa-lg', iconClasses[type])}></i>
+            <FontAwesomeIcon icon={iconClasses[type]} className="icon fa-lg" />
           </InputGroup.Text>
         </InputGroup.Prepend>
         <Form.Control

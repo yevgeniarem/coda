@@ -44,17 +44,39 @@ export const createEventCitiesList = payload => {
   };
 };
 
-export const updateInput = (variable, id) => {
+export const updateInput = (variable, id, name) => {
   return {
     type: 'UPDATE_INPUT',
     variable,
-    id
+    id,
+    name
   };
 };
 
 export const runModal = payload => {
   return {
     type: 'RUN_MODAL',
+    payload
+  };
+};
+
+export const updateJudgeList = payload => {
+  return {
+    type: 'UPDATE_JUDGE_LIST',
+    payload
+  };
+};
+
+export const updateRoutineList = payload => {
+  return {
+    type: 'UPDATE_ROUTINE_LIST',
+    payload
+  };
+};
+
+export const updateCurrentRoutine = payload => {
+  return {
+    type: 'UPDATE_CURRENT_ROUTINE',
     payload
   };
 };

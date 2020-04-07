@@ -12,8 +12,9 @@ const SelectInputComponent = ({ inputs = [], formatType, variable, name }) => {
   useEffect(() => {
     if (formatType === 'twoVar') {
       const { id } =
-        inputs.find(e => moment.utc(e.startDate).isSameOrAfter(moment.utc())) ||
-        {};
+        inputs.find(input =>
+          moment.utc(input.endDate).isSameOrAfter(moment.utc())
+        ) || {};
       dispatch(updateInput(variable, id));
     }
   }, [inputs, formatType, dispatch, variable]);
@@ -43,13 +44,14 @@ const SelectInputComponent = ({ inputs = [], formatType, variable, name }) => {
 
   const handleChange = e => {
     dispatch(updateInput(variable, Number(e.target.value)));
-    if (formatType === 'oneVar')
-      dispatch(updateInput(variable, Number(e.target.value)));
+    if (formatType === 'oneVar') {
+      dispatch(updateInput(variable, Number(e.target.value), e.target.name));
+    }
   };
 
   mappedInputs = inputs.map(e => {
     return (
-      <option key={e.id} value={e.id}>
+      <option key={e.id} value={e.id} name={e[variable]}>
         {format(e)}
       </option>
     );
