@@ -25,6 +25,8 @@
     margin: 17px;
     font-size: 30px;
     color: $offWhite;
+    position: fixed;
+    z-index: 2;
   }
 
   &--refresh {

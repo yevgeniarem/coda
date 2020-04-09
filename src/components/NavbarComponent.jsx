@@ -32,7 +32,15 @@ const NavbarComponent = ({ type, text, name }) => {
   };
 
   useEffect(() => {
-    if (name === 'judge5') dispatch(updateCurrentRoutine(routineList[0] || {}));
+    if (name === 'judge5')
+      dispatch(
+        updateCurrentRoutine(
+          routineList.find(
+            routine =>
+              !routine.cancelled && !routine.score && routine.score !== 0
+          ) || {}
+        )
+      );
   }, [dispatch, routineList, name]);
 
   if (name === 'judge5') {
@@ -43,9 +51,9 @@ const NavbarComponent = ({ type, text, name }) => {
     };
 
     judgeProfile = (
-      <div className="navbar__judge-profile container">
+      <>
         <div className="row align-items-center">
-          <div className="col col-auto navbar__col navbar__judge-profile-text">
+          <div className="col col-auto navbar__col navbar--judge-profile-text">
             {`#${position} ${findJudgeNameById()}`}
           </div>
           <Image
@@ -58,7 +66,7 @@ const NavbarComponent = ({ type, text, name }) => {
             className="col col-auto navbar__col navbar__col--last"
           />
         </div>
-      </div>
+      </>
     );
 
     handleClick = () => {
@@ -168,7 +176,7 @@ const NavbarComponent = ({ type, text, name }) => {
           <h1 className="navbar__text">{text.toUpperCase()}</h1>
           <h2 className="navbar__subtext">{subtext}</h2>
         </div>
-        <div>{judgeProfile}</div>
+        <div className="navbar--judge-profile">{judgeProfile}</div>
       </Navbar>
       <Sidebar
         sidebar={
