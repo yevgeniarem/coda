@@ -80,3 +80,10 @@ export const updateCurrentRoutine = payload => {
     payload
   };
 };
+
+export const updateScore = payload => {
+  return {
+    type: 'UPDATE_SCORE',
+    payload
+  };
+};

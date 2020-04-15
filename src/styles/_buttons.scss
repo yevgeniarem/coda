@@ -61,22 +61,22 @@
     background-color: #25282d;
   }
 
-  // &--scoring::before {
-  //   content: ' ';
-  //   display: block;
-  //   position: absolute;
-  //   top: 0;
-  //   left: 0;
-  //   width: 20px;
-  //   height: 100%;
-  //   background-color: #2c3035;
-  // }
-
   &--scoring {
     background-color: #3c4148;
     font-size: 12px;
     color: hsla(0, 0%, 100%, 0.8);
     padding: 6px 8px 6px 30px;
+
+    // &:before {
+    //   content: ' ';
+    //   display: block;
+    //   position: absolute;
+    //   top: 0;
+    //   left: 0;
+    //   width: 20px;
+    //   height: 100%;
+    //   background-color: #2c3035;
+    // }
   }
 }
 
@@ -158,6 +158,33 @@
     letter-spacing: 0.36px;
     padding: 17px 24px;
     width: 200px;
+
+    &:hover {
+      background-color: #029859;
+    }
+  }
+
+  &--scoring-submit {
+    background: #3123ae;
+    color: white;
+    border-radius: 50px;
+    border: none;
+    padding: 15px;
+    font-size: 12px;
+    font-weight: 800;
+    width: 100%;
+    margin-bottom: 10px;
+    margin-top: 5px;
+
+    &:hover {
+      background: darken(#3123ae, 5%);
+    }
+
+    &:active {
+      background-color: darken(#3123ae, 10%) !important;
+      outline: none;
+      box-shadow: none !important;
+    }
   }
 }
 

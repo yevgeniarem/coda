@@ -3,23 +3,29 @@ import { useDispatch, useSelector } from 'react-redux';
 import { updateCurrentRoutine } from '../redux/actions/appActions';
 import { Navbar, Image } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import DropdownComponent from '../components/DropdownComponent';
 import classNames from 'classnames';
 import Sidebar from 'react-sidebar';
 import moment from 'moment';
 
 const NavbarComponent = ({ type, text, name }) => {
-  const { currentEvent, eventCitiesList } = useSelector(state => state.events);
-  const { routineList, currentRoutine } = useSelector(state => state.routines);
+  const { currentEvent, eventCitiesList } = useSelector(
+    (state) => state.events
+  );
+  const { routineList, currentRoutine } = useSelector(
+    (state) => state.routines
+  );
   const { judge: judgeId, position, judgeList, tourDateId } = useSelector(
-    state => state.inputs
+    (state) => state.inputs
   );
   const [menuIsClicked, setMenuIsClicked] = useState(false);
   let dates,
     currentTourDate,
-    judgeProfile,
     renderMenu = () => {},
     handleClick = () => {},
     findJudgeNameById = () => {},
+    conditionalDiv = () => {},
+    renderJudgeProfile = () => {},
     routineListButtons,
     refreshButton,
     subtext = '';
@@ -28,46 +34,45 @@ const NavbarComponent = ({ type, text, name }) => {
   const navClassNames = {
     chooseYourEvent: 'navbar--choose-your-event',
     chooseYourCity: 'navbar--choose-your-city',
-    scoreSheet: 'navbar--scoreSheet'
+    scoreSheet: 'navbar--scoreSheet',
   };
 
   useEffect(() => {
-    if (name === 'judge5')
+    if (name === 'judge5' && !currentRoutine.routine_id)
       dispatch(
         updateCurrentRoutine(
           routineList.find(
-            routine =>
+            (routine) =>
               !routine.cancelled && !routine.score && routine.score !== 0
           ) || {}
         )
       );
-  }, [dispatch, routineList, name]);
+  }, [dispatch, routineList, name, currentRoutine]);
 
   if (name === 'judge5') {
     findJudgeNameById = () => {
-      let index = judgeList.map(judge => judge.id === judgeId).indexOf(true);
+      let index = judgeList.map((judge) => judge.id === judgeId).indexOf(true);
       let currentJudge = judgeList[index] || {};
       return currentJudge.judge.toUpperCase();
     };
 
-    judgeProfile = (
-      <>
-        <div className="row align-items-center">
-          <div className="col col-auto navbar__col navbar--judge-profile-text">
-            {`#${position} ${findJudgeNameById()}`}
+    renderJudgeProfile = () => {
+      return (
+        <div className="navbar--judge-profile-container">
+          <div className="row align-items-center navbar--judge-profile">
+            <div className="col col-auto navbar__col navbar--judge-profile-text">
+              {`#${position} ${findJudgeNameById()}`}
+            </div>
+            <Image
+              className="col col-auto navbar__col img--judge"
+              src={`https://assets.dance360.com/staff/50x50/${judgeId}.jpg`}
+              roundedCircle
+            />
+            <DropdownComponent />
           </div>
-          <Image
-            className="col col-auto navbar__col img--judge"
-            src={`https://assets.dance360.com/staff/50x50/${judgeId}.jpg`}
-            roundedCircle
-          />
-          <FontAwesomeIcon
-            icon={['fas', 'caret-down']}
-            className="col col-auto navbar__col navbar__col--last"
-          />
         </div>
-      </>
-    );
+      );
+    };
 
     handleClick = () => {
       setMenuIsClicked(!menuIsClicked);
@@ -98,7 +103,7 @@ const NavbarComponent = ({ type, text, name }) => {
     text = `#${currentRoutine.number} - ${currentRoutine.routine}`;
     subtext = `${currentRoutine.age_division} • ${currentRoutine.performance_division} • ${currentRoutine.routine_category}`;
 
-    const formatDate = tourDate => {
+    const formatDate = (tourDate) => {
       if (
         moment.utc(tourDate.startDate).format('MMM') ===
         moment.utc(tourDate.endDate).format('MMM')
@@ -114,14 +119,15 @@ const NavbarComponent = ({ type, text, name }) => {
       return tourDate.eventCity + ' - ' + dates;
     };
     currentTourDate = formatDate(
-      eventCitiesList.find(city => city.id === tourDateId)
+      eventCitiesList.find((city) => city.id === tourDateId)
     );
 
-    const handleButtonClick = routine => {
+    const handleButtonClick = (routine) => {
+      //modal component
       dispatch(updateCurrentRoutine(routine));
     };
 
-    routineListButtons = routineList.map(routine => {
+    routineListButtons = routineList.map((routine) => {
       const renderRoutineNumber = () => {
         if (routine.has_a) {
           return `#${routine.number}a`;
@@ -167,16 +173,21 @@ const NavbarComponent = ({ type, text, name }) => {
         REFRESH LIST
       </button>
     );
+
+    conditionalDiv = () => {
+      return <div style={{ width: 165 }}></div>;
+    };
   }
 
   return (
     <>
       <Navbar className={classNames('navbar', navClassNames[type])}>
+        <>{conditionalDiv()}</>
         <div className="navbar__main-header">
           <h1 className="navbar__text">{text.toUpperCase()}</h1>
           <h2 className="navbar__subtext">{subtext}</h2>
         </div>
-        <div className="navbar--judge-profile">{judgeProfile}</div>
+        <div>{renderJudgeProfile()}</div>
       </Navbar>
       <Sidebar
         sidebar={

@@ -4,45 +4,45 @@ import axios from 'axios';
 import NavbarComponent from './NavbarComponent';
 import SelectInputComponent from './SelectInputComponent';
 import NavButtonsComponent from './NavButtonsComponent';
-import Modal from 'react-bootstrap/Modal';
+import ModalComponent from './ModalComponent';
 import { Button } from 'react-bootstrap';
 import { runModal, updateJudgeList } from '../redux/actions/appActions';
 import { useHistory } from 'react-router-dom';
 
 const Judge4 = () => {
   const [competitionGroup, setCompetitionGroup] = useState();
-  const modalJudgeName = useSelector(state => state.modals.judgeName);
-  const judgeList = useSelector(state => state.inputs.judgeList);
+  const modalJudgeName = useSelector((state) => state.modals.judgeName);
+  const judgeList = useSelector((state) => state.inputs.judgeList);
   const dispatch = useDispatch();
   const history = useHistory();
 
   useEffect(() => {
     axios
       .get(`https://api.d360test.com/api/coda/judges`)
-      .then(function(judge) {
+      .then(function (judge) {
         dispatch(
           updateJudgeList(
-            judge.data.map(judge => {
+            judge.data.map((judge) => {
               return {
                 judge: `${judge.fname} ${judge.lname}`,
-                id: judge.id
+                id: judge.id,
               };
             })
           )
         );
       })
-      .catch(function(error) {
+      .catch(function (error) {
         console.log(error);
       });
 
     axios
       .get(`https://api.d360test.com/api/coda/competition-groups`)
-      .then(function(groups) {
+      .then(function (groups) {
         setCompetitionGroup(
-          groups.data.map(group => {
+          groups.data.map((group) => {
             return {
               competitionGroup: group.name,
-              id: group.id
+              id: group.id,
             };
           })
         );
@@ -53,15 +53,16 @@ const Judge4 = () => {
     { id: 1, position: 1 },
     { id: 2, position: 2 },
     { id: 3, position: 3 },
-    { id: 4, position: 4 }
+    { id: 4, position: 4 },
   ];
   const teacherJudge = [
     { id: 1, teacherJudge: 'IS Teacher Judge' },
-    { id: 2, teacherJudge: 'IS NOT Teacher Judge' }
+    { id: 2, teacherJudge: 'IS NOT Teacher Judge' },
   ];
 
   return (
     <div>
+      <ModalComponent isInvalid={!!modalJudgeName} />
       <Modal
         className="modal"
         show={!!modalJudgeName}

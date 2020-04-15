@@ -3,63 +3,44 @@ import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
 import { Image, Form, Button } from 'react-bootstrap';
 import InputGroupComponent from './InputGroupComponent';
-import {
-  authLogin,
-  invalidLogin,
-  handleModalClose
-} from '../redux/actions/appActions';
+import ModalComponent from './ModalComponent';
+import { authLogin, invalidLogin } from '../redux/actions/appActions';
 import { useHistory } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-import Modal from 'react-bootstrap/Modal';
 
 const Judge1 = () => {
-  const { name, password, isInvalid } = useSelector(state => state.login);
+  const { name, password, isInvalid } = useSelector((state) => state.login);
   const dispatch = useDispatch();
   const history = useHistory();
 
   const { handleSubmit, register, errors } = useForm({
-    validateCriteriaMode: 'all'
+    validateCriteriaMode: 'all',
   });
 
-  const onSubmit = data => {
+  const onSubmit = (data) => {
     axios
       .post(`https://api.d360test.com/api/auth/signin`, {
         name: name,
-        password: password
+        password: password,
       })
-      .then(res => {
+      .then((res) => {
         dispatch(authLogin());
         history.push('/Judge2');
       })
-      .catch(error => {
+      .catch((error) => {
         dispatch(invalidLogin());
       });
   };
 
   return (
     <>
-      <Modal
-        className="modal"
-        show={isInvalid}
-        onHide={() => dispatch(handleModalClose())}
-        centered
-      >
-        <Modal.Header className="modal__header">
-          <Modal.Title className="modal__title">Sorry</Modal.Title>
-        </Modal.Header>
-        <Modal.Body className="modal__body">
-          You have entered an invalid username or password.
-        </Modal.Body>
-        <Modal.Footer className="modal__footer">
-          <Button
-            variant="secondary"
-            onClick={() => dispatch(handleModalClose())}
-            className="button action-button--navigation action-button--blue"
-          >
-            OK
-          </Button>
-        </Modal.Footer>
-      </Modal>
+      <ModalComponent
+        isShown={isInvalid}
+        title="Sorry"
+        body="You have entered an invalid username or password."
+        numButtons="1"
+        button1="OK"
+      />
 
       <Image
         className="img-logo img-logo--home"

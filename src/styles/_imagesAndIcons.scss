@@ -26,7 +26,8 @@
     font-size: 30px;
     color: $offWhite;
     position: fixed;
-    z-index: 2;
+    z-index: 4;
+    margin-left: 30px;
   }
 
   &--refresh {
@@ -37,7 +38,7 @@
 }
 
 .img-event {
-  margin-top: 160px;
+  margin-top: 240px;
 
   &__col {
     padding: 0;
