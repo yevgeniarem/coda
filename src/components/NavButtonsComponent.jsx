@@ -3,15 +3,15 @@ import axios from 'axios';
 import { Button } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { runModal } from '../redux/actions/appActions';
+import { runJudgeModal } from '../redux/actions/appActions';
 
 const NavButtonsComponent = ({ button1, button2, disabled, location }) => {
   const history = useHistory();
-  const inputs = useSelector(state => state.inputs);
+  const inputs = useSelector((state) => state.inputs);
   const dispatch = useDispatch();
   let pauseClick = false;
 
-  const handleClick = e => {
+  const handleClick = (e) => {
     if (e.target.value === 'BACK') window.history.back();
     if (e.target.value === 'NEXT') {
       if (location === 'judge4') {
@@ -21,27 +21,29 @@ const NavButtonsComponent = ({ button1, button2, disabled, location }) => {
             params: {
               tour_date_id: inputs.tourDateId,
               competition_group_id: 2,
-              position: inputs.position
-            }
+              position: inputs.position,
+            },
           })
-          .then(function(response) {
-            dispatch(runModal(response.data));
+          .then(function (response) {
+            dispatch(runJudgeModal(response.data));
             if (!response.data) history.push('/Judge5');
           })
-          .catch(function(error) {
+          .catch(function (error) {
             console.log(error);
           });
       }
-      if (!pauseClick)
+      if (!pauseClick) {
+        dispatch(runJudgeModal(''));
         history.push(
           `/Judge${parseInt(history.location.pathname.slice(-1)) + 1}`
         );
+      }
     }
   };
 
   const isDisabled = () => {
     if (disabled === 'notDisabled') return false;
-    if (Object.values(inputs).find(e => e === 'default')) {
+    if (Object.values(inputs).find((e) => e === 'default')) {
       return true;
     } else {
       return false;

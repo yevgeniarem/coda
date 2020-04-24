@@ -5,16 +5,13 @@ import NavbarComponent from './NavbarComponent';
 import SelectInputComponent from './SelectInputComponent';
 import NavButtonsComponent from './NavButtonsComponent';
 import ModalComponent from './ModalComponent';
-import { Button } from 'react-bootstrap';
-import { runModal, updateJudgeList } from '../redux/actions/appActions';
-import { useHistory } from 'react-router-dom';
+import { updateJudgeList, closeSidebar } from '../redux/actions/appActions';
 
 const Judge4 = () => {
   const [competitionGroup, setCompetitionGroup] = useState();
   const modalJudgeName = useSelector((state) => state.modals.judgeName);
   const judgeList = useSelector((state) => state.inputs.judgeList);
   const dispatch = useDispatch();
-  const history = useHistory();
 
   useEffect(() => {
     axios
@@ -26,6 +23,7 @@ const Judge4 = () => {
               return {
                 judge: `${judge.fname} ${judge.lname}`,
                 id: judge.id,
+                default_notes: judge.default_notes,
               };
             })
           )
@@ -47,6 +45,8 @@ const Judge4 = () => {
           })
         );
       });
+
+    dispatch(closeSidebar());
   }, [dispatch]);
 
   const positions = [
@@ -56,47 +56,23 @@ const Judge4 = () => {
     { id: 4, position: 4 },
   ];
   const teacherJudge = [
-    { id: 1, teacherJudge: 'IS Teacher Judge' },
-    { id: 2, teacherJudge: 'IS NOT Teacher Judge' },
+    { id: true, teacherJudge: 'IS Teacher Judge' },
+    { id: false, teacherJudge: 'IS NOT Teacher Judge' },
   ];
 
   return (
     <div>
-      <ModalComponent isInvalid={!!modalJudgeName} />
-      <Modal
-        className="modal"
-        show={!!modalJudgeName}
-        onHide={() => dispatch(runModal(''))}
-        centered
-      >
-        <Modal.Header className="modal__header">
-          <Modal.Title className="modal__title">Alert</Modal.Title>
-        </Modal.Header>
-        <Modal.Body className="modal__body">
-          {`${modalJudgeName.fname} ${modalJudgeName.lname}`} already has scores
-          from this position for this tour date. If judges are being swapped,
-          this is fine. Continue?
-        </Modal.Body>
-        <Modal.Footer className="modal__footer">
-          <Button
-            variant="secondary"
-            onClick={() => dispatch(runModal(''))}
-            className="button action-button--navigation action-button--grey"
-          >
-            Cancel
-          </Button>
-          <Button
-            variant="secondary"
-            onClick={() => {
-              dispatch(runModal(''));
-              history.push('/Judge5');
-            }}
-            className="button action-button--navigation action-button--blue"
-          >
-            YES
-          </Button>
-        </Modal.Footer>
-      </Modal>
+      <ModalComponent
+        location="judge4"
+        isShown={!!modalJudgeName}
+        title="Alert"
+        body={`${modalJudgeName.fname} ${modalJudgeName.lname} already has scores
+        from this position for this tour date. If judges are being swapped,
+        this is fine. Continue?`}
+        numButtons="2"
+        button1="Cancel"
+        button2="YES"
+      />
 
       <NavbarComponent type="judgeInformation" text="JUDGE INFORMATION" />
 

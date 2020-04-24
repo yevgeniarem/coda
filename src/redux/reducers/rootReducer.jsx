@@ -5,6 +5,7 @@ import inputs from './inputs';
 import modals from './modals';
 import routines from './routines';
 import scoring from './scoring';
+import sidebar from './sidebar';
 
 const rootReducer = combineReducers({
   login,
@@ -12,7 +13,8 @@ const rootReducer = combineReducers({
   inputs,
   modals,
   routines,
-  scoring
+  scoring,
+  sidebar,
 });
 
 export default rootReducer;

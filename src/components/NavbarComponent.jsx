@@ -1,12 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { updateCurrentRoutine } from '../redux/actions/appActions';
+import {
+  updateCurrentRoutine,
+  runRoutineModal,
+  toggleSidebar,
+  updateRoutineList,
+} from '../redux/actions/appActions';
 import { Navbar, Image } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import DropdownComponent from '../components/DropdownComponent';
+import ModalComponent from './ModalComponent';
 import classNames from 'classnames';
 import Sidebar from 'react-sidebar';
 import moment from 'moment';
+import axios from 'axios';
 
 const NavbarComponent = ({ type, text, name }) => {
   const { currentEvent, eventCitiesList } = useSelector(
@@ -15,16 +22,23 @@ const NavbarComponent = ({ type, text, name }) => {
   const { routineList, currentRoutine } = useSelector(
     (state) => state.routines
   );
-  const { judge: judgeId, position, judgeList, tourDateId } = useSelector(
-    (state) => state.inputs
-  );
-  const [menuIsClicked, setMenuIsClicked] = useState(false);
+  const {
+    judge: judgeId,
+    position,
+    judgeList,
+    tourDateId,
+    competitionGroup,
+  } = useSelector((state) => state.inputs);
+  const isSidebarOpen = useSelector((state) => state.sidebar);
+  const { isRoutineModalShown } = useSelector((state) => state.modals);
+  const [clickedRoutine, setClickedRoutine] = useState({});
+  const [isFetching, setIsFetching] = useState(false);
   let dates,
     currentTourDate,
     renderMenu = () => {},
     handleClick = () => {},
     findJudgeNameById = () => {},
-    conditionalDiv = () => {},
+    conditionalStylingDiv = () => {},
     renderJudgeProfile = () => {},
     routineListButtons,
     refreshButton,
@@ -43,11 +57,11 @@ const NavbarComponent = ({ type, text, name }) => {
         updateCurrentRoutine(
           routineList.find(
             (routine) =>
-              !routine.cancelled && !routine.score && routine.score !== 0
+              !routine.canceled && !routine.score && routine.score !== 0
           ) || {}
         )
       );
-  }, [dispatch, routineList, name, currentRoutine]);
+  }, [dispatch, routineList, name, currentRoutine.routine_id]);
 
   if (name === 'judge5') {
     findJudgeNameById = () => {
@@ -75,11 +89,11 @@ const NavbarComponent = ({ type, text, name }) => {
     };
 
     handleClick = () => {
-      setMenuIsClicked(!menuIsClicked);
+      dispatch(toggleSidebar());
     };
 
     renderMenu = () => {
-      if (!menuIsClicked) {
+      if (!isSidebarOpen) {
         return (
           <div onClick={handleClick}>
             <FontAwesomeIcon
@@ -103,6 +117,11 @@ const NavbarComponent = ({ type, text, name }) => {
     text = `#${currentRoutine.number} - ${currentRoutine.routine}`;
     subtext = `${currentRoutine.age_division} • ${currentRoutine.performance_division} • ${currentRoutine.routine_category}`;
 
+    if (!currentRoutine.routine_id) {
+      text = 'COMPETITION IS OVER';
+      subtext = '';
+    }
+
     const formatDate = (tourDate) => {
       if (
         moment.utc(tourDate.startDate).format('MMM') ===
@@ -123,8 +142,8 @@ const NavbarComponent = ({ type, text, name }) => {
     );
 
     const handleButtonClick = (routine) => {
-      //modal component
-      dispatch(updateCurrentRoutine(routine));
+      dispatch(runRoutineModal(true));
+      setClickedRoutine(routine);
     };
 
     routineListButtons = routineList.map((routine) => {
@@ -135,6 +154,18 @@ const NavbarComponent = ({ type, text, name }) => {
           return `#${routine.number}`;
         }
       };
+      if (!!routine.score || routine.score === 0) {
+        return (
+          <button
+            onClick={() => handleButtonClick(routine)}
+            className="navbar__sidebar--button navbar__sidebar--button--disabled"
+            key={routine.routine_id}
+          >
+            <span>{renderRoutineNumber()}</span>
+            <span className="navbar__sidebar--routine">{routine.routine}</span>
+          </button>
+        );
+      }
       if (routine.routine === currentRoutine.routine) {
         return (
           <button
@@ -146,6 +177,19 @@ const NavbarComponent = ({ type, text, name }) => {
             <span className="navbar__sidebar--routine">
               {currentRoutine.routine}
             </span>
+          </button>
+        );
+      }
+      if (!!routine.canceled) {
+        return (
+          <button
+            onClick={() => handleButtonClick(routine)}
+            className="navbar__sidebar--button navbar__sidebar--button--disabled"
+            key={routine.routine_id}
+          >
+            <span>{renderRoutineNumber()}</span>
+            <span className="navbar__sidebar--routine">{routine.routine}</span>
+            <span className="float-right">CANCELED</span>
           </button>
         );
       }
@@ -161,10 +205,32 @@ const NavbarComponent = ({ type, text, name }) => {
       );
     });
 
+    const handleRefresh = () => {
+      setIsFetching(true);
+      axios
+        .get(`https://api.d360test.com/api/coda/routines`, {
+          params: {
+            tour_date_id: tourDateId,
+            competition_group_id: competitionGroup,
+            position: position,
+          },
+        })
+        .then(function (response) {
+          dispatch(updateRoutineList(response.data));
+          window.setTimeout(() => setIsFetching(false), 1000);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    };
+
     refreshButton = (
       <button
         type="button"
-        className="button action-button--submit action-button--green"
+        className={`button action-button--submit action-button--green ${
+          isFetching ? 'action-button--refreshing' : ''
+        }`}
+        onClick={handleRefresh}
       >
         <FontAwesomeIcon
           icon={['fas', 'redo']}
@@ -174,15 +240,25 @@ const NavbarComponent = ({ type, text, name }) => {
       </button>
     );
 
-    conditionalDiv = () => {
+    conditionalStylingDiv = () => {
       return <div style={{ width: 165 }}></div>;
     };
   }
 
   return (
     <>
+      <ModalComponent
+        isShown={isRoutineModalShown}
+        title="Alert"
+        body="Are you sure you want to switch routines? Your changes will not be saved."
+        numButtons="2"
+        button1="GO BACK"
+        button2="YES, SWITCH"
+        location="judge5"
+        clickedRoutine={clickedRoutine}
+      />
       <Navbar className={classNames('navbar', navClassNames[type])}>
-        <>{conditionalDiv()}</>
+        <>{conditionalStylingDiv()}</>
         <div className="navbar__main-header">
           <h1 className="navbar__text">{text.toUpperCase()}</h1>
           <h2 className="navbar__subtext">{subtext}</h2>
@@ -202,7 +278,7 @@ const NavbarComponent = ({ type, text, name }) => {
             {refreshButton}
           </div>
         }
-        open={menuIsClicked}
+        open={isSidebarOpen}
         onSetOpen={handleClick}
         sidebarClassName="navbar__sidebar"
         styles={{ overlay: { backgroundColor: 'rgba(0,0,0,0)' } }}

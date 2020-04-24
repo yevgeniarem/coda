@@ -7,12 +7,12 @@ import moment from 'moment';
 const SelectInputComponent = ({ inputs = [], formatType, variable, name }) => {
   let format, mappedInputs;
   const dispatch = useDispatch();
-  const selectInputs = useSelector(state => state.inputs);
+  const selectInputs = useSelector((state) => state.inputs);
 
   useEffect(() => {
     if (formatType === 'twoVar') {
       const { id } =
-        inputs.find(input =>
+        inputs.find((input) =>
           moment.utc(input.endDate).isSameOrAfter(moment.utc())
         ) || {};
       dispatch(updateInput(variable, id));
@@ -20,12 +20,12 @@ const SelectInputComponent = ({ inputs = [], formatType, variable, name }) => {
   }, [inputs, formatType, dispatch, variable]);
 
   if (formatType === 'oneVar') {
-    format = input => input[variable];
+    format = (input) => input[variable];
   }
 
   if (formatType === 'twoVar') {
     let dates;
-    format = e => {
+    format = (e) => {
       if (
         moment.utc(e.startDate).format('MMM') ===
         moment.utc(e.endDate).format('MMM')
@@ -42,14 +42,16 @@ const SelectInputComponent = ({ inputs = [], formatType, variable, name }) => {
     };
   }
 
-  const handleChange = e => {
-    dispatch(updateInput(variable, Number(e.target.value)));
-    if (formatType === 'oneVar') {
-      dispatch(updateInput(variable, Number(e.target.value), e.target.name));
+  const handleChange = (e) => {
+    if (variable === 'teacherJudge') {
+      if (e.target.value === 'true') dispatch(updateInput(variable, true));
+      if (e.target.value === 'false') dispatch(updateInput(variable, false));
+    } else {
+      dispatch(updateInput(variable, Number(e.target.value)));
     }
   };
 
-  mappedInputs = inputs.map(e => {
+  mappedInputs = inputs.map((e) => {
     return (
       <option key={e.id} value={e.id} name={e[variable]}>
         {format(e)}

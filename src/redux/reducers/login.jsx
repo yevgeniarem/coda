@@ -2,7 +2,7 @@ const initialState = {
   name: '',
   password: '',
   isLoggedIn: false,
-  isInvalid: false
+  isInvalid: false,
 };
 
 const login = (state = initialState, action) => {
@@ -10,22 +10,17 @@ const login = (state = initialState, action) => {
     case 'UPDATE_LOGIN':
       return {
         ...state,
-        [action.payload.type]: action.payload.value
+        [action.payload.type]: action.payload.value,
       };
     case 'AUTH_LOGIN':
       return {
         ...state,
-        isLoggedIn: true
+        isLoggedIn: true,
       };
     case 'INVALID_LOGIN':
       return {
         ...state,
-        isInvalid: true
-      };
-    case 'HANDLE_MODAL_CLOSE':
-      return {
-        ...state,
-        isInvalid: false
+        isInvalid: action.payload,
       };
     default:
       return state;

@@ -2,14 +2,19 @@ import React, { useState, useEffect } from 'react';
 import NavbarComponent from './NavbarComponent';
 import ScoringBreakdownComponent from './ScoringBreakdownComponent';
 import { useDispatch, useSelector } from 'react-redux';
-import { updateRoutineList } from '../redux/actions/appActions';
+import {
+  updateRoutineList,
+  addButton,
+  changeButton,
+  deleteButton,
+} from '../redux/actions/appActions';
 import axios from 'axios';
 
 const Judge5 = () => {
   const dispatch = useDispatch();
   const inputs = useSelector((state) => state.inputs);
-  const eventId = useSelector((state) => state.events.currentEvent.id);
   const { currentRoutine } = useSelector((state) => state.routines);
+  const { buttons: reduxButtons } = useSelector((state) => state.scoring);
   const [buttons, setButtons] = useState([]);
 
   useEffect(() => {
@@ -22,7 +27,6 @@ const Judge5 = () => {
         },
       })
       .then(function (response) {
-        // console.log('routines: ', response);
         dispatch(updateRoutineList(response.data));
       })
       .catch(function (error) {
@@ -32,7 +36,6 @@ const Judge5 = () => {
     axios // buttons
       .get('https://api.d360test.com/api/coda/buttons')
       .then(function (response) {
-        // console.log('buttons: ', response);
         setButtons(
           response.data.find(
             (buttons) =>
@@ -43,20 +46,50 @@ const Judge5 = () => {
       .catch(function (error) {
         console.log(error);
       });
+  }, [inputs, dispatch, currentRoutine.performance_division_level_id]);
 
-    axios // data for scoring breakdown
-      .get('https://api.d360test.com/api/coda/scoring-breakdown', {
-        params: {
-          event_id: eventId,
-        },
-      })
-      .then(function (response) {
-        // console.log('scoring breakdown: ', response);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  }, [inputs, eventId, dispatch, currentRoutine.performance_division_level_id]);
+  const handleClick = (button) => {
+    let selectedButton = document.getElementById(button.id);
+
+    if (
+      !reduxButtons.find((reduxButton) => reduxButton.level_4_id === button.id)
+    ) {
+      dispatch(
+        addButton({
+          level_4_id: button.id,
+          level_1_id: button.level_1_id,
+          good: true,
+        })
+      );
+      selectedButton.classList.add('button--scoring--green');
+    }
+
+    if (
+      reduxButtons.find(
+        (reduxButton) =>
+          reduxButton.level_4_id === button.id && reduxButton.good === true
+      )
+    ) {
+      dispatch(
+        changeButton({
+          level_4_id: button.id,
+          level_1_id: button.level_1_id,
+          good: false,
+        })
+      );
+      selectedButton.classList.remove('button--scoring--green');
+      selectedButton.classList.add('button--scoring--red');
+    }
+    if (
+      reduxButtons.find(
+        (reduxButton) =>
+          reduxButton.level_4_id === button.id && reduxButton.good === false
+      )
+    ) {
+      dispatch(deleteButton({ level_4_id: button.id }));
+      selectedButton.classList.remove('button--scoring--red');
+    }
+  };
 
   let allButtons = buttons.map((button) => {
     if (button.header_level) {
@@ -64,6 +97,7 @@ const Judge5 = () => {
         <button
           type="button"
           key={button.id}
+          id={button.id}
           className={`button button--judging button--header-level-${button.header_level}`}
         >
           {button.header_name}
@@ -75,7 +109,9 @@ const Judge5 = () => {
         <button
           type="button"
           key={button.id}
+          id={button.id}
           className={`button button--judging button--scoring`}
+          onClick={(e) => handleClick(button, e)}
         >
           {button.level_3_name}
         </button>
@@ -86,7 +122,9 @@ const Judge5 = () => {
         <button
           type="button"
           key={button.id}
+          id={button.id}
           className={`button button--judging button--scoring`}
+          onClick={() => handleClick(button)}
         >
           {button.level_4_name}
         </button>
@@ -101,6 +139,13 @@ const Judge5 = () => {
     0,
     allButtons.indexOf(performanceButton)
   );
+  let perfAndCreativeButtons = allButtons;
+
+  const conditionalScoringBreakdownComp = () => {
+    if (!!currentRoutine.routine_id) {
+      return <ScoringBreakdownComponent />;
+    }
+  };
 
   return (
     <>
@@ -109,9 +154,9 @@ const Judge5 = () => {
         {foundationButtons}
       </div>
       <div className="button__container button__container--secondPage">
-        {allButtons}
+        {perfAndCreativeButtons}
       </div>
-      <ScoringBreakdownComponent />
+      <div>{conditionalScoringBreakdownComp()}</div>
     </>
   );
 };

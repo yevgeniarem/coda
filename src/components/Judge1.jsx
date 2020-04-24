@@ -28,7 +28,7 @@ const Judge1 = () => {
         history.push('/Judge2');
       })
       .catch((error) => {
-        dispatch(invalidLogin());
+        dispatch(invalidLogin(true));
       });
   };
 
@@ -40,6 +40,7 @@ const Judge1 = () => {
         body="You have entered an invalid username or password."
         numButtons="1"
         button1="OK"
+        location="judge1"
       />
 
       <Image

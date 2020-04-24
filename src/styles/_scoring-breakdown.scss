@@ -86,8 +86,12 @@
     color: #b4b5b5;
 
     &--text {
-      margin-left: 5px;
+      margin: 0px;
       font-size: 11px;
+    }
+
+    &--check {
+      margin-right: 4px;
     }
   }
 }

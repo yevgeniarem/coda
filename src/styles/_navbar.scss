@@ -62,7 +62,6 @@
     // box-shadow: 2px 0 40px 0 #000;
     background-color: #131517;
     position: fixed !important;
-    height: 100%;
     width: 100%;
     overflow: auto;
     max-width: 400px;
@@ -70,8 +69,13 @@
     position: fixed;
     left: 0px;
     top: 60px !important;
-    padding: 0px 30px 30px 30px !important;
+    padding: 0px 30px 110px 30px !important;
     z-index: 3;
+
+    &--heading {
+      font-size: 15px;
+      font-weight: 400;
+    }
 
     &--button {
       width: 100%;
@@ -86,6 +90,11 @@
       &--active {
         background-color: #3123ae;
         color: #fff;
+      }
+
+      &--disabled {
+        background-color: rgba(220, 53, 69, 0.25);
+        pointer-events: none;
       }
     }
 

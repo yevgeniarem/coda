@@ -9,20 +9,22 @@ import { createEventCitiesList } from '../redux/actions/appActions';
 
 const Judge3 = () => {
   const dispatch = useDispatch();
-  const { currentEvent, eventCitiesList } = useSelector(state => state.events);
+  const { currentEvent, eventCitiesList } = useSelector(
+    (state) => state.events
+  );
 
   useEffect(() => {
     axios
       .get(`https://api.d360test.com/api/coda/tour-dates`, {
         params: {
           event_id: currentEvent.id,
-          season_id: currentEvent.seasonId
-        }
+          season_id: currentEvent.seasonId,
+        },
       })
-      .then(function(response) {
+      .then(function (response) {
         dispatch(createEventCitiesList(response.data));
       })
-      .catch(function(error) {
+      .catch(function (error) {
         console.log(error);
       });
   }, [currentEvent.id, currentEvent.seasonId, dispatch]);

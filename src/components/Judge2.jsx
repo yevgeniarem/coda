@@ -8,15 +8,15 @@ import axios from 'axios';
 
 const Judge2 = () => {
   const dispatch = useDispatch();
-  const events = useSelector(state => state.events.events);
+  const events = useSelector((state) => state.events.events);
 
   useEffect(() => {
     axios
       .get(`https://api.d360test.com/api/coda/events`)
-      .then(function(response) {
+      .then(function (response) {
         dispatch(createEvents(response.data));
       })
-      .catch(function(error) {
+      .catch(function (error) {
         console.log(error);
       });
   }, [dispatch]);
