@@ -1,8 +1,8 @@
 const initialState = {
-  tourDateId: 2187, //''
-  judge: 50, //'default'
-  position: 1, //'default'
-  teacherJudge: true, //'default'
+  tourDateId: '',
+  judge: 'default',
+  position: 'default',
+  teacherJudge: 'default',
   competitionGroup: 2,
   judgeList: [],
 };
