@@ -12,7 +12,7 @@ const DropdownComponent = () => {
 
   return (
     <Dropdown>
-      <Dropdown.Toggle className="profile-dropdown"></Dropdown.Toggle>
+      <Dropdown.Toggle className="profile-dropdown" />
 
       <Dropdown.Menu alignRight className="profile-dropdown__list">
         <Dropdown.Item

@@ -1,30 +1,31 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Image } from 'react-bootstrap';
+import axios from 'axios';
 import NavbarComponent from './NavbarComponent';
 import SelectInputComponent from './SelectInputComponent';
 import NavButtonsComponent from './NavButtonsComponent';
-import axios from 'axios';
 import { createEventCitiesList } from '../redux/actions/appActions';
 
 const Judge3 = () => {
   const dispatch = useDispatch();
   const { currentEvent, eventCitiesList } = useSelector(
-    (state) => state.events
+    (state) => state.events,
   );
 
   useEffect(() => {
     axios
-      .get(`https://api.d360test.com/api/coda/tour-dates`, {
+      .get('https://api.d360test.com/api/coda/tour-dates', {
         params: {
           event_id: currentEvent.id,
           season_id: currentEvent.seasonId,
         },
       })
-      .then(function (response) {
+      .then((response) => {
         dispatch(createEventCitiesList(response.data));
       })
-      .catch(function (error) {
+      .catch((error) => {
+        // eslint-disable-next-line no-console
         console.log(error);
       });
   }, [currentEvent.id, currentEvent.seasonId, dispatch]);

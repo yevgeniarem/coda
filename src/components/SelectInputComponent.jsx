@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { updateInput } from '../redux/actions/appActions';
 import { Form } from 'react-bootstrap';
 import moment from 'moment';
+import { updateInput } from '../redux/actions/appActions';
 
 const SelectInputComponent = ({ inputs = [], formatType, variable, name }) => {
-  let format, mappedInputs;
+  let format;
+  let mappedInputs;
   const dispatch = useDispatch();
   const selectInputs = useSelector((state) => state.inputs);
 
@@ -13,7 +14,7 @@ const SelectInputComponent = ({ inputs = [], formatType, variable, name }) => {
     if (formatType === 'twoVar') {
       const { id } =
         inputs.find((input) =>
-          moment.utc(input.endDate).isSameOrAfter(moment.utc())
+          moment.utc(input.endDate).isSameOrAfter(moment.utc()),
         ) || {};
       dispatch(updateInput(variable, id));
     }
@@ -38,7 +39,7 @@ const SelectInputComponent = ({ inputs = [], formatType, variable, name }) => {
           .utc(e.endDate)
           .format('MMM D, YYYY')}`;
       }
-      return e.eventCity + ' - ' + dates;
+      return `${e.eventCity} - ${dates}`;
     };
   }
 

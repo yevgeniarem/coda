@@ -1,6 +1,6 @@
 const initialState = {
   routineList: [],
-  currentRoutine: {}
+  currentRoutine: {},
 };
 
 const routines = (state = initialState, action) => {
@@ -8,12 +8,12 @@ const routines = (state = initialState, action) => {
     case 'UPDATE_ROUTINE_LIST':
       return {
         ...state,
-        routineList: action.payload
+        routineList: action.payload,
       };
     case 'UPDATE_CURRENT_ROUTINE':
       return {
         ...state,
-        currentRoutine: action.payload
+        currentRoutine: action.payload,
       };
     default:
       return state;

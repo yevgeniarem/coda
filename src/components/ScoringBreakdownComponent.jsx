@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useSelector, useDispatch } from 'react-redux';
+import { Popover, OverlayTrigger } from 'react-bootstrap';
+import axios from 'axios';
 import {
   updateScore,
   runSubmitModal,
@@ -10,9 +12,7 @@ import {
   updateNote,
   updateRoutineList,
 } from '../redux/actions/appActions';
-import { Popover, OverlayTrigger } from 'react-bootstrap';
 import ModalComponent from './ModalComponent';
-import axios from 'axios';
 
 const ScoringBreakdownComponent = () => {
   const dispatch = useDispatch();
@@ -22,7 +22,7 @@ const ScoringBreakdownComponent = () => {
   const { tourDateId, competitionGroup, position } = useSelector(
     (state) => state.inputs
   );
-  let { isSubmitModalShown } = useSelector((state) => state.modals);
+  const { isSubmitModalShown } = useSelector((state) => state.modals);
   const eventId = useSelector((state) => state.events.currentEvent.id);
   const [note, setNote] = useState('');
 
@@ -33,10 +33,10 @@ const ScoringBreakdownComponent = () => {
           event_id: eventId,
         },
       })
-      .then(function (response) {
+      .then((response) => {
         dispatch(updateScoringBreakdown(response.data));
       })
-      .catch(function (error) {
+      .catch((error) => {
         console.log(error);
       });
   }, [eventId, dispatch]);
@@ -93,13 +93,13 @@ const ScoringBreakdownComponent = () => {
         params: {
           tour_date_id: tourDateId,
           competition_group_id: competitionGroup,
-          position: position,
+          position,
         },
       })
-      .then(function (response) {
+      .then((response) => {
         dispatch(updateRoutineList(response.data));
       })
-      .catch(function (error) {
+      .catch((error) => {
         console.log(error);
       });
   };

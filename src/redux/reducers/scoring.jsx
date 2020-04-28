@@ -4,7 +4,7 @@ const initialState = {
   not_friendly: false,
   i_choreographed: false,
   teacher_critique: false,
-  is_coda: true, //hardcoded to always true
+  is_coda: true, // hardcoded to always true
   buttons: [],
   strongest_level_1_id: 0,
   weakest_level_1_id: 0,

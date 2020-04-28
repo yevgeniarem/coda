@@ -15,39 +15,36 @@ const Judge4 = () => {
 
   useEffect(() => {
     axios
-      .get(`https://api.d360test.com/api/coda/judges`)
-      .then(function (judge) {
+      .get('https://api.d360test.com/api/coda/judges')
+      .then((data) => {
         dispatch(
           updateJudgeList(
-            judge.data.map((judge) => {
-              return {
-                judge: `${judge.fname} ${judge.lname}`,
-                id: judge.id,
-                default_notes: judge.default_notes,
-              };
-            })
-          )
+            data.data.map((judge) => ({
+              judge: `${judge.fname} ${judge.lname}`,
+              id: judge.id,
+              default_notes: judge.default_notes,
+            })),
+          ),
         );
       })
-      .catch(function (error) {
+      .catch((error) => {
+        // eslint-disable-next-line no-console
         console.log(error);
       });
 
     axios
-      .get(`https://api.d360test.com/api/coda/competition-groups`)
-      .then(function (groups) {
+      .get('https://api.d360test.com/api/coda/competition-groups')
+      .then((groups) => {
         setCompetitionGroup(
-          groups.data.map((group) => {
-            return {
-              competitionGroup: group.name,
-              id: group.id,
-            };
-          })
+          groups.data.map((group) => ({
+            competitionGroup: group.name,
+            id: group.id,
+          })),
         );
       });
 
     dispatch(closeSidebar());
-  }, [dispatch]);
+  }, []);
 
   const positions = [
     { id: 1, position: 1 },

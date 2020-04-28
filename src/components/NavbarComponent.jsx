@@ -1,26 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Navbar, Image } from 'react-bootstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import classNames from 'classnames';
+import Sidebar from 'react-sidebar';
+import moment from 'moment';
+import axios from 'axios';
 import {
   updateCurrentRoutine,
   runRoutineModal,
   toggleSidebar,
   updateRoutineList,
 } from '../redux/actions/appActions';
-import { Navbar, Image } from 'react-bootstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import DropdownComponent from '../components/DropdownComponent';
+import DropdownComponent from './DropdownComponent';
 import ModalComponent from './ModalComponent';
-import classNames from 'classnames';
-import Sidebar from 'react-sidebar';
-import moment from 'moment';
-import axios from 'axios';
 
 const NavbarComponent = ({ type, text, name }) => {
   const { currentEvent, eventCitiesList } = useSelector(
-    (state) => state.events
+    (state) => state.events,
   );
   const { routineList, currentRoutine } = useSelector(
-    (state) => state.routines
+    (state) => state.routines,
   );
   const {
     judge: judgeId,
@@ -33,16 +33,16 @@ const NavbarComponent = ({ type, text, name }) => {
   const { isRoutineModalShown } = useSelector((state) => state.modals);
   const [clickedRoutine, setClickedRoutine] = useState({});
   const [isFetching, setIsFetching] = useState(false);
-  let dates,
-    currentTourDate,
-    renderMenu = () => {},
-    handleClick = () => {},
-    findJudgeNameById = () => {},
-    conditionalStylingDiv = () => {},
-    renderJudgeProfile = () => {},
-    routineListButtons,
-    refreshButton,
-    subtext = '';
+  let dates;
+  let currentTourDate;
+  let renderMenu = () => {};
+  let handleClick = () => {};
+  let findJudgeNameById = () => {};
+  let conditionalStylingDiv = () => {};
+  let renderJudgeProfile = () => {};
+  let routineListButtons;
+  let refreshButton;
+  let subtext = '';
   const dispatch = useDispatch();
 
   const navClassNames = {
@@ -52,21 +52,24 @@ const NavbarComponent = ({ type, text, name }) => {
   };
 
   useEffect(() => {
-    if (name === 'judge5' && !currentRoutine.routine_id)
+    if (name === 'judge5' && !currentRoutine.routine_id) {
       dispatch(
         updateCurrentRoutine(
           routineList.find(
             (routine) =>
-              !routine.canceled && !routine.score && routine.score !== 0
-          ) || {}
-        )
+              !routine.canceled && !routine.score && routine.score !== 0,
+          ) || {},
+        ),
       );
+    }
   }, [dispatch, routineList, name, currentRoutine.routine_id]);
 
   if (name === 'judge5') {
     findJudgeNameById = () => {
-      let index = judgeList.map((judge) => judge.id === judgeId).indexOf(true);
-      let currentJudge = judgeList[index] || {};
+      const index = judgeList
+        .map((judge) => judge.id === judgeId)
+        .indexOf(true);
+      const currentJudge = judgeList[index] || {};
       return currentJudge.judge.toUpperCase();
     };
 
@@ -95,23 +98,22 @@ const NavbarComponent = ({ type, text, name }) => {
     renderMenu = () => {
       if (!isSidebarOpen) {
         return (
-          <div onClick={handleClick}>
+          <div role="button" tabIndex="0" onClick={handleClick}>
             <FontAwesomeIcon
               icon={['fas', 'bars']}
               className="icon icon--menu"
             />
           </div>
         );
-      } else {
-        return (
-          <div onClick={handleClick}>
-            <FontAwesomeIcon
-              icon={['fas', 'times']}
-              className="icon icon--menu"
-            />
-          </div>
-        );
       }
+      return (
+        <div onClick={handleClick} role="button" tabIndex="0">
+          <FontAwesomeIcon
+            icon={['fas', 'times']}
+            className="icon icon--menu"
+          />
+        </div>
+      );
     };
 
     text = `#${currentRoutine.number} - ${currentRoutine.routine}`;
@@ -135,10 +137,10 @@ const NavbarComponent = ({ type, text, name }) => {
           .utc(tourDate.endDate)
           .format('MMM D, YYYY')}`;
       }
-      return tourDate.eventCity + ' - ' + dates;
+      return `${tourDate.eventCity} - ${dates}`;
     };
     currentTourDate = formatDate(
-      eventCitiesList.find((city) => city.id === tourDateId)
+      eventCitiesList.find((city) => city.id === tourDateId),
     );
 
     const handleButtonClick = (routine) => {
@@ -160,6 +162,7 @@ const NavbarComponent = ({ type, text, name }) => {
             onClick={() => handleButtonClick(routine)}
             className="navbar__sidebar--button navbar__sidebar--button--disabled"
             key={routine.routine_id}
+            type="button"
           >
             <span>{renderRoutineNumber()}</span>
             <span className="navbar__sidebar--routine">{routine.routine}</span>
@@ -172,6 +175,7 @@ const NavbarComponent = ({ type, text, name }) => {
             onClick={() => handleButtonClick(routine)}
             className="navbar__sidebar--button navbar__sidebar--button--active"
             key={routine.routine_id}
+            type="button"
           >
             <span>{renderRoutineNumber()}</span>
             <span className="navbar__sidebar--routine">
@@ -186,6 +190,7 @@ const NavbarComponent = ({ type, text, name }) => {
             onClick={() => handleButtonClick(routine)}
             className="navbar__sidebar--button navbar__sidebar--button--disabled"
             key={routine.routine_id}
+            type="button"
           >
             <span>{renderRoutineNumber()}</span>
             <span className="navbar__sidebar--routine">{routine.routine}</span>
@@ -198,6 +203,7 @@ const NavbarComponent = ({ type, text, name }) => {
           onClick={() => handleButtonClick(routine)}
           className="navbar__sidebar--button"
           key={routine.routine_id}
+          type="button"
         >
           <span>{renderRoutineNumber()}</span>
           <span className="navbar__sidebar--routine">{routine.routine}</span>
@@ -208,18 +214,18 @@ const NavbarComponent = ({ type, text, name }) => {
     const handleRefresh = () => {
       setIsFetching(true);
       axios
-        .get(`https://api.d360test.com/api/coda/routines`, {
+        .get('https://api.d360test.com/api/coda/routines', {
           params: {
             tour_date_id: tourDateId,
             competition_group_id: competitionGroup,
-            position: position,
+            position,
           },
         })
-        .then(function (response) {
+        .then((response) => {
           dispatch(updateRoutineList(response.data));
           window.setTimeout(() => setIsFetching(false), 1000);
         })
-        .catch(function (error) {
+        .catch((error) => {
           console.log(error);
         });
     };
@@ -232,10 +238,7 @@ const NavbarComponent = ({ type, text, name }) => {
         }`}
         onClick={handleRefresh}
       >
-        <FontAwesomeIcon
-          icon={['fas', 'redo']}
-          className="icon--refresh"
-        ></FontAwesomeIcon>{' '}
+        <FontAwesomeIcon icon={['fas', 'redo']} className="icon--refresh" />{' '}
         REFRESH LIST
       </button>
     );

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Modal, Button } from 'react-bootstrap';
+import { useHistory } from 'react-router-dom';
+import axios from 'axios';
 import {
   invalidLogin,
   runJudgeModal,
@@ -9,8 +11,6 @@ import {
   closeSidebar,
   runSubmitModal,
 } from '../redux/actions/appActions';
-import { useHistory } from 'react-router-dom';
-import axios from 'axios';
 
 const ModalComponent = ({
   isShown,
@@ -35,7 +35,7 @@ const ModalComponent = ({
     teacherJudge,
   } = useSelector((state) => state.inputs);
   const { currentRoutine, routineList } = useSelector(
-    (state) => state.routines
+    (state) => state.routines,
   );
   let {
     note,
@@ -61,53 +61,59 @@ const ModalComponent = ({
   };
 
   if (!note) {
-    let judgeObj = judgeList.find((judge) => judge.id === currentJudge) || {};
+    const judgeObj = judgeList.find((judge) => judge.id === currentJudge) || {};
     note = judgeObj.default_notes;
     if (!judgeObj.default_notes) note = '';
   }
 
-  let foundationButtons = buttons.filter((button) => button.level_1_id === 11);
-  let performanceButtons = buttons.filter((button) => button.level_1_id === 12);
-  let creativeButtons = buttons.filter((button) => button.level_1_id === 13);
+  const foundationButtons = buttons.filter(
+    (button) => button.level_1_id === 11,
+  );
+  const performanceButtons = buttons.filter(
+    (button) => button.level_1_id === 12,
+  );
+  const creativeButtons = buttons.filter((button) => button.level_1_id === 13);
 
-  const calculatePercentage = (buttons) => {
-    let array = buttons.map((button) => button.good) || [];
-    let percentage =
+  const calculatePercentage = (b) => {
+    const array = b.map((button) => button.good) || [];
+    const percentage =
       (array.filter((e) => e === true).length / array.length) * 100;
     if (isNaN(percentage)) return 50;
     return Math.floor(percentage);
   };
 
-  let foundationPercentage = calculatePercentage(foundationButtons);
-  let performancePercentage = calculatePercentage(performanceButtons);
-  let creativePercentage = calculatePercentage(creativeButtons);
+  const foundationPercentage = calculatePercentage(foundationButtons);
+  const performancePercentage = calculatePercentage(performanceButtons);
+  const creativePercentage = calculatePercentage(creativeButtons);
 
   const calculateStrongest = () => {
-    let max = Math.max(
+    const max = Math.max(
       foundationPercentage,
       performancePercentage,
-      creativePercentage
+      creativePercentage,
     );
 
     if (foundationPercentage === max) return 11;
     if (performancePercentage === max) return 12;
     if (creativePercentage === max) return 13;
+    return null;
   };
 
   const calculateWeakest = () => {
-    let min = Math.min(
+    const min = Math.min(
       foundationPercentage,
       performancePercentage,
-      creativePercentage
+      creativePercentage,
     );
 
     if (foundationPercentage === min) return 11;
     if (performancePercentage === min) return 12;
     if (creativePercentage === min) return 13;
+    return null;
   };
 
   const renderButtons = () => {
-    if (numButtons === '1')
+    if (numButtons === '1') {
       return (
         <Button
           variant="secondary"
@@ -117,7 +123,8 @@ const ModalComponent = ({
           {button1}
         </Button>
       );
-    if (numButtons === '2')
+    }
+    if (numButtons === '2') {
       return (
         <>
           <Button
@@ -135,8 +142,9 @@ const ModalComponent = ({
             onClick={() => {
               handleClose();
               if (location === 'judge4') history.push('/Judge5');
-              if (location === 'judge5')
+              if (location === 'judge5') {
                 dispatch(updateCurrentRoutine(clickedRoutine));
+              }
               if (location === 'scoring-breakdown-comp') {
                 strongest_level_1_id = calculateStrongest();
                 weakest_level_1_id = calculateWeakest();
@@ -151,21 +159,21 @@ const ModalComponent = ({
                     data: {
                       online_scoring_id: currentRoutine.online_scoring_id,
                       staff_id: currentJudge,
-                      note: note,
-                      score: score,
-                      not_friendly: not_friendly,
-                      i_choreographed: i_choreographed,
-                      position: position,
+                      note,
+                      score,
+                      not_friendly,
+                      i_choreographed,
+                      position,
                       teacher_critique: teacherJudge,
-                      is_coda: is_coda,
-                      buttons: buttons,
-                      strongest_level_1_id: strongest_level_1_id,
-                      weakest_level_1_id: weakest_level_1_id,
+                      is_coda,
+                      buttons,
+                      strongest_level_1_id,
+                      weakest_level_1_id,
                     },
                   })
-                  .then((res) => {
+                  .then(() => {
                     axios
-                      .post(`https://api.d360test.com/api/socket-scoring`, {
+                      .post('https://api.d360test.com/api/socket-scoring', {
                         tour_date_id: tourDateId,
                         coda: true,
                         data: {
@@ -173,26 +181,30 @@ const ModalComponent = ({
                           date_routine_id: currentRoutine.date_routine_id,
                         },
                       })
-                      .then((res) => {
-                        let routineIndex = routineList.findIndex(
+                      .then(() => {
+                        const routineIndex = routineList.findIndex(
                           (routine) =>
-                            routine.routine_id === currentRoutine.routine_id
+                            routine.routine_id === currentRoutine.routine_id,
                         );
-                        let newRoutineArr = routineList.slice(routineIndex + 1);
-                        let newCurrentRoutine = newRoutineArr.find(
+                        const newRoutineArr = routineList.slice(
+                          routineIndex + 1,
+                        );
+                        const newCurrentRoutine = newRoutineArr.find(
                           (routine) =>
                             !routine.canceled &&
                             !routine.score &&
-                            routine.score !== 0
+                            routine.score !== 0,
                         );
                         dispatch(updateCurrentRoutine(newCurrentRoutine));
                         window.scrollTo(0, 0);
                       })
                       .catch((err) => {
+                        // eslint-disable-next-line no-console
                         console.log(err);
                       });
                   })
                   .catch((error) => {
+                    // eslint-disable-next-line no-console
                     console.log(error);
                   });
               }
@@ -204,6 +216,8 @@ const ModalComponent = ({
           </Button>
         </>
       );
+    }
+    return null;
   };
 
   return (

@@ -24,18 +24,19 @@ const NavButtonsComponent = ({ button1, button2, disabled, location }) => {
               position: inputs.position,
             },
           })
-          .then(function (response) {
+          .then((response) => {
             dispatch(runJudgeModal(response.data));
             if (!response.data) history.push('/Judge5');
           })
-          .catch(function (error) {
+          .catch((error) => {
+            // eslint-disable-next-line no-console
             console.log(error);
           });
       }
       if (!pauseClick) {
         dispatch(runJudgeModal(''));
         history.push(
-          `/Judge${parseInt(history.location.pathname.slice(-1)) + 1}`
+          `/Judge${parseInt(history.location.pathname.slice(-1)) + 1}`,
         );
       }
     }
@@ -45,9 +46,8 @@ const NavButtonsComponent = ({ button1, button2, disabled, location }) => {
     if (disabled === 'notDisabled') return false;
     if (Object.values(inputs).find((e) => e === 'default')) {
       return true;
-    } else {
-      return false;
     }
+    return false;
   };
 
   return (

@@ -16,5 +16,10 @@
     "sourceType": "module"
   },
   "plugins": ["react"],
-  "rules": {}
+  "rules": {
+    "object-curly-newline": 0,
+    "jsx-a11y/click-events-have-key-events": 0,
+    "operator-linebreak": 0,
+    "camelcase": 0
+  }
 }
