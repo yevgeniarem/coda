@@ -1,3 +1,7 @@
+import axios from 'axios';
+
+import CONST from '../../utils/constants';
+
 export const updateLogin = (e) => ({
   type: 'UPDATE_LOGIN',
   payload: e,
@@ -11,6 +15,18 @@ export const invalidLogin = (payload) => ({
   type: 'INVALID_LOGIN',
   payload,
 });
+
+export const tryLogin = (dispatch) => async ({ name, password }) => {
+  try {
+    await axios.post(`${CONST.API}/auth/signin`, {
+      name,
+      password,
+    });
+    dispatch(authLogin());
+  } catch (err) {
+    dispatch(invalidLogin(true));
+  }
+};
 
 export const createEvents = (payload) => ({
   type: 'CREATE_EVENTS',

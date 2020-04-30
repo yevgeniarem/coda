@@ -1,35 +1,43 @@
 import React from 'react';
-import axios from 'axios';
-import { useSelector, useDispatch } from 'react-redux';
-import { Image, Form, Button } from 'react-bootstrap';
+import { useSelector } from 'react-redux';
+import { Image, Form } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
+
 import InputGroupComponent from './InputGroupComponent';
 import ModalComponent from './ModalComponent';
-import { authLogin, invalidLogin } from '../redux/actions/appActions';
+import { tryLogin } from '../redux/actions/appActions';
+import SubmitButton from '../componentsReusable/buttons/Submit';
 
-const Judge1 = () => {
+export default function Judge1() {
   const { name, password, isInvalid } = useSelector((state) => state.login);
-  const dispatch = useDispatch();
   const history = useHistory();
   const { handleSubmit, register, errors } = useForm({
     validateCriteriaMode: 'all',
   });
 
-  const onSubmit = () => {
-    axios
-      .post('https://api.d360test.com/api/auth/signin', {
-        name,
-        password,
-      })
-      .then(() => {
-        dispatch(authLogin());
-        history.push('/Judge2');
-      })
-      .catch(() => {
-        dispatch(invalidLogin(true));
-      });
+  const onSubmit = async () => {
+    try {
+      await tryLogin({ name, password });
+      history.push('/Judge2');
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error(err);
+    }
   };
+
+  const formInputs = [
+    {
+      name: 'name',
+      registerOptions: { required: 'Username is required' },
+      controlId: 'formBasicEmail',
+    },
+    {
+      name: 'password',
+      registerOptions: { required: 'Password is required' },
+      controlId: 'formBasicPassword',
+    },
+  ];
 
   return (
     <>
@@ -49,28 +57,18 @@ const Judge1 = () => {
       />
 
       <Form onSubmit={handleSubmit(onSubmit)} className="form form--login">
-        <Form.Group controlId="formBasicEmail">
-          <InputGroupComponent
-            type="name"
-            register={register({ required: 'Username is required' })}
-            errors={errors}
-          />
-        </Form.Group>
+        {formInputs.map((i) => (
+          <Form.Group controlId={i.controlId} key={i.name}>
+            <InputGroupComponent
+              type={i.name}
+              register={register(i.registerOptions)}
+              errors={errors}
+            />
+          </Form.Group>
+        ))}
 
-        <Form.Group controlId="formBasicPassword">
-          <InputGroupComponent
-            type="password"
-            register={register({ required: 'Password is required' })}
-            errors={errors}
-          />
-        </Form.Group>
-
-        <Button type="submit" className="button action-button--submit">
-          LOGIN
-        </Button>
+        <SubmitButton text="LOGIN" />
       </Form>
     </>
   );
-};
-
-export default Judge1;
+}

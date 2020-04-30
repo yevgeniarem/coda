@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Image } from 'react-bootstrap';
 import axios from 'axios';
-
 import NavbarComponent from './NavbarComponent';
 import SelectInputComponent from './SelectInputComponent';
 import NavButtonsComponent from './NavButtonsComponent';
