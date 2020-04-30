@@ -20,7 +20,7 @@ const Judge2 = () => {
         // eslint-disable-next-line no-console
         console.error(error);
       });
-  }, []);
+  }, [dispatch]);
 
   const generateEventLogos = () => {
     if (events) {

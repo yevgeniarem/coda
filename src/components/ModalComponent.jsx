@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Modal, Button } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
 import axios from 'axios';
+import PropTypes from 'prop-types';
 import {
   invalidLogin,
   runJudgeModal,
@@ -10,6 +11,7 @@ import {
   updateCurrentRoutine,
   closeSidebar,
   runSubmitModal,
+  resetScoring,
 } from '../redux/actions/appActions';
 
 const ModalComponent = ({
@@ -26,7 +28,7 @@ const ModalComponent = ({
   const history = useHistory();
   const [show, setShow] = useState(false);
   const { currentEvent } = useSelector((state) => state.events);
-  let {
+  const {
     competitionGroup,
     tourDateId,
     judgeList,
@@ -37,15 +39,13 @@ const ModalComponent = ({
   const { currentRoutine, routineList } = useSelector(
     (state) => state.routines,
   );
-  let {
+  const {
     note,
     score,
     not_friendly,
     i_choreographed,
     is_coda,
     buttons,
-    strongest_level_1_id,
-    weakest_level_1_id,
   } = useSelector((state) => state.scoring);
 
   useEffect(() => {
@@ -60,12 +60,6 @@ const ModalComponent = ({
     setShow(false);
   };
 
-  if (!note) {
-    const judgeObj = judgeList.find((judge) => judge.id === currentJudge) || {};
-    note = judgeObj.default_notes;
-    if (!judgeObj.default_notes) note = '';
-  }
-
   const foundationButtons = buttons.filter(
     (button) => button.level_1_id === 11,
   );
@@ -78,7 +72,7 @@ const ModalComponent = ({
     const array = b.map((button) => button.good) || [];
     const percentage =
       (array.filter((e) => e === true).length / array.length) * 100;
-    if (isNaN(percentage)) return 50;
+    if (Number.isNaN(percentage)) return 50;
     return Math.floor(percentage);
   };
 
@@ -146,11 +140,21 @@ const ModalComponent = ({
                 dispatch(updateCurrentRoutine(clickedRoutine));
               }
               if (location === 'scoring-breakdown-comp') {
-                strongest_level_1_id = calculateStrongest();
-                weakest_level_1_id = calculateWeakest();
+                const strongest_level_1_id = calculateStrongest();
+                const weakest_level_1_id = calculateWeakest();
+
+                let finalNote = note;
+                if (!finalNote) {
+                  const judgeObj = judgeList.find(
+                    (judge) => judge.id === currentJudge,
+                  );
+                  finalNote = judgeObj.default_notes;
+
+                  if (!judgeObj.default_notes) finalNote = '';
+                }
 
                 axios
-                  .post(`https://api.d360test.com/api/coda/score`, {
+                  .post('https://api.d360test.com/api/coda/score', {
                     isTabulator: false,
                     competition_group_id: competitionGroup,
                     date_routine_id: currentRoutine.date_routine_id,
@@ -159,7 +163,7 @@ const ModalComponent = ({
                     data: {
                       online_scoring_id: currentRoutine.online_scoring_id,
                       staff_id: currentJudge,
-                      note,
+                      note: finalNote,
                       score,
                       not_friendly,
                       i_choreographed,
@@ -209,6 +213,7 @@ const ModalComponent = ({
                   });
               }
               dispatch(closeSidebar());
+              dispatch(resetScoring());
             }}
             className="button action-button--navigation action-button--blue"
           >
@@ -229,6 +234,22 @@ const ModalComponent = ({
       <Modal.Footer className="modal__footer">{renderButtons()}</Modal.Footer>
     </Modal>
   );
+};
+
+ModalComponent.propTypes = {
+  isShown: PropTypes.bool.isRequired,
+  title: PropTypes.string.isRequired,
+  body: PropTypes.string.isRequired,
+  numButtons: PropTypes.string.isRequired,
+  button1: PropTypes.string.isRequired,
+  button2: PropTypes.string,
+  location: PropTypes.string.isRequired,
+  clickedRoutine: PropTypes.shape({}),
+};
+
+ModalComponent.defaultProps = {
+  button2: 'NEXT',
+  clickedRoutine: null,
 };
 
 export default ModalComponent;

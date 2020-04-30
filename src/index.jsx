@@ -1,28 +1,30 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import '@fortawesome/fontawesome-free/js/all';
-import * as serviceWorker from './serviceWorker';
 import {
   BrowserRouter as Router,
   Route,
   Redirect,
-  Switch
+  Switch,
 } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import { Provider, useSelector } from 'react-redux';
+import * as serviceWorker from './serviceWorker';
 import './styles/index.scss';
 import configureStore from './redux/configureStore';
-import { Provider, useSelector } from 'react-redux';
-import Judge1 from './components/Judge1.jsx';
-import Judge2 from './components/Judge2.jsx';
-import Judge3 from './components/Judge3.jsx';
-import Judge4 from './components/Judge4.jsx';
-import Judge5 from './components/Judge5.jsx';
+import Judge1 from './components/Judge1';
+import Judge2 from './components/Judge2';
+import Judge3 from './components/Judge3';
+import Judge4 from './components/Judge4';
+import Judge5 from './components/Judge5';
 
 const store = configureStore();
 
 function PrivateRoute({ children, ...rest }) {
-  const isLoggedIn = useSelector(state => state.login.isLoggedIn);
+  const isLoggedIn = useSelector((state) => state.login.isLoggedIn);
   return (
     <Route
+      // eslint-disable-next-line react/jsx-props-no-spreading
       {...rest}
       render={({ location }) =>
         isLoggedIn ? (
@@ -31,7 +33,7 @@ function PrivateRoute({ children, ...rest }) {
           <Redirect
             to={{
               pathname: '/',
-              state: { from: location }
+              state: { from: location },
             }}
           />
         )
@@ -68,7 +70,11 @@ ReactDOM.render(
       </Switch>
     </Router>
   </Provider>,
-  document.getElementById('root')
+  document.getElementById('root'),
 );
+
+PrivateRoute.propTypes = {
+  children: PropTypes.shape({}).isRequired,
+};
 
 serviceWorker.unregister();

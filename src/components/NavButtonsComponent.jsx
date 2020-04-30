@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Button } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
+import PropTypes from 'prop-types';
 import { runJudgeModal } from '../redux/actions/appActions';
 
 const NavButtonsComponent = ({ button1, button2, disabled, location }) => {
@@ -36,7 +37,7 @@ const NavButtonsComponent = ({ button1, button2, disabled, location }) => {
       if (!pauseClick) {
         dispatch(runJudgeModal(''));
         history.push(
-          `/Judge${parseInt(history.location.pathname.slice(-1)) + 1}`,
+          `/Judge${parseInt(history.location.pathname.slice(-1), 10) + 1}`,
         );
       }
     }
@@ -69,6 +70,13 @@ const NavButtonsComponent = ({ button1, button2, disabled, location }) => {
       </Button>
     </div>
   );
+};
+
+NavButtonsComponent.propTypes = {
+  button1: PropTypes.string.isRequired,
+  button2: PropTypes.string.isRequired,
+  disabled: PropTypes.string.isRequired,
+  location: PropTypes.string.isRequired,
 };
 
 export default NavButtonsComponent;

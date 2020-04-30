@@ -2,11 +2,11 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Form } from 'react-bootstrap';
 import moment from 'moment';
+import PropTypes from 'prop-types';
 import { updateInput } from '../redux/actions/appActions';
 
-const SelectInputComponent = ({ inputs = [], formatType, variable, name }) => {
+const SelectInputComponent = ({ inputs, formatType, variable, name }) => {
   let format;
-  let mappedInputs;
   const dispatch = useDispatch();
   const selectInputs = useSelector((state) => state.inputs);
 
@@ -52,7 +52,7 @@ const SelectInputComponent = ({ inputs = [], formatType, variable, name }) => {
     }
   };
 
-  mappedInputs = inputs.map((e) => {
+  const mappedInputs = inputs.map((e) => {
     return (
       <option key={e.id} value={e.id} name={e[variable]}>
         {format(e)}
@@ -77,6 +77,17 @@ const SelectInputComponent = ({ inputs = [], formatType, variable, name }) => {
       </div>
     </Form>
   );
+};
+
+SelectInputComponent.propTypes = {
+  inputs: PropTypes.arrayOf(PropTypes.object),
+  formatType: PropTypes.string.isRequired,
+  variable: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+};
+
+SelectInputComponent.defaultProps = {
+  inputs: [],
 };
 
 export default SelectInputComponent;

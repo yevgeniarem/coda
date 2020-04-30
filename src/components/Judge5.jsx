@@ -64,14 +64,11 @@ const Judge5 = () => {
       );
       selectedButton.classList.add('button--scoring--green');
     }
-
-    if (
-      reduxButtons.find((reduxButton) => {
-        return (
-          reduxButton.level_4_id === button.id && reduxButton.good === true
-        );
-      })
-    ) {
+    const greenButton = reduxButtons.find(
+      (reduxButton) =>
+        reduxButton.level_4_id === button.id && reduxButton.good === true,
+    );
+    if (greenButton) {
       dispatch(
         changeButton({
           level_4_id: button.id,
@@ -83,11 +80,10 @@ const Judge5 = () => {
       selectedButton.classList.add('button--scoring--red');
     }
     if (
-      reduxButtons.find((reduxButton) => {
-        return (
-          reduxButton.level_4_id === button.id && reduxButton.good === false
-        );
-      })
+      reduxButtons.find(
+        (reduxButton) =>
+          reduxButton.level_4_id === button.id && reduxButton.good === false,
+      )
     ) {
       dispatch(deleteButton({ level_4_id: button.id }));
       selectedButton.classList.remove('button--scoring--red');

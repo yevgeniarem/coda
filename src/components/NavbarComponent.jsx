@@ -4,6 +4,7 @@ import { Navbar, Image } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames';
 import Sidebar from 'react-sidebar';
+import PropTypes from 'prop-types';
 import moment from 'moment';
 import axios from 'axios';
 import {
@@ -44,6 +45,7 @@ const NavbarComponent = ({ type, text, name }) => {
   let refreshButton;
   let subtext = '';
   const dispatch = useDispatch();
+  let title = text;
 
   const navClassNames = {
     chooseYourEvent: 'navbar--choose-your-event',
@@ -73,23 +75,21 @@ const NavbarComponent = ({ type, text, name }) => {
       return currentJudge.judge.toUpperCase();
     };
 
-    renderJudgeProfile = () => {
-      return (
-        <div className="navbar--judge-profile-container">
-          <div className="row align-items-center navbar--judge-profile">
-            <div className="col col-auto navbar__col navbar--judge-profile-text">
-              {`#${position} ${findJudgeNameById()}`}
-            </div>
-            <Image
-              className="col col-auto navbar__col img--judge"
-              src={`https://assets.dance360.com/staff/50x50/${judgeId}.jpg`}
-              roundedCircle
-            />
-            <DropdownComponent />
+    renderJudgeProfile = () => (
+      <div className="navbar--judge-profile-container">
+        <div className="row align-items-center navbar--judge-profile">
+          <div className="col col-auto navbar__col navbar--judge-profile-text">
+            {`#${position} ${findJudgeNameById()}`}
           </div>
+          <Image
+            className="col col-auto navbar__col img--judge"
+            src={`https://assets.dance360.com/staff/50x50/${judgeId}.jpg`}
+            roundedCircle
+          />
+          <DropdownComponent />
         </div>
-      );
-    };
+      </div>
+    );
 
     handleClick = () => {
       dispatch(toggleSidebar());
@@ -116,11 +116,11 @@ const NavbarComponent = ({ type, text, name }) => {
       );
     };
 
-    text = `#${currentRoutine.number} - ${currentRoutine.routine}`;
+    title = `#${currentRoutine.number} - ${currentRoutine.routine}`;
     subtext = `${currentRoutine.age_division} • ${currentRoutine.performance_division} • ${currentRoutine.routine_category}`;
 
     if (!currentRoutine.routine_id) {
-      text = 'COMPETITION IS OVER';
+      title = 'COMPETITION IS OVER';
       subtext = '';
     }
 
@@ -152,9 +152,8 @@ const NavbarComponent = ({ type, text, name }) => {
       const renderRoutineNumber = () => {
         if (routine.has_a) {
           return `#${routine.number}a`;
-        } else {
-          return `#${routine.number}`;
         }
+        return `#${routine.number}`;
       };
       if (!!routine.score || routine.score === 0) {
         return (
@@ -184,7 +183,7 @@ const NavbarComponent = ({ type, text, name }) => {
           </button>
         );
       }
-      if (!!routine.canceled) {
+      if (routine.canceled) {
         return (
           <button
             onClick={() => handleButtonClick(routine)}
@@ -226,6 +225,7 @@ const NavbarComponent = ({ type, text, name }) => {
           window.setTimeout(() => setIsFetching(false), 1000);
         })
         .catch((error) => {
+          // eslint-disable-next-line no-console
           console.log(error);
         });
     };
@@ -243,9 +243,7 @@ const NavbarComponent = ({ type, text, name }) => {
       </button>
     );
 
-    conditionalStylingDiv = () => {
-      return <div style={{ width: 165 }}></div>;
-    };
+    conditionalStylingDiv = () => <div style={{ width: 165 }} />;
   }
 
   return (
@@ -263,7 +261,7 @@ const NavbarComponent = ({ type, text, name }) => {
       <Navbar className={classNames('navbar', navClassNames[type])}>
         <>{conditionalStylingDiv()}</>
         <div className="navbar__main-header">
-          <h1 className="navbar__text">{text.toUpperCase()}</h1>
+          <h1 className="navbar__text">{title.toUpperCase()}</h1>
           <h2 className="navbar__subtext">{subtext}</h2>
         </div>
         <div>{renderJudgeProfile()}</div>
@@ -290,6 +288,17 @@ const NavbarComponent = ({ type, text, name }) => {
       </Sidebar>
     </>
   );
+};
+
+NavbarComponent.propTypes = {
+  type: PropTypes.string.isRequired,
+  text: PropTypes.string,
+  name: PropTypes.string,
+};
+
+NavbarComponent.defaultProps = {
+  text: null,
+  name: null,
 };
 
 export default NavbarComponent;

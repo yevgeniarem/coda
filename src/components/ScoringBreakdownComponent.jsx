@@ -16,15 +16,23 @@ import ModalComponent from './ModalComponent';
 
 const ScoringBreakdownComponent = () => {
   const dispatch = useDispatch();
-  let { score, scoring_breakdown, not_friendly, i_choreographed } = useSelector(
-    (state) => state.scoring
-  );
+  const {
+    score,
+    scoring_breakdown,
+    not_friendly,
+    i_choreographed,
+    note,
+  } = useSelector((state) => state.scoring);
   const { tourDateId, competitionGroup, position } = useSelector(
-    (state) => state.inputs
+    (state) => state.inputs,
   );
   const { isSubmitModalShown } = useSelector((state) => state.modals);
   const eventId = useSelector((state) => state.events.currentEvent.id);
-  const [note, setNote] = useState('');
+  const [noteValue, setNoteValue] = useState(note);
+
+  useEffect(() => {
+    setNoteValue(note);
+  }, [note]);
 
   useEffect(() => {
     axios // data for scoring breakdown
@@ -37,6 +45,7 @@ const ScoringBreakdownComponent = () => {
         dispatch(updateScoringBreakdown(response.data));
       })
       .catch((error) => {
+        // eslint-disable-next-line no-console
         console.log(error);
       });
   }, [eventId, dispatch]);
@@ -44,11 +53,11 @@ const ScoringBreakdownComponent = () => {
   const handleClick = (action) => {
     if (action === 'minus') {
       if (score === 0) return;
-      dispatch(updateScore(--score));
+      dispatch(updateScore(score - 1));
     }
     if (action === 'plus') {
       if (score === 100) return;
-      dispatch(updateScore(++score));
+      dispatch(updateScore(score + 1));
     }
   };
 
@@ -87,7 +96,7 @@ const ScoringBreakdownComponent = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     dispatch(runSubmitModal(true));
-    dispatch(updateNote(note));
+    dispatch(updateNote(noteValue));
     axios
       .get(`https://api.d360test.com/api/coda/routines`, {
         params: {
@@ -100,6 +109,7 @@ const ScoringBreakdownComponent = () => {
         dispatch(updateRoutineList(response.data));
       })
       .catch((error) => {
+        // eslint-disable-next-line no-console
         console.log(error);
       });
   };
@@ -114,7 +124,7 @@ const ScoringBreakdownComponent = () => {
   };
 
   const handleTextChange = (event) => {
-    setNote(event.target.value);
+    setNoteValue(event.target.value);
   };
 
   return (
@@ -135,7 +145,7 @@ const ScoringBreakdownComponent = () => {
           trigger="click"
           placement="left"
           overlay={popover}
-          rootClose={true}
+          rootClose
         >
           <FontAwesomeIcon
             icon={['fas', 'info-circle']}
@@ -164,13 +174,17 @@ const ScoringBreakdownComponent = () => {
           <form onSubmit={handleSubmit}>
             <textarea
               className="scoring-breakdown__textarea"
-              value={note}
+              value={noteValue}
               onChange={handleTextChange}
             />
             <div className="scoring-breakdown__checkbox">
-              <label className="scoring-breakdown__checkbox--text">
+              <label
+                className="scoring-breakdown__checkbox--text"
+                htmlFor="not_friendly"
+              >
                 <input
                   name="not_friendly"
+                  id="not_friendly"
                   type="checkbox"
                   checked={not_friendly}
                   onChange={handleInputChange}
@@ -181,9 +195,13 @@ const ScoringBreakdownComponent = () => {
               </label>
             </div>
             <div className="scoring-breakdown__checkbox">
-              <label className="scoring-breakdown__checkbox--text">
+              <label
+                className="scoring-breakdown__checkbox--text"
+                htmlFor="i_choreographed"
+              >
                 <input
                   name="i_choreographed"
+                  id="i_choreographed"
                   type="checkbox"
                   checked={i_choreographed}
                   onChange={handleInputChange}

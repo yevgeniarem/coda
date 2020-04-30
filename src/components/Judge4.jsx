@@ -44,7 +44,7 @@ const Judge4 = () => {
       });
 
     dispatch(closeSidebar());
-  }, []);
+  }, [dispatch]);
 
   const positions = [
     { id: 1, position: 1 },

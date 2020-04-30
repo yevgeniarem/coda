@@ -3,7 +3,12 @@
     "browser": true,
     "es6": true
   },
-  "extends": ["plugin:react/recommended", "airbnb"],
+  "extends": [
+    "plugin:react/recommended",
+    "airbnb",
+    "prettier",
+    "prettier/react"
+  ],
   "globals": {
     "Atomics": "readonly",
     "SharedArrayBuffer": "readonly"
@@ -20,6 +25,8 @@
     "object-curly-newline": 0,
     "jsx-a11y/click-events-have-key-events": 0,
     "operator-linebreak": 0,
-    "camelcase": 0
+    "camelcase": 0,
+    "implicit-arrow-linebreak": 0,
+    "react/jsx-one-expression-per-line": 0
   }
 }
