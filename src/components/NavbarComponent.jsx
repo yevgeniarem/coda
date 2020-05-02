@@ -54,7 +54,7 @@ const NavbarComponent = ({ type, text, name }) => {
   };
 
   useEffect(() => {
-    if (name === 'judge5' && !currentRoutine.routine_id) {
+    if (name === 'scoring' && !currentRoutine.routine_id) {
       dispatch(
         updateCurrentRoutine(
           routineList.find(
@@ -66,7 +66,7 @@ const NavbarComponent = ({ type, text, name }) => {
     }
   }, [dispatch, routineList, name, currentRoutine.routine_id]);
 
-  if (name === 'judge5') {
+  if (name === 'scoring') {
     findJudgeNameById = () => {
       const index = judgeList
         .map((judge) => judge.id === judgeId)
@@ -255,7 +255,7 @@ const NavbarComponent = ({ type, text, name }) => {
         numButtons="2"
         button1="GO BACK"
         button2="YES, SWITCH"
-        location="judge5"
+        location="scoring"
         clickedRoutine={clickedRoutine}
       />
       <Navbar className={classNames('navbar', navClassNames[type])}>

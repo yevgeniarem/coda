@@ -10,7 +10,7 @@ import {
   deleteButton,
 } from '../redux/actions/appActions';
 
-const Judge5 = () => {
+export default function Scoring() {
   const dispatch = useDispatch();
   const inputs = useSelector((state) => state.inputs);
   const { currentRoutine } = useSelector((state) => state.routines);
@@ -150,7 +150,7 @@ const Judge5 = () => {
 
   return (
     <>
-      <NavbarComponent type="scoreSheet" name="judge5" />
+      <NavbarComponent type="scoreSheet" name="scoring" />
       <div className="button__container button__container--firstPage">
         {foundationButtons}
       </div>
@@ -160,6 +160,4 @@ const Judge5 = () => {
       <div>{conditionalScoringBreakdownComp()}</div>
     </>
   );
-};
-
-export default Judge5;
+}

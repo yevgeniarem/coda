@@ -9,7 +9,7 @@ const EventLogoComponent = ({ id, imgSrc, imgAlt, index }) => {
   const history = useHistory();
   const dispatch = useDispatch();
   const handleClick = () => {
-    history.push('/Judge3');
+    history.push('/TourDates');
     dispatch(updateCurrentEvent(id));
   };
 

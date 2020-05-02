@@ -3,12 +3,13 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Image } from 'react-bootstrap';
 import axios from 'axios';
 
-import NavbarComponent from './NavbarComponent';
-import SelectInputComponent from './SelectInputComponent';
-import NavButtonsComponent from './NavButtonsComponent';
+import NavbarComponent from '../components/NavbarComponent';
+import SelectInputComponent from '../components/SelectInputComponent';
+import NavButtonsComponent from '../components/NavButtonsComponent';
 import { createEventCitiesList } from '../redux/actions/appActions';
+import CONST from '../utils/constants';
 
-const Judge3 = () => {
+export default function TourDates() {
   const dispatch = useDispatch();
   const { currentEvent, eventCitiesList } = useSelector(
     (state) => state.events,
@@ -16,7 +17,7 @@ const Judge3 = () => {
 
   useEffect(() => {
     axios
-      .get('https://api.d360test.com/api/coda/tour-dates', {
+      .get(`${CONST.API}/coda/tour-dates`, {
         params: {
           event_id: currentEvent.id,
           season_id: currentEvent.seasonId,
@@ -54,12 +55,10 @@ const Judge3 = () => {
         <NavButtonsComponent
           button1="BACK"
           button2="NEXT"
-          location="judge3"
+          location="tourDates"
           disabled="notDisabled"
         />
       </div>
     </div>
   );
-};
-
-export default Judge3;
+}

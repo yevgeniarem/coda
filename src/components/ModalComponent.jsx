@@ -53,9 +53,9 @@ const ModalComponent = ({
   }, [isShown]);
 
   const handleClose = () => {
-    if (location === 'judge1') dispatch(invalidLogin(false));
-    if (location === 'judge4') dispatch(runJudgeModal(''));
-    if (location === 'judge5') dispatch(runRoutineModal(false));
+    if (location === 'login') dispatch(invalidLogin(false));
+    if (location === 'judges') dispatch(runJudgeModal(''));
+    if (location === 'scoring') dispatch(runRoutineModal(false));
     if (location === 'scoring-breakdown-comp') dispatch(runSubmitModal(false));
     setShow(false);
   };
@@ -135,8 +135,8 @@ const ModalComponent = ({
             variant="secondary"
             onClick={() => {
               handleClose();
-              if (location === 'judge4') history.push('/Judge5');
-              if (location === 'judge5') {
+              if (location === 'judges') history.push('/scoring');
+              if (location === 'scoring') {
                 dispatch(updateCurrentRoutine(clickedRoutine));
               }
               if (location === 'scoring-breakdown-comp') {

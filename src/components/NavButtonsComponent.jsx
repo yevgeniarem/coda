@@ -15,7 +15,7 @@ const NavButtonsComponent = ({ button1, button2, disabled, location }) => {
   const handleClick = (e) => {
     if (e.target.value === 'BACK') window.history.back();
     if (e.target.value === 'NEXT') {
-      if (location === 'judge4') {
+      if (location === 'judges') {
         pauseClick = true;
         axios
           .get('https://api.d360test.com/api/coda/check-judge', {
@@ -27,7 +27,7 @@ const NavButtonsComponent = ({ button1, button2, disabled, location }) => {
           })
           .then((response) => {
             dispatch(runJudgeModal(response.data));
-            if (!response.data) history.push('/Judge5');
+            if (!response.data) history.push('/scoring');
           })
           .catch((error) => {
             // eslint-disable-next-line no-console

@@ -1,25 +1,26 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Image, Form } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 
-import InputGroupComponent from './InputGroupComponent';
-import ModalComponent from './ModalComponent';
-import { tryLogin } from '../redux/actions/appActions';
+import InputGroupComponent from '../components/InputGroupComponent';
+import ModalComponent from '../components/ModalComponent';
 import SubmitButton from '../componentsReusable/buttons/Submit';
+import { tryLogin } from '../redux/actions/appActions';
 
-export default function Judge1() {
-  const { name, password, isInvalid } = useSelector((state) => state.login);
+export default function Login() {
   const history = useHistory();
+  const dispatch = useDispatch();
+  const { name, password, isInvalid } = useSelector((state) => state.login);
   const { handleSubmit, register, errors } = useForm({
     validateCriteriaMode: 'all',
   });
 
   const onSubmit = async () => {
     try {
-      await tryLogin({ name, password });
-      history.push('/Judge2');
+      await dispatch(tryLogin({ name, password }));
+      history.push('/Events');
     } catch (err) {
       // eslint-disable-next-line no-console
       console.error(err);
@@ -47,7 +48,7 @@ export default function Judge1() {
         body="You have entered an invalid username or password."
         numButtons="1"
         button1="OK"
-        location="judge1"
+        location="login"
       />
 
       <Image

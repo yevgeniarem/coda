@@ -7,7 +7,7 @@ import NavButtonsComponent from './NavButtonsComponent';
 import ModalComponent from './ModalComponent';
 import { updateJudgeList, closeSidebar } from '../redux/actions/appActions';
 
-const Judge4 = () => {
+export default function Judges() {
   const [competitionGroup, setCompetitionGroup] = useState();
   const modalJudgeName = useSelector((state) => state.modals.judgeName);
   const judgeList = useSelector((state) => state.inputs.judgeList);
@@ -60,7 +60,7 @@ const Judge4 = () => {
   return (
     <div>
       <ModalComponent
-        location="judge4"
+        location="judges"
         isShown={!!modalJudgeName}
         title="Alert"
         body={`${modalJudgeName.fname} ${modalJudgeName.lname} already has scores
@@ -105,12 +105,10 @@ const Judge4 = () => {
         <NavButtonsComponent
           button1="BACK"
           button2="NEXT"
-          location="judge4"
+          location="judges"
           disabled="disabled"
         />
       </div>
     </div>
   );
-};
-
-export default Judge4;
+}

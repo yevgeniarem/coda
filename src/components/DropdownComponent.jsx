@@ -6,8 +6,8 @@ const DropdownComponent = () => {
   const history = useHistory();
 
   const handleClick = (action) => {
-    if (action === 'change-judge') history.push('/Judge4');
-    if (action === 'sign-out') history.push('/Judge1');
+    if (action === 'change-judge') history.push('/Judges');
+    if (action === 'sign-out') history.push('/Login');
   };
 
   return (

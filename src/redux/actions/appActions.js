@@ -16,8 +16,9 @@ export const invalidLogin = (payload) => ({
   payload,
 });
 
-export const tryLogin = (dispatch) => async ({ name, password }) => {
+export const tryLogin = ({ name, password }) => async (dispatch) => {
   try {
+    // console.log(getState().login);
     await axios.post(`${CONST.API}/auth/signin`, {
       name,
       password,
