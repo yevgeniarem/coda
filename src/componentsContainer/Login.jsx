@@ -4,18 +4,18 @@ import { Image, Form } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 
-import InputGroupComponent from '../components/InputGroupComponent';
-import ModalComponent from '../components/ModalComponent';
-import SubmitButton from '../componentsReusable/buttons/Submit';
+import InputGroup from '../componentsReusable/InputGroup';
+import Modal from '../componentsReusable/Modal';
+import SubmitButton from '../componentsReusable/buttons/SubmitButton';
 import { tryLogin } from '../redux/actions/appActions';
 
 export default function Login() {
   const history = useHistory();
   const dispatch = useDispatch();
-  const { name, password, isInvalid } = useSelector((state) => state.login);
   const { handleSubmit, register, errors } = useForm({
     validateCriteriaMode: 'all',
   });
+  const { name, password, isInvalid } = useSelector((state) => state.login);
 
   const onSubmit = async () => {
     try {
@@ -42,7 +42,7 @@ export default function Login() {
 
   return (
     <>
-      <ModalComponent
+      <Modal
         isShown={isInvalid}
         title="Sorry"
         body="You have entered an invalid username or password."
@@ -60,7 +60,7 @@ export default function Login() {
       <Form onSubmit={handleSubmit(onSubmit)} className="form form--login">
         {formInputs.map((i) => (
           <Form.Group controlId={i.controlId} key={i.name}>
-            <InputGroupComponent
+            <InputGroup
               type={i.name}
               register={register(i.registerOptions)}
               errors={errors}

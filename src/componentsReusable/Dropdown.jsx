@@ -1,8 +1,8 @@
 import React from 'react';
-import { Dropdown } from 'react-bootstrap';
+import { Dropdown as BootstrapDropdown } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
 
-const DropdownComponent = () => {
+export default function Dropdown() {
   const history = useHistory();
 
   const handleClick = (action) => {
@@ -11,27 +11,25 @@ const DropdownComponent = () => {
   };
 
   return (
-    <Dropdown>
-      <Dropdown.Toggle className="profile-dropdown" />
+    <BootstrapDropdown>
+      <BootstrapDropdown.Toggle className="profile-dropdown" />
 
-      <Dropdown.Menu alignRight className="profile-dropdown__list">
-        <Dropdown.Item
+      <BootstrapDropdown.Menu alignRight className="profile-dropdown__list">
+        <BootstrapDropdown.Item
           className="profile-dropdown__item"
           href="#/change-judge-info"
           onClick={() => handleClick('change-judge')}
         >
           CHANGE JUDGE INFO
-        </Dropdown.Item>
-        <Dropdown.Item
+        </BootstrapDropdown.Item>
+        <BootstrapDropdown.Item
           className="profile-dropdown__item"
           href="#/sign-out"
           onClick={() => handleClick('sign-out')}
         >
           SIGN OUT
-        </Dropdown.Item>
-      </Dropdown.Menu>
-    </Dropdown>
+        </BootstrapDropdown.Item>
+      </BootstrapDropdown.Menu>
+    </BootstrapDropdown>
   );
-};
-
-export default DropdownComponent;
+}

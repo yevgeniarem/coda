@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 
 export default function PrivateRoute({ path, exact, component }) {
   const { isLoggedIn } = useSelector((state) => state.login);
+
   return isLoggedIn ? (
     <Route path={path} exact={exact} component={component} />
   ) : (

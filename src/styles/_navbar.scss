@@ -17,7 +17,7 @@
     height: 16px;
     font-size: 20px;
     font-weight: 900;
-    margin-bottom: 0px;
+    margin-bottom: 8px;
     letter-spacing: 1.43px;
     text-align: center;
   }
@@ -31,13 +31,8 @@
   }
 
   &--judge-profile-container {
-    padding-right: 16px;
     display: inline;
-  }
-
-  &--judge-profile {
-    margin-right: 0px;
-    padding-top: 25px;
+    padding-right: 15px;
   }
 
   &--judge-profile-text {

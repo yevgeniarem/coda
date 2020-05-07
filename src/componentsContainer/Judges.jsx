@@ -1,25 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
-import NavbarComponent from './NavbarComponent';
-import SelectInputComponent from './SelectInputComponent';
-import NavButtonsComponent from './NavButtonsComponent';
-import ModalComponent from './ModalComponent';
-import { updateJudgeList, closeSidebar } from '../redux/actions/appActions';
+
+import Navbar from '../componentsReusable/Navbar';
+import SelectInput from '../componentsReusable/SelectInput';
+import NavButtons from '../componentsReusable/buttons/NavButtons';
+import Modal from '../componentsReusable/Modal';
+import { updateJudgeList } from '../redux/actions/appActions';
+import CONST from '../utils/constants';
 
 export default function Judges() {
-  const [competitionGroup, setCompetitionGroup] = useState();
-  const modalJudgeName = useSelector((state) => state.modals.judgeName);
-  const judgeList = useSelector((state) => state.inputs.judgeList);
   const dispatch = useDispatch();
+  const { judgeName: modalJudgeName } = useSelector((state) => state.modals);
+  const { judgeList } = useSelector((state) => state.inputs);
+  const [competitionGroup, setCompetitionGroup] = useState();
 
   useEffect(() => {
     axios
-      .get('https://api.d360test.com/api/coda/judges')
-      .then((data) => {
+      .get(`${CONST.API}/coda/judges`)
+      .then((d) => {
         dispatch(
           updateJudgeList(
-            data.data.map((judge) => ({
+            d.data.map((judge) => ({
               judge: `${judge.fname} ${judge.lname}`,
               id: judge.id,
               default_notes: judge.default_notes,
@@ -29,11 +31,11 @@ export default function Judges() {
       })
       .catch((error) => {
         // eslint-disable-next-line no-console
-        console.log(error);
+        console.error(error);
       });
 
     axios
-      .get('https://api.d360test.com/api/coda/competition-groups')
+      .get(`${CONST.API}/coda/competition-groups`)
       .then((groups) => {
         setCompetitionGroup(
           groups.data.map((group) => ({
@@ -41,9 +43,11 @@ export default function Judges() {
             id: group.id,
           })),
         );
+      })
+      .catch((error) => {
+        // eslint-disable-next-line no-console
+        console.error(error);
       });
-
-    dispatch(closeSidebar());
   }, [dispatch]);
 
   const positions = [
@@ -52,14 +56,38 @@ export default function Judges() {
     { id: 3, position: 3 },
     { id: 4, position: 4 },
   ];
+
   const teacherJudge = [
     { id: true, teacherJudge: 'IS Teacher Judge' },
     { id: false, teacherJudge: 'IS NOT Teacher Judge' },
   ];
 
+  const selectInputs = [
+    {
+      name: 'Judge',
+      variable: 'judge',
+      inputs: judgeList,
+    },
+    {
+      name: 'Position',
+      variable: 'position',
+      inputs: positions,
+    },
+    {
+      name: 'Teacher Judge',
+      variable: 'teacherJudge',
+      inputs: teacherJudge,
+    },
+    {
+      name: 'Competition Group',
+      variable: 'competitionGroup',
+      inputs: competitionGroup,
+    },
+  ];
+
   return (
-    <div>
-      <ModalComponent
+    <>
+      <Modal
         location="judges"
         isShown={!!modalJudgeName}
         title="Alert"
@@ -71,44 +99,30 @@ export default function Judges() {
         button2="YES"
       />
 
-      <NavbarComponent type="judgeInformation" text="JUDGE INFORMATION" />
+      <Navbar text="judge information" />
 
       <div className="main-container">
         <div className="main-container__title">JUDGE INFORMATION</div>
         <div className="main-container__middle-container">
-          <SelectInputComponent
-            inputs={judgeList}
-            formatType="oneVar"
-            variable="judge"
-            name="Judge"
-          />
-          <SelectInputComponent
-            inputs={positions}
-            formatType="oneVar"
-            variable="position"
-            name="Position"
-          />
-          <SelectInputComponent
-            inputs={teacherJudge}
-            formatType="oneVar"
-            variable="teacherJudge"
-            name="Teacher Judge"
-          />
-          <SelectInputComponent
-            inputs={competitionGroup}
-            formatType="oneVar"
-            variable="competitionGroup"
-            name="Competition Group"
-          />
+          {competitionGroup &&
+            judgeList[0] &&
+            selectInputs.map((i) => (
+              <SelectInput
+                name={i.name}
+                variable={i.variable}
+                inputs={i.inputs}
+                key={i.name}
+              />
+            ))}
         </div>
 
-        <NavButtonsComponent
+        <NavButtons
           button1="BACK"
           button2="NEXT"
           location="judges"
           disabled="disabled"
         />
       </div>
-    </div>
+    </>
   );
 }

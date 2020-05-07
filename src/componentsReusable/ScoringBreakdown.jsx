@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useSelector, useDispatch } from 'react-redux';
 import { Popover, OverlayTrigger } from 'react-bootstrap';
 import axios from 'axios';
+
 import {
   updateScore,
   runSubmitModal,
@@ -12,9 +13,10 @@ import {
   updateNote,
   updateRoutineList,
 } from '../redux/actions/appActions';
-import ModalComponent from './ModalComponent';
+import Modal from './Modal';
+import CONST from '../utils/constants';
 
-const ScoringBreakdownComponent = () => {
+export default function ScoringBreakdown() {
   const dispatch = useDispatch();
   const {
     score,
@@ -27,7 +29,7 @@ const ScoringBreakdownComponent = () => {
     (state) => state.inputs,
   );
   const { isSubmitModalShown } = useSelector((state) => state.modals);
-  const eventId = useSelector((state) => state.events.currentEvent.id);
+  const { id: eventId } = useSelector((state) => state.events.currentEvent);
   const [noteValue, setNoteValue] = useState(note);
 
   useEffect(() => {
@@ -36,7 +38,7 @@ const ScoringBreakdownComponent = () => {
 
   useEffect(() => {
     axios // data for scoring breakdown
-      .get('https://api.d360test.com/api/coda/scoring-breakdown', {
+      .get(`${CONST.API}/coda/scoring-breakdown`, {
         params: {
           event_id: eventId,
         },
@@ -46,7 +48,7 @@ const ScoringBreakdownComponent = () => {
       })
       .catch((error) => {
         // eslint-disable-next-line no-console
-        console.log(error);
+        console.error(error);
       });
   }, [eventId, dispatch]);
 
@@ -98,7 +100,7 @@ const ScoringBreakdownComponent = () => {
     dispatch(runSubmitModal(true));
     dispatch(updateNote(noteValue));
     axios
-      .get(`https://api.d360test.com/api/coda/routines`, {
+      .get(`${CONST.API}/coda/routines`, {
         params: {
           tour_date_id: tourDateId,
           competition_group_id: competitionGroup,
@@ -110,7 +112,7 @@ const ScoringBreakdownComponent = () => {
       })
       .catch((error) => {
         // eslint-disable-next-line no-console
-        console.log(error);
+        console.error(error);
       });
   };
 
@@ -129,7 +131,7 @@ const ScoringBreakdownComponent = () => {
 
   return (
     <>
-      <ModalComponent
+      <Modal
         isShown={isSubmitModalShown}
         title="Alert"
         body="Are you sure you want to save?"
@@ -220,6 +222,4 @@ const ScoringBreakdownComponent = () => {
       </div>
     </>
   );
-};
-
-export default ScoringBreakdownComponent;
+}

@@ -1,7 +1,7 @@
 import React from 'react';
+import { Provider } from 'react-redux';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import { Provider } from 'react-redux';
 import * as serviceWorker from './serviceWorker';
 import configureStore from './redux/configureStore';
 import '@fortawesome/fontawesome-free/js/all';

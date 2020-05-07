@@ -4,9 +4,11 @@ import { Button } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
-import { runJudgeModal } from '../redux/actions/appActions';
 
-const NavButtonsComponent = ({ button1, button2, disabled, location }) => {
+import { runJudgeModal } from '../../redux/actions/appActions';
+import CONST from '../../utils/constants';
+
+export default function NavButtons({ button1, button2, disabled, location }) {
   const history = useHistory();
   const inputs = useSelector((state) => state.inputs);
   const dispatch = useDispatch();
@@ -18,7 +20,7 @@ const NavButtonsComponent = ({ button1, button2, disabled, location }) => {
       if (location === 'judges') {
         pauseClick = true;
         axios
-          .get('https://api.d360test.com/api/coda/check-judge', {
+          .get(`${CONST.API}/coda/check-judge`, {
             params: {
               tour_date_id: inputs.tourDateId,
               competition_group_id: 2,
@@ -31,23 +33,19 @@ const NavButtonsComponent = ({ button1, button2, disabled, location }) => {
           })
           .catch((error) => {
             // eslint-disable-next-line no-console
-            console.log(error);
+            console.error(error);
           });
       }
       if (!pauseClick) {
         dispatch(runJudgeModal(''));
-        history.push(
-          `/Judge${parseInt(history.location.pathname.slice(-1), 10) + 1}`,
-        );
+        history.push('/Judges');
       }
     }
   };
 
   const isDisabled = () => {
     if (disabled === 'notDisabled') return false;
-    if (Object.values(inputs).find((e) => e === 'default')) {
-      return true;
-    }
+    if (Object.values(inputs).find((e) => e === 'default')) return true;
     return false;
   };
 
@@ -70,13 +68,11 @@ const NavButtonsComponent = ({ button1, button2, disabled, location }) => {
       </Button>
     </div>
   );
-};
+}
 
-NavButtonsComponent.propTypes = {
+NavButtons.propTypes = {
   button1: PropTypes.string.isRequired,
   button2: PropTypes.string.isRequired,
   disabled: PropTypes.string.isRequired,
   location: PropTypes.string.isRequired,
 };
-
-export default NavButtonsComponent;

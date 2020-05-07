@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Modal, Button } from 'react-bootstrap';
+import { Modal as BootstrapModal, Button } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 import PropTypes from 'prop-types';
+
 import {
   invalidLogin,
   runJudgeModal,
@@ -13,8 +14,9 @@ import {
   runSubmitModal,
   resetScoring,
 } from '../redux/actions/appActions';
+import CONST from '../utils/constants';
 
-const ModalComponent = ({
+export default function Modal({
   isShown,
   title,
   body,
@@ -23,7 +25,7 @@ const ModalComponent = ({
   button2,
   location,
   clickedRoutine,
-}) => {
+}) {
   const dispatch = useDispatch();
   const history = useHistory();
   const [show, setShow] = useState(false);
@@ -154,7 +156,7 @@ const ModalComponent = ({
                 }
 
                 axios
-                  .post('https://api.d360test.com/api/coda/score', {
+                  .post(`${CONST.API}/coda/score`, {
                     isTabulator: false,
                     competition_group_id: competitionGroup,
                     date_routine_id: currentRoutine.date_routine_id,
@@ -177,7 +179,7 @@ const ModalComponent = ({
                   })
                   .then(() => {
                     axios
-                      .post('https://api.d360test.com/api/socket-scoring', {
+                      .post(`${CONST.API}/socket-scoring`, {
                         tour_date_id: tourDateId,
                         coda: true,
                         data: {
@@ -204,12 +206,12 @@ const ModalComponent = ({
                       })
                       .catch((err) => {
                         // eslint-disable-next-line no-console
-                        console.log(err);
+                        console.error(err);
                       });
                   })
                   .catch((error) => {
                     // eslint-disable-next-line no-console
-                    console.log(error);
+                    console.error(error);
                   });
               }
               dispatch(closeSidebar());
@@ -226,17 +228,21 @@ const ModalComponent = ({
   };
 
   return (
-    <Modal className="modal" show={show} onHide={handleClose} centered>
-      <Modal.Header className="modal__header">
-        <Modal.Title className="modal__title">{title}</Modal.Title>
-      </Modal.Header>
-      <Modal.Body className="modal__body">{body}</Modal.Body>
-      <Modal.Footer className="modal__footer">{renderButtons()}</Modal.Footer>
-    </Modal>
+    <BootstrapModal className="modal" show={show} onHide={handleClose} centered>
+      <BootstrapModal.Header className="modal__header">
+        <BootstrapModal.Title className="modal__title">
+          {title}
+        </BootstrapModal.Title>
+      </BootstrapModal.Header>
+      <BootstrapModal.Body className="modal__body">{body}</BootstrapModal.Body>
+      <BootstrapModal.Footer className="modal__footer">
+        {renderButtons()}
+      </BootstrapModal.Footer>
+    </BootstrapModal>
   );
-};
+}
 
-ModalComponent.propTypes = {
+Modal.propTypes = {
   isShown: PropTypes.bool.isRequired,
   title: PropTypes.string.isRequired,
   body: PropTypes.string.isRequired,
@@ -247,9 +253,7 @@ ModalComponent.propTypes = {
   clickedRoutine: PropTypes.shape({}),
 };
 
-ModalComponent.defaultProps = {
+Modal.defaultProps = {
   button2: 'NEXT',
   clickedRoutine: null,
 };
-
-export default ModalComponent;

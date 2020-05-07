@@ -29,6 +29,14 @@ export const tryLogin = ({ name, password }) => async (dispatch) => {
   }
 };
 
+export const tryJudgeCheck = ({tour_date_id, competition_group_id, position}) => async (dispatch) => {
+  try {
+    await axios.post(`${CONST.API}/coda/check-judge`, {
+      
+    }
+  }
+}
+
 export const createEvents = (payload) => ({
   type: 'CREATE_EVENTS',
   payload,

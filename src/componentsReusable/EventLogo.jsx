@@ -3,9 +3,10 @@ import { Image } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
+
 import { updateCurrentEvent } from '../redux/actions/appActions';
 
-const EventLogoComponent = ({ id, imgSrc, imgAlt, index }) => {
+export default function EventLogo({ id, imgSrc, imgAlt, index }) {
   const history = useHistory();
   const dispatch = useDispatch();
   const handleClick = () => {
@@ -25,13 +26,11 @@ const EventLogoComponent = ({ id, imgSrc, imgAlt, index }) => {
       <Image src={imgSrc} alt={imgAlt} />
     </div>
   );
-};
+}
 
-EventLogoComponent.propTypes = {
+EventLogo.propTypes = {
   id: PropTypes.number.isRequired,
   imgSrc: PropTypes.string.isRequired,
   imgAlt: PropTypes.string.isRequired,
   index: PropTypes.number.isRequired,
 };
-
-export default EventLogoComponent;

@@ -1,8 +1,8 @@
 import Login from './componentsContainer/Login';
 import Events from './componentsContainer/Events';
 import TourDates from './componentsContainer/TourDates';
-import Judges from './components/Judges';
-import Scoring from './components/Scoring';
+import Judges from './componentsContainer/Judges';
+import Scoring from './componentsContainer/Scoring';
 
 export default [
   { path: '/', exact: true, privateRoute: false, component: Login },
