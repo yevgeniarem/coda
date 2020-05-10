@@ -20,14 +20,13 @@ export default function Sidebar() {
   const { isRoutineModalShown } = useSelector((state) => state.modals);
   const isSidebarOpen = useSelector((state) => state.sidebar);
   const [clickedRoutine, setClickedRoutine] = useState({});
+  const currentTourDate = formatTourDate(
+    tourDates.find((city) => city.id === inputs.tourDateId),
+  );
 
   const handleClick = () => {
     dispatch(toggleSidebar());
   };
-
-  const currentTourDate = formatTourDate(
-    tourDates.find((city) => city.id === inputs.tourDateId),
-  );
 
   const handleButtonClick = (routine) => {
     dispatch(runRoutineModal(true));
@@ -35,12 +34,9 @@ export default function Sidebar() {
   };
 
   const routineListButtons = routineList.map((routine) => {
-    const renderRoutineNumber = () => {
-      if (routine.has_a) {
-        return `#${routine.number}a`;
-      }
-      return `#${routine.number}`;
-    };
+    const renderRoutineNumber = () =>
+      routine.has.a ? `#${routine.number}a` : `#${routine.number}`;
+
     if (!!routine.score || routine.score === 0) {
       return (
         <button

@@ -193,8 +193,8 @@
   }
 
   &--refreshing {
-    background: darken(#02be6f, 20%);
-    color: darken(white, 20%);
+    background: darken(#02be6f, 15%) !important;
+    color: darken(white, 15%) !important;
   }
 
   &--scoring-submit {

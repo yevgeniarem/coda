@@ -13,6 +13,7 @@ export default function RefreshButton() {
   const handleRefresh = () => {
     setIsFetching(true);
     dispatch(getRoutineList(inputs));
+    window.setTimeout(() => setIsFetching(false), 1000);
   };
 
   return (
