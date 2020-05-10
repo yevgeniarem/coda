@@ -1,50 +1,37 @@
 import React from 'react';
-import axios from 'axios';
 import { Button } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import { runJudgeModal } from '../../redux/actions/appActions';
-import CONST from '../../utils/constants';
+import { tryJudgeCheck } from '../../redux/actions/appActions';
 
 export default function NavButtons({ button1, button2, disabled, location }) {
   const history = useHistory();
   const inputs = useSelector((state) => state.inputs);
+  const { tourDateId, position } = useSelector((state) => state.inputs);
   const dispatch = useDispatch();
-  let pauseClick = false;
+
+  const checkJudge = async () => {
+    try {
+      const response = await dispatch(tryJudgeCheck({ tourDateId, position }));
+      if (!response.data) history.push('/scoring');
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error(err);
+    }
+  };
 
   const handleClick = (e) => {
     if (e.target.value === 'BACK') window.history.back();
     if (e.target.value === 'NEXT') {
-      if (location === 'judges') {
-        pauseClick = true;
-        axios
-          .get(`${CONST.API}/coda/check-judge`, {
-            params: {
-              tour_date_id: inputs.tourDateId,
-              competition_group_id: 2,
-              position: inputs.position,
-            },
-          })
-          .then((response) => {
-            dispatch(runJudgeModal(response.data));
-            if (!response.data) history.push('/scoring');
-          })
-          .catch((error) => {
-            // eslint-disable-next-line no-console
-            console.error(error);
-          });
-      }
-      if (!pauseClick) {
-        dispatch(runJudgeModal(''));
-        history.push('/Judges');
-      }
+      if (location === 'tourDates') history.push('/judges');
+      if (location === 'judges') checkJudge();
     }
   };
 
   const isDisabled = () => {
-    if (disabled === 'notDisabled') return false;
+    if (disabled === false) return false;
     if (Object.values(inputs).find((e) => e === 'default')) return true;
     return false;
   };
@@ -73,6 +60,6 @@ export default function NavButtons({ button1, button2, disabled, location }) {
 NavButtons.propTypes = {
   button1: PropTypes.string.isRequired,
   button2: PropTypes.string.isRequired,
-  disabled: PropTypes.string.isRequired,
+  disabled: PropTypes.bool.isRequired,
   location: PropTypes.string.isRequired,
 };

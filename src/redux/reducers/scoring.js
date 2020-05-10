@@ -14,9 +14,9 @@ const scoring = (state = initialState, action) => {
   switch (action.type) {
     case 'UPDATE_SCORE':
       return { ...state, score: action.payload };
-    case 'ADD_BUTTON':
+    case 'MAKE_BUTTON_GREEN':
       return { ...state, buttons: [...state.buttons, action.payload] };
-    case 'CHANGE_BUTTON':
+    case 'MAKE_BUTTON_RED':
       filteredButtons = state.buttons.filter(
         (button) => button.level_4_id !== action.payload.level_4_id,
       );
@@ -35,7 +35,7 @@ const scoring = (state = initialState, action) => {
     case 'UPDATE_NOTE':
       return { ...state, note: action.payload };
     case 'RESET_SCORING':
-      return { ...initialState };
+      return { ...initialState, scoring_breakdown: state.scoring_breakdown };
     default:
       return state;
   }

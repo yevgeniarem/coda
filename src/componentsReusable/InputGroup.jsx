@@ -9,7 +9,6 @@ import { updateLogin } from '../redux/actions/appActions';
 
 export default function InputGroup({ type, register, errors }) {
   const dispatch = useDispatch();
-
   const iconClasses = {
     name: ['far', 'envelope'],
     password: ['fas', 'lock'],

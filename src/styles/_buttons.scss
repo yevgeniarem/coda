@@ -179,6 +179,9 @@
     padding: 17px 24px;
     width: 50%;
 
+    &:focus {
+      background: #02be6f;
+    }
     &:hover {
       background-color: #029859;
     }
@@ -205,11 +208,12 @@
     width: 100%;
     margin-bottom: 10px;
     margin-top: 5px;
-
+    &:focus {
+      background: #3123ae;
+    }
     &:hover {
       background: darken(#3123ae, 5%);
     }
-
     &:active {
       background-color: darken(#3123ae, 10%) !important;
       outline: none;

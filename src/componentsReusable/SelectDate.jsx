@@ -5,9 +5,9 @@ import moment from 'moment';
 
 import SelectInput from './SelectInput';
 import { updateInput } from '../redux/actions/appActions';
+import { formatTourDate } from '../utils/helpers';
 
 export default function SelectDate({ inputs, variable, name }) {
-  let date;
   const dispatch = useDispatch();
   const { id } =
     inputs.find((input) =>
@@ -18,27 +18,11 @@ export default function SelectDate({ inputs, variable, name }) {
     dispatch(updateInput(variable, id));
   }, [dispatch, id, variable]);
 
-  const format = (e) => {
-    if (
-      moment.utc(e.startDate).format('MMM') ===
-      moment.utc(e.endDate).format('MMM')
-    ) {
-      date = `${moment.utc(e.startDate).format('MMM D')}-${moment
-        .utc(e.endDate)
-        .format('D, YYYY')}`;
-    } else {
-      date = `${moment.utc(e.startDate).format('MMM D')}-${moment
-        .utc(e.endDate)
-        .format('MMM D, YYYY')}`;
-    }
-    return `${e.eventCity} - ${date}`;
-  };
-
   return (
     <SelectInput
       inputs={inputs.map((i) => ({
         id: i.id,
-        tourDateId: format(i),
+        tourDateId: formatTourDate(i),
       }))}
       variable={variable}
       name={name}

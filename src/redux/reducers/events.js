@@ -1,14 +1,14 @@
 const initialState = {
   events: [],
   currentEvent: '',
-  eventCitiesList: [],
+  tourDates: [],
   currentTourDate: '',
 };
 
 const events = (state = initialState, action) => {
   const eventsList = [];
   let currentEvent = [];
-  const eventCitiesList = [];
+  const tourDates = [];
 
   switch (action.type) {
     case 'CREATE_EVENTS':
@@ -25,16 +25,16 @@ const events = (state = initialState, action) => {
         (event) => event.id === action.payload,
       );
       return { ...state, currentEvent: currentEvent[0] };
-    case 'CREATE_EVENT_CITIES_LIST':
+    case 'UPDATE_TOUR_DATES':
       action.payload.forEach((city) => {
-        eventCitiesList.push({
+        tourDates.push({
           id: city.id,
           eventCity: city.event_city.name,
           startDate: city.start_date,
           endDate: city.end_date,
         });
       });
-      return { ...state, eventCitiesList: [...eventCitiesList] };
+      return { ...state, tourDates: [...tourDates] };
     default:
       return state;
   }

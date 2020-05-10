@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Modal as BootstrapModal, Button } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
-import axios from 'axios';
 import PropTypes from 'prop-types';
 
 import {
@@ -13,8 +12,8 @@ import {
   closeSidebar,
   runSubmitModal,
   resetScoring,
+  postScore,
 } from '../redux/actions/appActions';
-import CONST from '../utils/constants';
 
 export default function Modal({
   isShown,
@@ -28,7 +27,6 @@ export default function Modal({
 }) {
   const dispatch = useDispatch();
   const history = useHistory();
-  const [show, setShow] = useState(false);
   const { currentEvent } = useSelector((state) => state.events);
   const {
     competitionGroup,
@@ -49,6 +47,7 @@ export default function Modal({
     is_coda,
     buttons,
   } = useSelector((state) => state.scoring);
+  const [show, setShow] = useState(false);
 
   useEffect(() => {
     if (isShown) setShow(true);
@@ -155,64 +154,34 @@ export default function Modal({
                   if (!judgeObj.default_notes) finalNote = '';
                 }
 
-                axios
-                  .post(`${CONST.API}/coda/score`, {
-                    isTabulator: false,
-                    competition_group_id: competitionGroup,
-                    date_routine_id: currentRoutine.date_routine_id,
-                    event_id: currentEvent.id,
-                    tour_date_id: tourDateId,
-                    data: {
-                      online_scoring_id: currentRoutine.online_scoring_id,
-                      staff_id: currentJudge,
-                      note: finalNote,
-                      score,
-                      not_friendly,
-                      i_choreographed,
-                      position,
-                      teacher_critique: teacherJudge,
-                      is_coda,
-                      buttons,
-                      strongest_level_1_id,
-                      weakest_level_1_id,
-                    },
-                  })
-                  .then(() => {
-                    axios
-                      .post(`${CONST.API}/socket-scoring`, {
-                        tour_date_id: tourDateId,
-                        coda: true,
-                        data: {
-                          competition_group_id: competitionGroup,
-                          date_routine_id: currentRoutine.date_routine_id,
-                        },
-                      })
-                      .then(() => {
-                        const routineIndex = routineList.findIndex(
-                          (routine) =>
-                            routine.routine_id === currentRoutine.routine_id,
-                        );
-                        const newRoutineArr = routineList.slice(
-                          routineIndex + 1,
-                        );
-                        const newCurrentRoutine = newRoutineArr.find(
-                          (routine) =>
-                            !routine.canceled &&
-                            !routine.score &&
-                            routine.score !== 0,
-                        );
-                        dispatch(updateCurrentRoutine(newCurrentRoutine));
-                        window.scrollTo(0, 0);
-                      })
-                      .catch((err) => {
-                        // eslint-disable-next-line no-console
-                        console.error(err);
-                      });
-                  })
-                  .catch((error) => {
+                const submitScore = async () => {
+                  try {
+                    dispatch(
+                      postScore({
+                        competitionGroup,
+                        currentRoutine,
+                        currentEvent,
+                        tourDateId,
+                        currentJudge,
+                        finalNote,
+                        score,
+                        not_friendly,
+                        i_choreographed,
+                        position,
+                        teacherJudge,
+                        is_coda,
+                        buttons,
+                        strongest_level_1_id,
+                        weakest_level_1_id,
+                        routineList,
+                      }),
+                    );
+                  } catch (err) {
                     // eslint-disable-next-line no-console
-                    console.error(error);
-                  });
+                    console.error(err);
+                  }
+                };
+                submitScore();
               }
               dispatch(closeSidebar());
               dispatch(resetScoring());

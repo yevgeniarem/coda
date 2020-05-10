@@ -3,15 +3,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Image } from 'react-bootstrap';
 import ReactSidebar from 'react-sidebar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import axios from 'axios';
-import moment from 'moment';
 
-import {
-  updateRoutineList,
-  toggleSidebar,
-  runRoutineModal,
-} from '../redux/actions/appActions';
+import { toggleSidebar, runRoutineModal } from '../redux/actions/appActions';
 import Modal from './Modal';
+import RefreshButton from './buttons/RefreshButton';
+import { formatTourDate } from '../utils/helpers';
 import CONST from '../utils/constants';
 
 export default function Sidebar() {
@@ -19,73 +15,18 @@ export default function Sidebar() {
   const { routineList, currentRoutine } = useSelector(
     (state) => state.routines,
   );
-  const { currentEvent, eventCitiesList } = useSelector(
-    (state) => state.events,
-  );
-  const { position, tourDateId, competitionGroup } = useSelector(
-    (state) => state.inputs,
-  );
+  const { currentEvent, tourDates } = useSelector((state) => state.events);
+  const inputs = useSelector((state) => state.inputs);
   const { isRoutineModalShown } = useSelector((state) => state.modals);
   const isSidebarOpen = useSelector((state) => state.sidebar);
-  const [isFetching, setIsFetching] = useState(false);
   const [clickedRoutine, setClickedRoutine] = useState({});
 
   const handleClick = () => {
     dispatch(toggleSidebar());
   };
 
-  const formatDate = (tourDate) => {
-    let dates;
-    if (
-      moment.utc(tourDate.startDate).format('MMM') ===
-      moment.utc(tourDate.endDate).format('MMM')
-    ) {
-      dates = `${moment.utc(tourDate.startDate).format('MMM D')}-${moment
-        .utc(tourDate.endDate)
-        .format('D, YYYY')}`;
-    } else {
-      dates = `${moment.utc(tourDate.startDate).format('MMM D')}-${moment
-        .utc(tourDate.endDate)
-        .format('MMM D, YYYY')}`;
-    }
-    return `${tourDate.eventCity} - ${dates}`;
-  };
-
-  const currentTourDate = formatDate(
-    eventCitiesList.find((city) => city.id === tourDateId),
-  );
-
-  const handleRefresh = () => {
-    setIsFetching(true);
-    axios
-      .get(`${CONST.API}/coda/routines`, {
-        params: {
-          tour_date_id: tourDateId,
-          competition_group_id: competitionGroup,
-          position,
-        },
-      })
-      .then((response) => {
-        dispatch(updateRoutineList(response.data));
-        window.setTimeout(() => setIsFetching(false), 1000);
-      })
-      .catch((error) => {
-        // eslint-disable-next-line no-console
-        console.error(error);
-      });
-  };
-
-  const refreshButton = (
-    <button
-      type="button"
-      className={`button action-button--submit action-button--green ${
-        isFetching ? 'action-button--refreshing' : ''
-      }`}
-      onClick={handleRefresh}
-    >
-      <FontAwesomeIcon icon={['fas', 'redo']} className="icon--refresh" />{' '}
-      REFRESH LIST
-    </button>
+  const currentTourDate = formatTourDate(
+    tourDates.find((city) => city.id === inputs.tourDateId),
   );
 
   const handleButtonClick = (routine) => {
@@ -192,7 +133,7 @@ export default function Sidebar() {
             />
             <span className="navbar__sidebar--heading">{currentTourDate}</span>
             <div className="navbar__sidebar--butons">{routineListButtons}</div>
-            {refreshButton}
+            <RefreshButton />
           </div>
         }
         open={isSidebarOpen}

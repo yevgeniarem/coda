@@ -5,6 +5,7 @@ const initialState = {
   teacherJudge: 'default',
   competitionGroup: 2,
   judgeList: [],
+  competitionGroupList: [],
 };
 
 const inputs = (state = initialState, action) => {
@@ -18,6 +19,11 @@ const inputs = (state = initialState, action) => {
       return {
         ...state,
         judgeList: action.payload,
+      };
+    case 'UPDATE_COMPETITION_GROUP_LIST':
+      return {
+        ...state,
+        competitionGroupList: action.payload,
       };
     default:
       return state;

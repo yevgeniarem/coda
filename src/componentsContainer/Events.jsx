@@ -1,9 +1,8 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Container, Row, Col } from 'react-bootstrap';
-import axios from 'axios';
 
-import { createEvents } from '../redux/actions/appActions';
+import { getEventsList } from '../redux/actions/appActions';
 import EventLogo from '../componentsReusable/EventLogo';
 import Navbar from '../componentsReusable/Navbar';
 import CONST from '../utils/constants';
@@ -13,15 +12,7 @@ export default function Events() {
   const { events } = useSelector((state) => state.events);
 
   useEffect(() => {
-    axios
-      .get(`${CONST.API}/coda/events`)
-      .then((response) => {
-        dispatch(createEvents(response.data));
-      })
-      .catch((error) => {
-        // eslint-disable-next-line no-console
-        console.error(error);
-      });
+    dispatch(getEventsList());
   }, [dispatch]);
 
   return (

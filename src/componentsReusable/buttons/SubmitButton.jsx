@@ -5,10 +5,7 @@ import PropTypes from 'prop-types';
 
 export default function SubmitButton({ text, classes }) {
   return (
-    <Button
-      type="submit"
-      className={classNames('button action-button--submit', classes)}
-    >
+    <Button type="submit" className={classNames('button', classes)}>
       {text}
     </Button>
   );

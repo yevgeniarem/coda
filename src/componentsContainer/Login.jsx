@@ -68,7 +68,7 @@ export default function Login() {
           </Form.Group>
         ))}
 
-        <SubmitButton text="LOGIN" />
+        <SubmitButton text="LOGIN" classes={['action-button--submit']} />
       </Form>
     </>
   );

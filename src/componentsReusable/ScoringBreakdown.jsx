@@ -1,56 +1,31 @@
 import React, { useEffect, useState } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useSelector, useDispatch } from 'react-redux';
-import { Popover, OverlayTrigger } from 'react-bootstrap';
-import axios from 'axios';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import {
   updateScore,
   runSubmitModal,
-  updateScoringBreakdown,
   toggleNotFriendly,
   toggleIChoreographed,
   updateNote,
-  updateRoutineList,
+  getRoutineList,
 } from '../redux/actions/appActions';
 import Modal from './Modal';
-import CONST from '../utils/constants';
+import ScoringPopover from './ScoringPopover';
+import SubmitButton from './buttons/SubmitButton';
 
 export default function ScoringBreakdown() {
   const dispatch = useDispatch();
-  const {
-    score,
-    scoring_breakdown,
-    not_friendly,
-    i_choreographed,
-    note,
-  } = useSelector((state) => state.scoring);
-  const { tourDateId, competitionGroup, position } = useSelector(
-    (state) => state.inputs,
+  const { score, not_friendly, i_choreographed, note } = useSelector(
+    (state) => state.scoring,
   );
+  const inputs = useSelector((state) => state.inputs);
   const { isSubmitModalShown } = useSelector((state) => state.modals);
-  const { id: eventId } = useSelector((state) => state.events.currentEvent);
   const [noteValue, setNoteValue] = useState(note);
 
   useEffect(() => {
     setNoteValue(note);
   }, [note]);
-
-  useEffect(() => {
-    axios // data for scoring breakdown
-      .get(`${CONST.API}/coda/scoring-breakdown`, {
-        params: {
-          event_id: eventId,
-        },
-      })
-      .then((response) => {
-        dispatch(updateScoringBreakdown(response.data));
-      })
-      .catch((error) => {
-        // eslint-disable-next-line no-console
-        console.error(error);
-      });
-  }, [eventId, dispatch]);
 
   const handleClick = (action) => {
     if (action === 'minus') {
@@ -63,57 +38,11 @@ export default function ScoringBreakdown() {
     }
   };
 
-  const renderScoringBreakdown = scoring_breakdown.map((award) => {
-    return (
-      <div className="score-popover__list-item" key={award.id}>
-        <div className="row">
-          <div className="col">{award.award}</div>
-          <div className="col-auto">{`${award.lowest}-${award.highest}`}</div>
-        </div>
-      </div>
-    );
-  });
-
-  const popover = (
-    <Popover className="score-popover">
-      <Popover.Title className="score-popover__header" as="h3">
-        SCORING BREAKDOWN
-      </Popover.Title>
-      <Popover.Content className="p-0">
-        <div className="container-fluid p-0">
-          <div className="score-popover__list-header">
-            <div className="row">
-              <div className="col">AWARD</div>
-              <div className="col-auto">SCORE</div>
-            </div>
-          </div>
-          <div className="score-popover__list-items">
-            {renderScoringBreakdown}
-          </div>
-        </div>
-      </Popover.Content>
-    </Popover>
-  );
-
   const handleSubmit = (event) => {
     event.preventDefault();
     dispatch(runSubmitModal(true));
     dispatch(updateNote(noteValue));
-    axios
-      .get(`${CONST.API}/coda/routines`, {
-        params: {
-          tour_date_id: tourDateId,
-          competition_group_id: competitionGroup,
-          position,
-        },
-      })
-      .then((response) => {
-        dispatch(updateRoutineList(response.data));
-      })
-      .catch((error) => {
-        // eslint-disable-next-line no-console
-        console.error(error);
-      });
+    dispatch(getRoutineList(inputs));
   };
 
   const handleInputChange = (event) => {
@@ -129,6 +58,19 @@ export default function ScoringBreakdown() {
     setNoteValue(event.target.value);
   };
 
+  const checkboxInputs = [
+    {
+      name: 'not_friendly',
+      text: 'Routine is not family-friendly',
+      checked: not_friendly,
+    },
+    {
+      name: 'i_choreographed',
+      text: 'I choreographed this routine',
+      checked: i_choreographed,
+    },
+  ];
+
   return (
     <>
       <Modal
@@ -143,17 +85,7 @@ export default function ScoringBreakdown() {
 
       <div className="scoring-breakdown__container">
         <div className="scoring-breakdown__title">SCORING BREAKDOWN</div>
-        <OverlayTrigger
-          trigger="click"
-          placement="left"
-          overlay={popover}
-          rootClose
-        >
-          <FontAwesomeIcon
-            icon={['fas', 'info-circle']}
-            className="scoring-breakdown--info-icon"
-          />
-        </OverlayTrigger>
+        <ScoringPopover />
         <div className="scoring-breakdown__score-container container">
           <div className="row align-items-center justify-content-center">
             <FontAwesomeIcon
@@ -179,43 +111,28 @@ export default function ScoringBreakdown() {
               value={noteValue}
               onChange={handleTextChange}
             />
-            <div className="scoring-breakdown__checkbox">
-              <label
-                className="scoring-breakdown__checkbox--text"
-                htmlFor="not_friendly"
-              >
-                <input
-                  name="not_friendly"
-                  id="not_friendly"
-                  type="checkbox"
-                  checked={not_friendly}
-                  onChange={handleInputChange}
-                  className="scoring-breakdown__checkbox--check"
-                />
-                {'  '}
-                Routine is not family-friendly
-              </label>
-            </div>
-            <div className="scoring-breakdown__checkbox">
-              <label
-                className="scoring-breakdown__checkbox--text"
-                htmlFor="i_choreographed"
-              >
-                <input
-                  name="i_choreographed"
-                  id="i_choreographed"
-                  type="checkbox"
-                  checked={i_choreographed}
-                  onChange={handleInputChange}
-                  className="scoring-breakdown__checkbox--check"
-                />
-                {'  '}I choreographed this routine
-              </label>
-            </div>
-            <input
-              type="submit"
-              className="button action-button--scoring-submit"
-              value="SUBMIT"
+            {checkboxInputs.map((i) => (
+              <div className="scoring-breakdown__checkbox" key={i.name}>
+                <label
+                  className="scoring-breakdown__checkbox--text"
+                  htmlFor={i.name}
+                >
+                  <input
+                    name={i.name}
+                    id={i.name}
+                    type="checkbox"
+                    checked={i.checked}
+                    onChange={handleInputChange}
+                    className="scoring-breakdown__checkbox--check"
+                  />
+                  {'  '}
+                  {i.text}
+                </label>
+              </div>
+            ))}
+            <SubmitButton
+              text="SUBMIT"
+              classes={['action-button--scoring-submit']}
             />
           </form>
         </div>

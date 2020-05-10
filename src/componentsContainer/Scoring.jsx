@@ -1,43 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import axios from 'axios';
 
 import NavbarScoring from '../componentsReusable/NavbarScoring';
 import ScoringBreakdown from '../componentsReusable/ScoringBreakdown';
 import {
-  updateRoutineList,
-  addButton,
-  changeButton,
+  getRoutineList,
+  makeButtonGreen,
+  makeButtonRed,
   deleteButton,
 } from '../redux/actions/appActions';
-import CONST from '../utils/constants';
+import { getButtons } from '../utils/helpers';
 
 export default function Scoring() {
   const dispatch = useDispatch();
-  const { inputs } = useSelector((state) => state);
+  const inputs = useSelector((state) => state.inputs);
   const { currentRoutine } = useSelector((state) => state.routines);
   const { buttons: reduxButtons } = useSelector((state) => state.scoring);
   const [buttons, setButtons] = useState([]);
 
   useEffect(() => {
-    axios
-      .get(`${CONST.API}/coda/routines`, {
-        params: {
-          tour_date_id: inputs.tourDateId,
-          competition_group_id: inputs.competitionGroup,
-          position: inputs.position,
-        },
-      })
-      .then((response) => {
-        dispatch(updateRoutineList(response.data));
-      })
-      .catch((error) => {
-        // eslint-disable-next-line no-console
-        console.error(error);
-      });
-
-    axios
-      .get(`${CONST.API}/coda/buttons`)
+    dispatch(getRoutineList(inputs));
+    getButtons()
       .then((response) => {
         setButtons(
           response.data.find(
@@ -53,12 +36,21 @@ export default function Scoring() {
 
   const handleClick = (button) => {
     const selectedButton = document.getElementById(button.id);
+    const buttonIsGrey = !reduxButtons.find(
+      (reduxButton) => reduxButton.level_4_id === button.id,
+    );
+    const buttonIsGreen = reduxButtons.find(
+      (reduxButton) =>
+        reduxButton.level_4_id === button.id && reduxButton.good === true,
+    );
+    const buttonIsRed = reduxButtons.find(
+      (reduxButton) =>
+        reduxButton.level_4_id === button.id && reduxButton.good === false,
+    );
 
-    if (
-      !reduxButtons.find((reduxButton) => reduxButton.level_4_id === button.id)
-    ) {
+    if (buttonIsGrey) {
       dispatch(
-        addButton({
+        makeButtonGreen({
           level_4_id: button.id,
           level_1_id: button.level_1_id,
           good: true,
@@ -66,13 +58,9 @@ export default function Scoring() {
       );
       selectedButton.classList.add('button--scoring--green');
     }
-    const greenButton = reduxButtons.find(
-      (reduxButton) =>
-        reduxButton.level_4_id === button.id && reduxButton.good === true,
-    );
-    if (greenButton) {
+    if (buttonIsGreen) {
       dispatch(
-        changeButton({
+        makeButtonRed({
           level_4_id: button.id,
           level_1_id: button.level_1_id,
           good: false,
@@ -81,12 +69,7 @@ export default function Scoring() {
       selectedButton.classList.remove('button--scoring--green');
       selectedButton.classList.add('button--scoring--red');
     }
-    if (
-      reduxButtons.find(
-        (reduxButton) =>
-          reduxButton.level_4_id === button.id && reduxButton.good === false,
-      )
-    ) {
+    if (buttonIsRed) {
       dispatch(deleteButton({ level_4_id: button.id }));
       selectedButton.classList.remove('button--scoring--red');
     }
