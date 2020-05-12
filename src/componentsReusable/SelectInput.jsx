@@ -12,12 +12,12 @@ export default function SelectInput({ inputs, variable, name }) {
   const handleChange = (e) => {
     if (variable === 'teacherJudge') {
       if (e.target.value === 'true') {
-        dispatch(updateInput(variable, true));
+        dispatch(updateInput({ variable, id: true }));
       } else {
-        dispatch(updateInput(variable, false));
+        dispatch(updateInput({ variable, id: false }));
       }
     } else {
-      dispatch(updateInput(variable, Number(e.target.value)));
+      dispatch(updateInput({ variable, id: Number(e.target.value) }));
     }
   };
 

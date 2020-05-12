@@ -15,7 +15,7 @@ export default function SelectDate({ inputs, variable, name }) {
     ) || {};
 
   useEffect(() => {
-    dispatch(updateInput(variable, id));
+    dispatch(updateInput({ variable, id }));
   }, [dispatch, id, variable]);
 
   return (

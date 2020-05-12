@@ -10,25 +10,25 @@ export default function Dropdown() {
     if (action === 'sign-out') history.push('/Login');
   };
 
+  const dropdownItems = [
+    { name: 'CHANGE JUDGE INFO', info: 'change-judge' },
+    { name: 'SIGN OUT', info: 'sign-out' },
+  ];
+
   return (
     <BootstrapDropdown>
       <BootstrapDropdown.Toggle className="profile-dropdown" />
-
       <BootstrapDropdown.Menu alignRight className="profile-dropdown__list">
-        <BootstrapDropdown.Item
-          className="profile-dropdown__item"
-          href="#/change-judge-info"
-          onClick={() => handleClick('change-judge')}
-        >
-          CHANGE JUDGE INFO
-        </BootstrapDropdown.Item>
-        <BootstrapDropdown.Item
-          className="profile-dropdown__item"
-          href="#/sign-out"
-          onClick={() => handleClick('sign-out')}
-        >
-          SIGN OUT
-        </BootstrapDropdown.Item>
+        {dropdownItems.map((i) => (
+          <BootstrapDropdown.Item
+            className="profile-dropdown__item"
+            href={`#/${i.info}`}
+            onClick={() => handleClick(i.info)}
+            key={i.info}
+          >
+            {i.name}
+          </BootstrapDropdown.Item>
+        ))}
       </BootstrapDropdown.Menu>
     </BootstrapDropdown>
   );

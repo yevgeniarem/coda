@@ -36,23 +36,32 @@ export default function NavButtons({ button1, button2, disabled, location }) {
     return false;
   };
 
+  const buttons = [
+    {
+      value: button1,
+      classNames: 'button action-button--navigation action-button--grey',
+      disabled: false,
+    },
+    {
+      value: button2,
+      classNames: 'button action-button--navigation action-button--blue',
+      disabled: isDisabled(),
+    },
+  ];
+
   return (
     <div className="button-wrapper">
-      <Button
-        onClick={handleClick}
-        className="button action-button--navigation action-button--grey"
-        value={button1}
-      >
-        {button1}
-      </Button>
-      <Button
-        onClick={handleClick}
-        className="button action-button--navigation action-button--blue"
-        value={button2}
-        disabled={isDisabled()}
-      >
-        {button2}
-      </Button>
+      {buttons.map((b) => (
+        <Button
+          onClick={handleClick}
+          className={b.classNames}
+          value={b.value}
+          disabled={b.disabled}
+          key={b.value}
+        >
+          {b.value}
+        </Button>
+      ))}
     </div>
   );
 }

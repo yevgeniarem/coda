@@ -2,53 +2,99 @@ import axios from 'axios';
 
 import CONST from '../../utils/constants';
 
-export const updateLogin = (e) => ({
-  type: 'UPDATE_LOGIN',
-  payload: e,
-});
+export const createEvents = (payload) => (dispatch) => {
+  const events = [];
+  payload.forEach((event) =>
+    events.push({
+      id: event.id,
+      name: event.name,
+      seasonId: event.current_season_id,
+    }),
+  );
+  dispatch({
+    type: 'CREATE_EVENTS',
+    payload: events,
+  });
+};
 
-export const authLogin = () => ({
-  type: 'AUTH_LOGIN',
-});
+export const updateCurrentEvent = (payload) => (dispatch, getState) => {
+  const { events } = getState().events;
+  const currentEvent = events.filter((e) => e.id === payload);
+  dispatch({
+    type: 'UPDATE_CURRENT_EVENT',
+    payload: currentEvent[0],
+  });
+};
 
-export const invalidLogin = (payload) => ({
-  type: 'INVALID_LOGIN',
-  payload,
-});
+export const updateTourDates = (payload) => (dispatch) => {
+  const tourDates = [];
+  payload.forEach((city) => {
+    tourDates.push({
+      id: city.id,
+      eventCity: city.event_city.name,
+      startDate: city.start_date,
+      endDate: city.end_date,
+    });
+  });
+  dispatch({ type: 'UPDATE_TOUR_DATES', payload: tourDates });
+};
+
+export const updateInput = (payload) => (dispatch) => {
+  dispatch({ type: 'UPDATE_INPUT', payload });
+};
+
+export const updateJudgeList = (payload) => (dispatch) => {
+  dispatch({
+    type: 'UPDATE_JUDGE_LIST',
+    payload,
+  });
+};
+
+export const updateCompetitionGroupList = (payload) => (dispatch) => {
+  dispatch({
+    type: 'UPDATE_COMPETITION_GROUP_LIST',
+    payload,
+  });
+};
+
+export const updateLogin = (payload) => (dispatch) => {
+  dispatch({
+    type: 'UPDATE_LOGIN',
+    payload,
+  });
+};
+
+export const authLogin = () => (dispatch) => {
+  dispatch({
+    type: 'AUTH_LOGIN',
+    payload: true,
+  });
+};
+
+export const invalidLogin = (payload) => (dispatch) => {
+  dispatch({
+    type: 'INVALID_LOGIN',
+    payload,
+  });
+};
 
 export const runJudgeModal = (payload) => ({
   type: 'RUN_JUDGE_MODAL',
   payload,
 });
 
-export const createEvents = (payload) => ({
-  type: 'CREATE_EVENTS',
+export const runRoutineModal = (payload) => ({
+  type: 'RUN_ROUTINE_MODAL',
   payload,
 });
 
-export const updateJudgeList = (payload) => ({
-  type: 'UPDATE_JUDGE_LIST',
+export const runSubmitModal = (payload) => ({
+  type: 'RUN_SUBMIT_MODAL',
   payload,
-});
-
-export const updateCompetitionGroupList = (payload) => ({
-  type: 'UPDATE_COMPETITION_GROUP_LIST',
-  payload,
-});
-
-export const updateInput = (variable, id) => ({
-  type: 'UPDATE_INPUT',
-  variable,
-  id,
 });
 
 export const updateRoutineList = (payload) => ({
   type: 'UPDATE_ROUTINE_LIST',
-  payload,
-});
-
-export const updateTourDates = (payload) => ({
-  type: 'UPDATE_TOUR_DATES',
   payload,
 });
 
@@ -62,9 +108,53 @@ export const updateScoringBreakdown = (payload) => ({
   payload,
 });
 
+export const updateScore = (payload) => ({
+  type: 'UPDATE_SCORE',
+  payload,
+});
+
+export const toggleSidebar = () => ({
+  type: 'TOGGLE_SIDEBAR',
+});
+
+export const closeSidebar = () => ({
+  type: 'CLOSE_SIDEBAR',
+});
+
+export const makeButtonGreen = (payload) => ({
+  type: 'MAKE_BUTTON_GREEN',
+  payload,
+});
+
+export const makeButtonRed = (payload) => ({
+  type: 'MAKE_BUTTON_RED',
+  payload,
+});
+
+export const deleteButton = (payload) => ({
+  type: 'DELETE_BUTTON',
+  payload,
+});
+
+export const toggleNotFriendly = () => ({
+  type: 'TOGGLE_NOT_FRIENDLY',
+});
+
+export const toggleIChoreographed = () => ({
+  type: 'TOGGLE_I_CHOREOGRAPHED',
+});
+
+export const updateNote = (payload) => ({
+  type: 'UPDATE_NOTE',
+  payload,
+});
+
+export const resetScoring = () => ({
+  type: 'RESET_SCORING',
+});
+
 export const tryLogin = ({ name, password }) => async (dispatch) => {
   try {
-    // console.log(getState().login);
     await axios.post(`${CONST.API}/auth/signin`, {
       name,
       password,
@@ -257,63 +347,3 @@ export const getScoringBreakdown = (eventId) => (dispatch) => {
       console.error(error);
     });
 };
-
-export const updateCurrentEvent = (payload) => ({
-  type: 'UPDATE_CURRENT_EVENT',
-  payload,
-});
-
-export const runRoutineModal = (payload) => ({
-  type: 'RUN_ROUTINE_MODAL',
-  payload,
-});
-
-export const updateScore = (payload) => ({
-  type: 'UPDATE_SCORE',
-  payload,
-});
-
-export const toggleSidebar = () => ({
-  type: 'TOGGLE_SIDEBAR',
-});
-
-export const closeSidebar = () => ({
-  type: 'CLOSE_SIDEBAR',
-});
-
-export const makeButtonGreen = (payload) => ({
-  type: 'MAKE_BUTTON_GREEN',
-  payload,
-});
-
-export const makeButtonRed = (payload) => ({
-  type: 'MAKE_BUTTON_RED',
-  payload,
-});
-
-export const deleteButton = (payload) => ({
-  type: 'DELETE_BUTTON',
-  payload,
-});
-
-export const runSubmitModal = (payload) => ({
-  type: 'RUN_SUBMIT_MODAL',
-  payload,
-});
-
-export const toggleNotFriendly = () => ({
-  type: 'TOGGLE_NOT_FRIENDLY',
-});
-
-export const toggleIChoreographed = () => ({
-  type: 'TOGGLE_I_CHOREOGRAPHED',
-});
-
-export const updateNote = (payload) => ({
-  type: 'UPDATE_NOTE',
-  payload,
-});
-
-export const resetScoring = () => ({
-  type: 'RESET_SCORING',
-});

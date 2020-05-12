@@ -15,7 +15,7 @@ const login = (state = initialState, action) => {
     case 'AUTH_LOGIN':
       return {
         ...state,
-        isLoggedIn: true,
+        isLoggedIn: action.payload,
       };
     case 'INVALID_LOGIN':
       return {

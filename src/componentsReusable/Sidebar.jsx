@@ -35,7 +35,7 @@ export default function Sidebar() {
 
   const routineListButtons = routineList.map((routine) => {
     const renderRoutineNumber = () =>
-      routine.has.a ? `#${routine.number}a` : `#${routine.number}`;
+      routine.has_a ? `#${routine.number}a` : `#${routine.number}`;
 
     if (!!routine.score || routine.score === 0) {
       return (

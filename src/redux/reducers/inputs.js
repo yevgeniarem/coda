@@ -13,7 +13,7 @@ const inputs = (state = initialState, action) => {
     case 'UPDATE_INPUT':
       return {
         ...state,
-        [action.variable]: action.id,
+        [action.payload.variable]: action.payload.id,
       };
     case 'UPDATE_JUDGE_LIST':
       return {

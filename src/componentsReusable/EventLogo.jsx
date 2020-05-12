@@ -9,9 +9,9 @@ import { updateCurrentEvent } from '../redux/actions/appActions';
 export default function EventLogo({ id, imgSrc, imgAlt, index }) {
   const history = useHistory();
   const dispatch = useDispatch();
-  const handleClick = () => {
+  const handleClick = async () => {
+    await dispatch(updateCurrentEvent(id));
     history.push('/TourDates');
-    dispatch(updateCurrentEvent(id));
   };
 
   return (
