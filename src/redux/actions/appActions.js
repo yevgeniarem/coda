@@ -78,80 +78,127 @@ export const invalidLogin = (payload) => (dispatch) => {
   });
 };
 
-export const runJudgeModal = (payload) => ({
-  type: 'RUN_JUDGE_MODAL',
-  payload,
-});
+export const runJudgeModal = (payload) => (dispatch) => {
+  dispatch({
+    type: 'RUN_JUDGE_MODAL',
+    payload,
+  });
+};
 
-export const runRoutineModal = (payload) => ({
-  type: 'RUN_ROUTINE_MODAL',
-  payload,
-});
+export const runRoutineModal = (payload) => (dispatch) => {
+  dispatch({
+    type: 'RUN_ROUTINE_MODAL',
+    payload,
+  });
+};
 
-export const runSubmitModal = (payload) => ({
-  type: 'RUN_SUBMIT_MODAL',
-  payload,
-});
+export const runSubmitModal = (payload) => (dispatch) => {
+  dispatch({
+    type: 'RUN_SUBMIT_MODAL',
+    payload,
+  });
+};
 
-export const updateRoutineList = (payload) => ({
-  type: 'UPDATE_ROUTINE_LIST',
-  payload,
-});
+export const updateRoutineList = (payload) => (dispatch) => {
+  dispatch({
+    type: 'UPDATE_ROUTINE_LIST',
+    payload,
+  });
+};
 
-export const updateCurrentRoutine = (payload) => ({
-  type: 'UPDATE_CURRENT_ROUTINE',
-  payload,
-});
+export const updateCurrentRoutine = (payload) => (dispatch) => {
+  dispatch({
+    type: 'UPDATE_CURRENT_ROUTINE',
+    payload,
+  });
+};
 
-export const updateScoringBreakdown = (payload) => ({
-  type: 'UPDATE_SCORING_BREAKDOWN',
-  payload,
-});
+export const updateScore = (payload) => (dispatch) => {
+  dispatch({
+    type: 'UPDATE_SCORE',
+    payload,
+  });
+};
 
-export const updateScore = (payload) => ({
-  type: 'UPDATE_SCORE',
-  payload,
-});
+export const makeButtonGreen = (payload) => (dispatch, getState) => {
+  const { buttons } = getState().scoring;
+  dispatch({
+    type: 'MAKE_BUTTON_GREEN',
+    payload: [...buttons, payload],
+  });
+};
 
-export const toggleSidebar = () => ({
-  type: 'TOGGLE_SIDEBAR',
-});
+export const makeButtonRed = (payload) => (dispatch, getState) => {
+  const { buttons } = getState().scoring;
+  const filteredButtons = buttons.filter(
+    (button) => button.level_4_id !== payload.level_4_id,
+  );
+  dispatch({
+    type: 'MAKE_BUTTON_RED',
+    payload: [...filteredButtons, payload],
+  });
+};
 
-export const closeSidebar = () => ({
-  type: 'CLOSE_SIDEBAR',
-});
+export const deleteButton = (payload) => (dispatch, getState) => {
+  const { buttons } = getState().scoring;
+  const filteredButtons = buttons.filter(
+    (button) => button.level_4_id !== payload.level_4_id,
+  );
+  dispatch({ type: 'DELETE_BUTTON', payload: filteredButtons });
+};
 
-export const makeButtonGreen = (payload) => ({
-  type: 'MAKE_BUTTON_GREEN',
-  payload,
-});
+export const updateScoringBreakdown = (payload) => (dispatch) => {
+  dispatch({
+    type: 'UPDATE_SCORING_BREAKDOWN',
+    payload,
+  });
+};
 
-export const makeButtonRed = (payload) => ({
-  type: 'MAKE_BUTTON_RED',
-  payload,
-});
+export const toggleNotFriendly = () => (dispatch, getState) => {
+  const { not_friendly } = getState().scoring;
+  dispatch({
+    type: 'TOGGLE_NOT_FRIENDLY',
+    payload: !not_friendly,
+  });
+};
 
-export const deleteButton = (payload) => ({
-  type: 'DELETE_BUTTON',
-  payload,
-});
+export const toggleIChoreographed = () => (dispatch, getState) => {
+  const { i_choreographed } = getState().scoring;
+  dispatch({
+    type: 'TOGGLE_I_CHOREOGRAPHED',
+    payload: !i_choreographed,
+  });
+};
 
-export const toggleNotFriendly = () => ({
-  type: 'TOGGLE_NOT_FRIENDLY',
-});
+export const updateNote = (payload) => (dispatch) => {
+  dispatch({
+    type: 'UPDATE_NOTE',
+    payload,
+  });
+};
 
-export const toggleIChoreographed = () => ({
-  type: 'TOGGLE_I_CHOREOGRAPHED',
-});
+export const resetScoring = () => (dispatch, getState) => {
+  const { scoring_breakdown } = getState().scoring;
+  dispatch({
+    type: 'RESET_SCORING',
+    payload: scoring_breakdown,
+  });
+};
 
-export const updateNote = (payload) => ({
-  type: 'UPDATE_NOTE',
-  payload,
-});
+export const toggleSidebar = () => (dispatch, getState) => {
+  const state = getState().sidebar;
+  dispatch({
+    type: 'TOGGLE_SIDEBAR',
+    payload: !state,
+  });
+};
 
-export const resetScoring = () => ({
-  type: 'RESET_SCORING',
-});
+export const closeSidebar = () => (dispatch) => {
+  dispatch({
+    type: 'CLOSE_SIDEBAR',
+    payload: false,
+  });
+};
 
 export const tryLogin = ({ name, password }) => async (dispatch) => {
   try {

@@ -10,32 +10,25 @@ const initialState = {
 };
 
 const scoring = (state = initialState, action) => {
-  let filteredButtons;
   switch (action.type) {
     case 'UPDATE_SCORE':
       return { ...state, score: action.payload };
     case 'MAKE_BUTTON_GREEN':
-      return { ...state, buttons: [...state.buttons, action.payload] };
+      return { ...state, buttons: action.payload };
     case 'MAKE_BUTTON_RED':
-      filteredButtons = state.buttons.filter(
-        (button) => button.level_4_id !== action.payload.level_4_id,
-      );
-      return { ...state, buttons: [...filteredButtons, action.payload] };
+      return { ...state, buttons: action.payload };
     case 'DELETE_BUTTON':
-      filteredButtons = state.buttons.filter(
-        (button) => button.level_4_id !== action.payload.level_4_id,
-      );
-      return { ...state, buttons: filteredButtons };
+      return { ...state, buttons: action.payload };
     case 'UPDATE_SCORING_BREAKDOWN':
       return { ...state, scoring_breakdown: action.payload };
     case 'TOGGLE_NOT_FRIENDLY':
-      return { ...state, not_friendly: !state.not_friendly };
+      return { ...state, not_friendly: action.payload };
     case 'TOGGLE_I_CHOREOGRAPHED':
-      return { ...state, i_choreographed: !state.i_choreographed };
+      return { ...state, i_choreographed: action.payload };
     case 'UPDATE_NOTE':
       return { ...state, note: action.payload };
     case 'RESET_SCORING':
-      return { ...initialState, scoring_breakdown: state.scoring_breakdown };
+      return { ...initialState, scoring_breakdown: action.payload };
     default:
       return state;
   }
