@@ -281,23 +281,39 @@ export const getCompetitionGroupList = () => (dispatch) => {
     });
 };
 
-export const getRoutineList = (inputs) => (dispatch) => {
-  axios
-    .get(`${CONST.API}/coda/routines`, {
+export const getRoutineList = (inputs) => async (dispatch) => {
+  try {
+    const response = await axios.get(`${CONST.API}/coda/routines`, {
       params: {
         tour_date_id: inputs.tourDateId,
         competition_group_id: inputs.competitionGroup,
         position: inputs.position,
       },
-    })
-    .then((response) => {
-      dispatch(updateRoutineList(response.data));
-    })
-    .catch((error) => {
-      // eslint-disable-next-line no-console
-      console.error(error);
     });
+    await dispatch(updateRoutineList(response.data));
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.error(err);
+  }
 };
+
+// export const getRoutineList = (inputs) => (dispatch) => {
+//   axios
+//     .get(`${CONST.API}/coda/routines`, {
+//       params: {
+//         tour_date_id: inputs.tourDateId,
+//         competition_group_id: inputs.competitionGroup,
+//         position: inputs.position,
+//       },
+//     })
+//     .then((response) => {
+//       dispatch(updateRoutineList(response.data));
+//     })
+//     .catch((error) => {
+//       // eslint-disable-next-line no-console
+//       console.error(error);
+//     });
+// };
 
 export const getTourDates = (currentEvent) => (dispatch) => {
   axios

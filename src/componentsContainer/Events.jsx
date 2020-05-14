@@ -13,10 +13,15 @@ export default function Events() {
 
   useEffect(() => {
     dispatch(getEventsList());
-  }, [dispatch]);
+    // eslint-disable-next-line
+  }, []);
+
+  // useEffect(() => {
+  //   dispatch(getEventsList());
+  // }, [dispatch]);
 
   return (
-    <div>
+    <>
       <Navbar text="choose your event" />
 
       <Container className="img-event">
@@ -36,6 +41,6 @@ export default function Events() {
               .slice(0, 4)}
         </Row>
       </Container>
-    </div>
+    </>
   );
 }

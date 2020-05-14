@@ -1,5 +1,6 @@
 const initialState = {
-  events: [],
+  events: null,
+  // events: [],
   currentEvent: {},
   tourDates: [],
   currentTourDate: '',

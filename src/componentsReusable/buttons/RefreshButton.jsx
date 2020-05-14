@@ -10,15 +10,22 @@ export default function RefreshButton() {
   const inputs = useSelector((state) => state.inputs);
   const [isFetching, setIsFetching] = useState(false);
 
-  const handleRefresh = () => {
+  const handleRefresh = async () => {
     setIsFetching(true);
-    dispatch(getRoutineList(inputs));
+    await dispatch(getRoutineList(inputs));
     window.setTimeout(() => setIsFetching(false), 1000);
   };
+
+  // const handleRefresh = () => {
+  //   setIsFetching(true);
+  //   dispatch(getRoutineList(inputs));
+  //   window.setTimeout(() => setIsFetching(false), 1000);
+  // };
 
   return (
     <Button
       type="button"
+      // TODO use classnames package
       className={`button action-button--submit action-button--green ${
         isFetching ? 'action-button--refreshing' : ''
       }`}

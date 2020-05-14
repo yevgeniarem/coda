@@ -36,7 +36,9 @@ export default function NavButtons({ button1, button2, disabled, location }) {
     return false;
   };
 
+  // TODO separate buttons into left / right button components
   const buttons = [
+    // TODO use classnames package, instead of classNames, use color property
     {
       value: button1,
       classNames: 'button action-button--navigation action-button--grey',

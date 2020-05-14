@@ -13,12 +13,15 @@ import { getButtons } from '../utils/helpers';
 
 export default function Scoring() {
   const dispatch = useDispatch();
+
+  // TODO combine selectors
   const inputs = useSelector((state) => state.inputs);
   const { currentRoutine } = useSelector((state) => state.routines);
   const { buttons: reduxButtons } = useSelector((state) => state.scoring);
   const [buttons, setButtons] = useState([]);
 
   useEffect(() => {
+    // TODO change to Promise.all
     dispatch(getRoutineList(inputs));
     getButtons()
       .then((response) => {
@@ -36,6 +39,7 @@ export default function Scoring() {
 
   const handleClick = (button) => {
     const selectedButton = document.getElementById(button.id);
+    // TODO make helper function to combine .find
     const buttonIsGrey = !reduxButtons.find(
       (reduxButton) => reduxButton.level_4_id === button.id,
     );
@@ -47,7 +51,7 @@ export default function Scoring() {
       (reduxButton) =>
         reduxButton.level_4_id === button.id && reduxButton.good === false,
     );
-
+    // TODO separate into helper functions (in separate folder)
     if (buttonIsGrey) {
       dispatch(
         makeButtonGreen({
@@ -117,6 +121,7 @@ export default function Scoring() {
     return null;
   });
 
+  // TODO put these in useEffect + put into bigger function that describes what this is doing
   const performanceButton = allButtons.find(
     (button) => button.props.children === 'Performance',
   );
@@ -135,6 +140,8 @@ export default function Scoring() {
       <div className="button__container button__container--secondPage">
         {perfAndCreativeButtons}
       </div>
+
+      {/* TODO put in helper function to make it readable */}
       <div>{currentRoutine.routine_id && <ScoringBreakdown />}</div>
     </>
   );
