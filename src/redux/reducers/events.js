@@ -1,9 +1,8 @@
 const initialState = {
   events: null,
-  // events: [],
-  currentEvent: {},
-  tourDates: [],
-  currentTourDate: '',
+  currentEvent: null,
+  tourDates: null,
+  currentTourDate: null,
 };
 
 const events = (state = initialState, action) => {

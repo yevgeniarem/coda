@@ -1,6 +1,6 @@
 const initialState = {
-  name: '',
-  password: '',
+  name: null,
+  password: null,
   isLoggedIn: false,
   isInvalid: false,
 };

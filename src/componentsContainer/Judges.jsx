@@ -13,16 +13,10 @@ import { positions, teacherJudge } from '../utils/constants';
 
 export default function Judges() {
   const dispatch = useDispatch();
-
   const [
     { judgeName: modalJudgeName },
     { judgeList, competitionGroupList },
   ] = useSelector((state) => [state.modals, state.inputs]);
-
-  // const { judgeName: modalJudgeName } = useSelector((state) => state.modals);
-  // const { judgeList, competitionGroupList } = useSelector(
-  //   (state) => state.inputs,
-  // );
 
   useEffect(() => {
     Promise.all([
@@ -30,11 +24,6 @@ export default function Judges() {
       dispatch(getCompetitionGroupList()),
     ]);
   }, [dispatch]);
-
-  // useEffect(() => {
-  //   dispatch(getJudgeList());
-  //   dispatch(getCompetitionGroupList());
-  // }, [dispatch]);
 
   const judgeSelectInputs = [
     {
@@ -59,9 +48,9 @@ export default function Judges() {
     },
   ];
 
-  const modalMessage = `${modalJudgeName.fname} ${modalJudgeName.lname} already has scores
-  from this position for this tour date. If judges are being swapped,
-  this is fine. Continue?`;
+  const modalMessage = `${modalJudgeName && modalJudgeName.fname} ${
+    modalJudgeName && modalJudgeName.lname
+  } already has scores from this position for this tour date. If judges are being swapped, this is fine. Continue?`;
 
   return (
     <>
@@ -70,9 +59,6 @@ export default function Judges() {
         isShown={!!modalJudgeName}
         title="Alert"
         body={modalMessage}
-        // body={`${modalJudgeName.fname} ${modalJudgeName.lname} already has scores
-        // from this position for this tour date. If judges are being swapped,
-        // this is fine. Continue?`}
         numButtons="2"
         button1="Cancel"
         button2="YES"
@@ -83,9 +69,8 @@ export default function Judges() {
       <div className="main-container">
         <div className="main-container__title">JUDGE INFORMATION</div>
         <div className="main-container__middle-container">
-          {/* TODO fix initial state to be null */}
-          {competitionGroupList[0] &&
-            judgeList[0] &&
+          {competitionGroupList &&
+            judgeList &&
             judgeSelectInputs.map((i) => (
               <SelectInput
                 name={i.name}
@@ -98,7 +83,12 @@ export default function Judges() {
         </div>
 
         {/* TODO fix disabled state */}
-        <NavButtons button1="BACK" button2="NEXT" location="judges" disabled />
+        <NavButtons
+          leftButtonText="BACK"
+          rightButtonText="NEXT"
+          location="judges"
+          rightButtonInitiallyDisabled
+        />
       </div>
     </>
   );

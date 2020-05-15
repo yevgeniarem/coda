@@ -36,10 +36,9 @@ export default function TourDates() {
         </div>
 
         <NavButtons
-          button1="BACK"
-          button2="NEXT"
+          leftButtonText="BACK"
+          rightButtonText="NEXT"
           location="tourDates"
-          disabled={false}
         />
       </div>
     </>

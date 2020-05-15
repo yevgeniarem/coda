@@ -12,13 +12,19 @@ import CONST from '../utils/constants';
 
 export default function Sidebar() {
   const dispatch = useDispatch();
-  const { routineList, currentRoutine } = useSelector(
-    (state) => state.routines,
-  );
-  const { currentEvent, tourDates } = useSelector((state) => state.events);
-  const inputs = useSelector((state) => state.inputs);
-  const { isRoutineModalShown } = useSelector((state) => state.modals);
-  const isSidebarOpen = useSelector((state) => state.sidebar);
+  const [
+    { routineList, currentRoutine },
+    { currentEvent, tourDates },
+    inputs,
+    { isRoutineModalShown },
+    isSidebarOpen,
+  ] = useSelector((state) => [
+    state.routines,
+    state.events,
+    state.inputs,
+    state.modals,
+    state.sidebar,
+  ]);
   const [clickedRoutine, setClickedRoutine] = useState({});
   const currentTourDate = formatTourDate(
     tourDates.find((city) => city.id === inputs.tourDateId),
@@ -29,7 +35,7 @@ export default function Sidebar() {
   };
 
   const handleButtonClick = (routine) => {
-    dispatch(runRoutineModal(true));
+    dispatch(runRoutineModal(true)); // QUESTION: should I put a Promise.all here?
     setClickedRoutine(routine);
   };
 

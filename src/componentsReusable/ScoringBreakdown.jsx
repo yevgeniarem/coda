@@ -16,11 +16,11 @@ import SubmitButton from './buttons/SubmitButton';
 
 export default function ScoringBreakdown() {
   const dispatch = useDispatch();
-  const { score, not_friendly, i_choreographed, note } = useSelector(
-    (state) => state.scoring,
-  );
-  const inputs = useSelector((state) => state.inputs);
-  const { isSubmitModalShown } = useSelector((state) => state.modals);
+  const [
+    { score, not_friendly, i_choreographed, note },
+    inputs,
+    { isSubmitModalShown },
+  ] = useSelector((state) => [state.scoring, state.inputs, state.modals]);
   const [noteValue, setNoteValue] = useState(note);
 
   useEffect(() => {
@@ -40,9 +40,11 @@ export default function ScoringBreakdown() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    dispatch(runSubmitModal(true));
-    dispatch(updateNote(noteValue));
-    dispatch(getRoutineList(inputs));
+    Promise.all([
+      dispatch(runSubmitModal(true)),
+      dispatch(updateNote(noteValue)),
+      dispatch(getRoutineList(inputs)),
+    ]); // QUESTION: did I do this correctly?
   };
 
   const handleInputChange = (event) => {

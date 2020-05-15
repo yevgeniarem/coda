@@ -33,11 +33,12 @@ export default function SelectInput({ inputs, variable, name }) {
           <option key="default" value="default" disabled>
             {name}
           </option>
-          {inputs.map((i) => (
-            <option key={i.id} value={i.id} name={i[variable]}>
-              {i[variable]}
-            </option>
-          ))}
+          {inputs &&
+            inputs.map((i) => (
+              <option key={i.id} value={i.id} name={i[variable]}>
+                {i[variable]}
+              </option>
+            ))}
         </Form.Control>
       </div>
     </Form>

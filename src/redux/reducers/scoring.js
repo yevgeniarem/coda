@@ -1,12 +1,12 @@
 const initialState = {
-  note: '',
+  note: null,
   score: 100,
   not_friendly: false,
   i_choreographed: false,
   teacher_critique: false,
   is_coda: true, // hardcoded to always true
-  buttons: [],
-  scoring_breakdown: [],
+  buttons: null,
+  scoring_breakdown: null,
 };
 
 const scoring = (state = initialState, action) => {

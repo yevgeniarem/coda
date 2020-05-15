@@ -10,9 +10,11 @@ import { formatTourDate } from '../utils/helpers';
 export default function SelectDate({ inputs, variable, name }) {
   const dispatch = useDispatch();
   const { id } =
-    inputs.find((input) =>
-      moment.utc(input.endDate).isSameOrAfter(moment.utc()),
-    ) || {};
+    (inputs &&
+      inputs.find((input) =>
+        moment.utc(input.endDate).isSameOrAfter(moment.utc()),
+      )) ||
+    {};
 
   useEffect(() => {
     dispatch(updateInput({ variable, id }));
@@ -20,10 +22,13 @@ export default function SelectDate({ inputs, variable, name }) {
 
   return (
     <SelectInput
-      inputs={inputs.map((i) => ({
-        id: i.id,
-        tourDateId: formatTourDate(i),
-      }))}
+      inputs={
+        inputs &&
+        inputs.map((i) => ({
+          id: i.id,
+          tourDateId: formatTourDate(i),
+        }))
+      }
       variable={variable}
       name={name}
     />

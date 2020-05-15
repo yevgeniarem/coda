@@ -1,11 +1,11 @@
 const initialState = {
-  tourDateId: '',
-  judge: 'default',
-  position: 'default',
-  teacherJudge: 'default',
+  tourDateId: null,
+  judge: null,
+  position: null,
+  teacherJudge: null,
   competitionGroup: 2,
-  judgeList: [],
-  competitionGroupList: [],
+  judgeList: null,
+  competitionGroupList: null,
 };
 
 const inputs = (state = initialState, action) => {

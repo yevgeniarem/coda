@@ -13,15 +13,15 @@ import { getButtons } from '../utils/helpers';
 
 export default function Scoring() {
   const dispatch = useDispatch();
-
-  // TODO combine selectors
-  const inputs = useSelector((state) => state.inputs);
-  const { currentRoutine } = useSelector((state) => state.routines);
-  const { buttons: reduxButtons } = useSelector((state) => state.scoring);
+  const [
+    inputs,
+    { currentRoutine },
+    { buttons: reduxButtons },
+  ] = useSelector((state) => [state.inputs, state.routines, state.scoring]);
   const [buttons, setButtons] = useState([]);
 
   useEffect(() => {
-    // TODO change to Promise.all
+    // TODO change to Promise.all QUESTION: do I only use Promise.all in a useEffect?
     dispatch(getRoutineList(inputs));
     getButtons()
       .then((response) => {

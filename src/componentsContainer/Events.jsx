@@ -13,12 +13,7 @@ export default function Events() {
 
   useEffect(() => {
     dispatch(getEventsList());
-    // eslint-disable-next-line
-  }, []);
-
-  // useEffect(() => {
-  //   dispatch(getEventsList());
-  // }, [dispatch]);
+  }, [dispatch]);
 
   return (
     <>

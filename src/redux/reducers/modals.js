@@ -1,5 +1,5 @@
 const initialState = {
-  judgeName: '',
+  judgeName: null,
   isRoutineModalShown: false,
   isSubmitModalShown: false,
 };

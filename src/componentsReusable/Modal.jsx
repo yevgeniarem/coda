@@ -27,26 +27,24 @@ export default function Modal({
 }) {
   const dispatch = useDispatch();
   const history = useHistory();
-  const { currentEvent } = useSelector((state) => state.events);
-  const {
-    competitionGroup,
-    tourDateId,
-    judgeList,
-    judge: currentJudge,
-    position,
-    teacherJudge,
-  } = useSelector((state) => state.inputs);
-  const { currentRoutine, routineList } = useSelector(
-    (state) => state.routines,
-  );
-  const {
-    note,
-    score,
-    not_friendly,
-    i_choreographed,
-    is_coda,
-    buttons,
-  } = useSelector((state) => state.scoring);
+  const [
+    { currentEvent },
+    {
+      competitionGroup,
+      tourDateId,
+      judgeList,
+      judge: currentJudge,
+      position,
+      teacherJudge,
+    },
+    { currentRoutine, routineList },
+    { note, score, not_friendly, i_choreographed, is_coda, buttons },
+  ] = useSelector((state) => [
+    state.events,
+    state.inputs,
+    state.routines,
+    state.scoring,
+  ]);
   const [show, setShow] = useState(false);
 
   useEffect(() => {
@@ -61,16 +59,15 @@ export default function Modal({
     setShow(false);
   };
 
-  const foundationButtons = buttons.filter(
-    (button) => button.level_1_id === 11,
-  );
-  const performanceButtons = buttons.filter(
-    (button) => button.level_1_id === 12,
-  );
-  const creativeButtons = buttons.filter((button) => button.level_1_id === 13);
+  const foundationButtons =
+    buttons && buttons.filter((button) => button.level_1_id === 11);
+  const performanceButtons =
+    buttons && buttons.filter((button) => button.level_1_id === 12);
+  const creativeButtons =
+    buttons && buttons.filter((button) => button.level_1_id === 13);
 
   const calculatePercentage = (b) => {
-    const array = b.map((button) => button.good) || [];
+    const array = (b && b.map((button) => button.good)) || [];
     const percentage =
       (array.filter((e) => e === true).length / array.length) * 100;
     if (Number.isNaN(percentage)) return 50;
@@ -125,7 +122,7 @@ export default function Modal({
           <Button
             variant="secondary"
             onClick={() => {
-              handleClose();
+              handleClose(); // QUESTION: I shouldn't add Promise.all here, right?
               dispatch(closeSidebar());
             }}
             className="button action-button--navigation action-button--grey"
@@ -183,8 +180,7 @@ export default function Modal({
                 };
                 submitScore();
               }
-              dispatch(closeSidebar());
-              dispatch(resetScoring());
+              Promise.all([dispatch(closeSidebar()), dispatch(resetScoring())]); // QUESTION: did I do this correctly?
             }}
             className="button action-button--navigation action-button--blue"
           >

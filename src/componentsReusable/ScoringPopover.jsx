@@ -7,23 +7,14 @@ import { getScoringBreakdown } from '../redux/actions/appActions';
 
 export default function ScoringPopover() {
   const dispatch = useDispatch();
-  const { scoring_breakdown } = useSelector((state) => state.scoring);
-  const { id: eventId } = useSelector((state) => state.events.currentEvent);
+  const [{ scoring_breakdown }, { id: eventId }] = useSelector((state) => [
+    state.scoring,
+    state.events.currentEvent,
+  ]);
 
   useEffect(() => {
     dispatch(getScoringBreakdown(eventId));
   }, [eventId, dispatch]);
-
-  const renderScoringBreakdown = scoring_breakdown.map((award) => {
-    return (
-      <div className="score-popover__list-item" key={award.id}>
-        <div className="row">
-          <div className="col">{award.award}</div>
-          <div className="col-auto">{`${award.lowest}-${award.highest}`}</div>
-        </div>
-      </div>
-    );
-  });
 
   const popover = (
     <Popover className="score-popover">
@@ -39,7 +30,16 @@ export default function ScoringPopover() {
             </div>
           </div>
           <div className="score-popover__list-items">
-            {renderScoringBreakdown}
+            {scoring_breakdown.map((award) => {
+              return (
+                <div className="score-popover__list-item" key={award.id}>
+                  <div className="row">
+                    <div className="col">{award.award}</div>
+                    <div className="col-auto">{`${award.lowest}-${award.highest}`}</div>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
       </Popover.Content>
