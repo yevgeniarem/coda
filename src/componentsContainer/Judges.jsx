@@ -82,12 +82,11 @@ export default function Judges() {
             ))}
         </div>
 
-        {/* TODO fix disabled state */}
         <NavButtons
           leftButtonText="BACK"
           rightButtonText="NEXT"
           location="judges"
-          rightButtonInitiallyDisabled
+          rightInitiallyDisabled
         />
       </div>
     </>

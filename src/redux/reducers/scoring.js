@@ -1,11 +1,11 @@
 const initialState = {
-  note: null,
+  note: '',
   score: 100,
   not_friendly: false,
   i_choreographed: false,
   teacher_critique: false,
   is_coda: true, // hardcoded to always true
-  buttons: null,
+  buttons: [],
   scoring_breakdown: null,
 };
 

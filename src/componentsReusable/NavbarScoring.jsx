@@ -23,10 +23,12 @@ export default function NavbarScoring() {
     if (!currentRoutine.routine_id) {
       dispatch(
         updateCurrentRoutine(
-          routineList.find(
-            (routine) =>
-              !routine.canceled && !routine.score && routine.score !== 0,
-          ) || {},
+          (routineList &&
+            routineList.find(
+              (routine) =>
+                !routine.canceled && !routine.score && routine.score !== 0,
+            )) ||
+            {},
         ),
       );
     }

@@ -30,16 +30,17 @@ export default function ScoringPopover() {
             </div>
           </div>
           <div className="score-popover__list-items">
-            {scoring_breakdown.map((award) => {
-              return (
-                <div className="score-popover__list-item" key={award.id}>
-                  <div className="row">
-                    <div className="col">{award.award}</div>
-                    <div className="col-auto">{`${award.lowest}-${award.highest}`}</div>
+            {scoring_breakdown &&
+              scoring_breakdown.map((award) => {
+                return (
+                  <div className="score-popover__list-item" key={award.id}>
+                    <div className="row">
+                      <div className="col">{award.award}</div>
+                      <div className="col-auto">{`${award.lowest}-${award.highest}`}</div>
+                    </div>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })}
           </div>
         </div>
       </Popover.Content>

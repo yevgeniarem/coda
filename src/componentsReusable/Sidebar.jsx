@@ -34,20 +34,63 @@ export default function Sidebar() {
     dispatch(toggleSidebar());
   };
 
-  const handleButtonClick = (routine) => {
-    dispatch(runRoutineModal(true)); // QUESTION: should I put a Promise.all here?
+  const handleButtonClick = async (routine) => {
     setClickedRoutine(routine);
+    dispatch(runRoutineModal(true));
   };
 
-  const routineListButtons = routineList.map((routine) => {
-    const renderRoutineNumber = () =>
-      routine.has_a ? `#${routine.number}a` : `#${routine.number}`;
+  const routineListButtons =
+    routineList &&
+    routineList.map((routine) => {
+      const renderRoutineNumber = () =>
+        routine.has_a ? `#${routine.number}a` : `#${routine.number}`;
 
-    if (!!routine.score || routine.score === 0) {
+      if (!!routine.score || routine.score === 0) {
+        return (
+          <button
+            onClick={() => handleButtonClick(routine)}
+            className="navbar__sidebar--button navbar__sidebar--button--disabled"
+            key={routine.routine_id}
+            type="button"
+          >
+            <span>{renderRoutineNumber()}</span>
+            <span className="navbar__sidebar--routine">{routine.routine}</span>
+          </button>
+        );
+      }
+      if (routine.routine === currentRoutine.routine) {
+        return (
+          <button
+            onClick={() => handleButtonClick(routine)}
+            className="navbar__sidebar--button navbar__sidebar--button--active"
+            key={routine.routine_id}
+            type="button"
+          >
+            <span>{renderRoutineNumber()}</span>
+            <span className="navbar__sidebar--routine">
+              {currentRoutine.routine}
+            </span>
+          </button>
+        );
+      }
+      if (routine.canceled) {
+        return (
+          <button
+            onClick={() => handleButtonClick(routine)}
+            className="navbar__sidebar--button navbar__sidebar--button--disabled"
+            key={routine.routine_id}
+            type="button"
+          >
+            <span>{renderRoutineNumber()}</span>
+            <span className="navbar__sidebar--routine">{routine.routine}</span>
+            <span className="float-right">CANCELED</span>
+          </button>
+        );
+      }
       return (
         <button
           onClick={() => handleButtonClick(routine)}
-          className="navbar__sidebar--button navbar__sidebar--button--disabled"
+          className="navbar__sidebar--button"
           key={routine.routine_id}
           type="button"
         >
@@ -55,48 +98,7 @@ export default function Sidebar() {
           <span className="navbar__sidebar--routine">{routine.routine}</span>
         </button>
       );
-    }
-    if (routine.routine === currentRoutine.routine) {
-      return (
-        <button
-          onClick={() => handleButtonClick(routine)}
-          className="navbar__sidebar--button navbar__sidebar--button--active"
-          key={routine.routine_id}
-          type="button"
-        >
-          <span>{renderRoutineNumber()}</span>
-          <span className="navbar__sidebar--routine">
-            {currentRoutine.routine}
-          </span>
-        </button>
-      );
-    }
-    if (routine.canceled) {
-      return (
-        <button
-          onClick={() => handleButtonClick(routine)}
-          className="navbar__sidebar--button navbar__sidebar--button--disabled"
-          key={routine.routine_id}
-          type="button"
-        >
-          <span>{renderRoutineNumber()}</span>
-          <span className="navbar__sidebar--routine">{routine.routine}</span>
-          <span className="float-right">CANCELED</span>
-        </button>
-      );
-    }
-    return (
-      <button
-        onClick={() => handleButtonClick(routine)}
-        className="navbar__sidebar--button"
-        key={routine.routine_id}
-        type="button"
-      >
-        <span>{renderRoutineNumber()}</span>
-        <span className="navbar__sidebar--routine">{routine.routine}</span>
-      </button>
-    );
-  });
+    });
 
   const renderMenu = () => {
     if (!isSidebarOpen) {

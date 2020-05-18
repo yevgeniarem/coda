@@ -206,7 +206,7 @@ export const tryLogin = ({ name, password }) => async (dispatch) => {
       name,
       password,
     });
-    dispatch(authLogin());
+    await dispatch(authLogin());
   } catch (err) {
     dispatch(invalidLogin(true));
   }
@@ -221,7 +221,7 @@ export const tryJudgeCheck = ({ tourDateId, position }) => async (dispatch) => {
         position,
       },
     });
-    dispatch(runJudgeModal(response.data));
+    await dispatch(runJudgeModal(response.data));
     return response;
   } catch (err) {
     // eslint-disable-next-line no-console
@@ -230,55 +230,49 @@ export const tryJudgeCheck = ({ tourDateId, position }) => async (dispatch) => {
   }
 };
 
-export const getEventsList = () => (dispatch) => {
-  axios
-    .get(`${CONST.API}/coda/events`)
-    .then((response) => {
-      dispatch(createEvents(response.data));
-    })
-    .catch((err) => {
-      // eslint-disable-next-line no-console
-      console.error(err);
-    });
+export const getEventsList = () => async (dispatch) => {
+  try {
+    const response = await axios.get(`${CONST.API}/coda/events`);
+    await dispatch(createEvents(response.data));
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.error(err);
+  }
 };
 
-export const getJudgeList = () => (dispatch) => {
-  axios
-    .get(`${CONST.API}/coda/judges`)
-    .then((response) => {
-      dispatch(
-        updateJudgeList(
-          response.data.map((judge) => ({
-            judge: `${judge.fname} ${judge.lname}`,
-            id: judge.id,
-            default_notes: judge.default_notes,
-          })),
-        ),
-      );
-    })
-    .catch((error) => {
-      // eslint-disable-next-line no-console
-      console.error(error);
-    });
+export const getJudgeList = () => async (dispatch) => {
+  try {
+    const response = await axios.get(`${CONST.API}/coda/judges`);
+    await dispatch(
+      updateJudgeList(
+        response.data.map((judge) => ({
+          judge: `${judge.fname} ${judge.lname}`,
+          id: judge.id,
+          default_notes: judge.default_notes,
+        })),
+      ),
+    );
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.error(err);
+  }
 };
 
-export const getCompetitionGroupList = () => (dispatch) => {
-  axios
-    .get(`${CONST.API}/coda/competition-groups`)
-    .then((groups) => {
-      dispatch(
-        updateCompetitionGroupList(
-          groups.data.map((group) => ({
-            competitionGroup: group.name,
-            id: group.id,
-          })),
-        ),
-      );
-    })
-    .catch((error) => {
-      // eslint-disable-next-line no-console
-      console.error(error);
-    });
+export const getCompetitionGroupList = () => async (dispatch) => {
+  try {
+    const response = await axios.get(`${CONST.API}/coda/competition-groups`);
+    await dispatch(
+      updateCompetitionGroupList(
+        response.data.map((group) => ({
+          competitionGroup: group.name,
+          id: group.id,
+        })),
+      ),
+    );
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.error(err);
+  }
 };
 
 export const getRoutineList = (inputs) => async (dispatch) => {
@@ -297,39 +291,19 @@ export const getRoutineList = (inputs) => async (dispatch) => {
   }
 };
 
-// export const getRoutineList = (inputs) => (dispatch) => {
-//   axios
-//     .get(`${CONST.API}/coda/routines`, {
-//       params: {
-//         tour_date_id: inputs.tourDateId,
-//         competition_group_id: inputs.competitionGroup,
-//         position: inputs.position,
-//       },
-//     })
-//     .then((response) => {
-//       dispatch(updateRoutineList(response.data));
-//     })
-//     .catch((error) => {
-//       // eslint-disable-next-line no-console
-//       console.error(error);
-//     });
-// };
-
-export const getTourDates = (currentEvent) => (dispatch) => {
-  axios
-    .get(`${CONST.API}/coda/tour-dates`, {
+export const getTourDates = (currentEvent) => async (dispatch) => {
+  try {
+    const response = await axios.get(`${CONST.API}/coda/tour-dates`, {
       params: {
         event_id: currentEvent.id,
         season_id: currentEvent.seasonId,
       },
-    })
-    .then((response) => {
-      dispatch(updateTourDates(response.data));
-    })
-    .catch((error) => {
-      // eslint-disable-next-line no-console
-      console.error(error);
     });
+    await dispatch(updateTourDates(response.data));
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.error(err);
+  }
 };
 
 export const postScore = ({
@@ -387,7 +361,7 @@ export const postScore = ({
     const newCurrentRoutine = newRoutineArr.find(
       (routine) => !routine.canceled && !routine.score && routine.score !== 0,
     );
-    dispatch(updateCurrentRoutine(newCurrentRoutine));
+    await dispatch(updateCurrentRoutine(newCurrentRoutine));
     window.scrollTo(0, 0);
   } catch (err) {
     // eslint-disable-next-line no-console
@@ -395,18 +369,16 @@ export const postScore = ({
   }
 };
 
-export const getScoringBreakdown = (eventId) => (dispatch) => {
-  axios
-    .get(`${CONST.API}/coda/scoring-breakdown`, {
+export const getScoringBreakdown = (eventId) => async (dispatch) => {
+  try {
+    const response = await axios.get(`${CONST.API}/coda/scoring-breakdown`, {
       params: {
         event_id: eventId,
       },
-    })
-    .then((response) => {
-      dispatch(updateScoringBreakdown(response.data));
-    })
-    .catch((error) => {
-      // eslint-disable-next-line no-console
-      console.error(error);
     });
+    await dispatch(updateScoringBreakdown(response.data));
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.error(err);
+  }
 };

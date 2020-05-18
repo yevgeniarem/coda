@@ -121,9 +121,9 @@ export default function Modal({
         <>
           <Button
             variant="secondary"
-            onClick={() => {
-              handleClose(); // QUESTION: I shouldn't add Promise.all here, right?
-              dispatch(closeSidebar());
+            onClick={async () => {
+              await dispatch(closeSidebar());
+              handleClose();
             }}
             className="button action-button--navigation action-button--grey"
           >
@@ -180,7 +180,7 @@ export default function Modal({
                 };
                 submitScore();
               }
-              Promise.all([dispatch(closeSidebar()), dispatch(resetScoring())]); // QUESTION: did I do this correctly?
+              Promise.all([dispatch(closeSidebar()), dispatch(resetScoring())]);
             }}
             className="button action-button--navigation action-button--blue"
           >

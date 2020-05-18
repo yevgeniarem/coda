@@ -1,6 +1,6 @@
 const initialState = {
   routineList: null,
-  currentRoutine: null,
+  currentRoutine: {},
 };
 
 const routines = (state = initialState, action) => {

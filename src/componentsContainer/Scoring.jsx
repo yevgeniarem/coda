@@ -21,20 +21,23 @@ export default function Scoring() {
   const [buttons, setButtons] = useState([]);
 
   useEffect(() => {
-    // TODO change to Promise.all QUESTION: do I only use Promise.all in a useEffect?
-    dispatch(getRoutineList(inputs));
-    getButtons()
-      .then((response) => {
-        setButtons(
-          response.data.find(
-            (b) => b.level_id === currentRoutine.performance_division_level_id,
-          ).level_4,
-        );
-      })
-      .catch((error) => {
-        // eslint-disable-next-line no-console
-        console.error(error);
-      });
+    Promise.all([
+      dispatch(getRoutineList(inputs)),
+      getButtons()
+        .then((response) => {
+          if (!currentRoutine.performance_division_level_id) return;
+          setButtons(
+            response.data.find(
+              (b) =>
+                b.level_id === currentRoutine.performance_division_level_id,
+            ).level_4,
+          );
+        })
+        .catch((error) => {
+          // eslint-disable-next-line no-console
+          console.error(error);
+        }),
+    ]);
   }, [inputs, dispatch, currentRoutine.performance_division_level_id]);
 
   const handleClick = (button) => {
@@ -79,6 +82,7 @@ export default function Scoring() {
     }
   };
 
+  // use helper functions (1. determining whether header or other button. 2. returning button name) and classnames
   const allButtons = buttons.map((button) => {
     if (button.header_level) {
       return (
@@ -100,6 +104,7 @@ export default function Scoring() {
           id={button.id}
           className="button button--judging button--scoring"
           onClick={(e) => handleClick(button, e)}
+          // onClick={clickableButton && ((e) => handleClick(button, e))}
         >
           {button.level_3_name}
         </button>
@@ -142,7 +147,7 @@ export default function Scoring() {
       </div>
 
       {/* TODO put in helper function to make it readable */}
-      <div>{currentRoutine.routine_id && <ScoringBreakdown />}</div>
+      <div>{currentRoutine && <ScoringBreakdown />}</div>
     </>
   );
 }

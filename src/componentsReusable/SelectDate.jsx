@@ -36,7 +36,11 @@ export default function SelectDate({ inputs, variable, name }) {
 }
 
 SelectDate.propTypes = {
-  inputs: PropTypes.arrayOf(PropTypes.object).isRequired,
+  inputs: PropTypes.arrayOf(PropTypes.object),
   variable: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
+};
+
+SelectDate.defaultProps = {
+  inputs: null,
 };

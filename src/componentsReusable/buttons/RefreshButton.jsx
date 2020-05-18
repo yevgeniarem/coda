@@ -16,12 +16,6 @@ export default function RefreshButton() {
     window.setTimeout(() => setIsFetching(false), 1000);
   };
 
-  // const handleRefresh = () => {
-  //   setIsFetching(true);
-  //   dispatch(getRoutineList(inputs));
-  //   window.setTimeout(() => setIsFetching(false), 1000);
-  // };
-
   return (
     <Button
       type="button"

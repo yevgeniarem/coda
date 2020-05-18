@@ -44,13 +44,13 @@ export default function ScoringBreakdown() {
       dispatch(runSubmitModal(true)),
       dispatch(updateNote(noteValue)),
       dispatch(getRoutineList(inputs)),
-    ]); // QUESTION: did I do this correctly?
+    ]);
   };
 
-  const handleInputChange = (event) => {
+  const handleInputChange = async (event) => {
     if (event.target.name === 'not_friendly') dispatch(toggleNotFriendly());
     if (event.target.name === 'i_choreographed') {
-      dispatch(toggleIChoreographed());
+      await dispatch(toggleIChoreographed());
       if (i_choreographed === true) dispatch(updateScore(100));
       if (i_choreographed === false) dispatch(updateScore(0));
     }

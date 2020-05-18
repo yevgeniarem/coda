@@ -27,7 +27,7 @@ export default function SelectInput({ inputs, variable, name }) {
         <Form.Control
           as="select"
           className="form__select-input form__first-input"
-          value={selectInputs[variable]}
+          value={`${selectInputs[variable] || 'default'}`}
           onChange={handleChange}
         >
           <option key="default" value="default" disabled>
@@ -46,7 +46,11 @@ export default function SelectInput({ inputs, variable, name }) {
 }
 
 SelectInput.propTypes = {
-  inputs: PropTypes.arrayOf(PropTypes.object).isRequired,
+  inputs: PropTypes.arrayOf(PropTypes.object),
   variable: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
+};
+
+SelectInput.defaultProps = {
+  inputs: null,
 };
