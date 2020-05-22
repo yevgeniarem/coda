@@ -32,7 +32,8 @@ export default function NavbarScoring() {
         ),
       );
     }
-  }, [dispatch, routineList, currentRoutine.routine_id]);
+    // eslint-disable-next-line
+  }, [routineList]);
 
   return (
     <>

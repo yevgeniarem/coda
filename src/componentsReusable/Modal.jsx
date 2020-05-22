@@ -210,7 +210,7 @@ export default function Modal({
 Modal.propTypes = {
   isShown: PropTypes.bool.isRequired,
   title: PropTypes.string.isRequired,
-  body: PropTypes.string.isRequired,
+  body: PropTypes.string,
   numButtons: PropTypes.string.isRequired,
   button1: PropTypes.string.isRequired,
   button2: PropTypes.string,
@@ -221,4 +221,5 @@ Modal.propTypes = {
 Modal.defaultProps = {
   button2: 'NEXT',
   clickedRoutine: null,
+  body: null,
 };

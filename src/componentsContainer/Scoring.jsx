@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import classNames from 'classnames';
 
 import NavbarScoring from '../componentsReusable/NavbarScoring';
 import ScoringBreakdown from '../componentsReusable/ScoringBreakdown';
@@ -9,7 +10,12 @@ import {
   makeButtonRed,
   deleteButton,
 } from '../redux/actions/appActions';
-import { getButtons } from '../utils/helpers';
+import {
+  getButtons,
+  determineButtonColor,
+  determineButtonType,
+  splitButtonsIntoPages,
+} from '../utils/helpers';
 
 export default function Scoring() {
   const dispatch = useDispatch();
@@ -19,43 +25,31 @@ export default function Scoring() {
     { buttons: reduxButtons },
   ] = useSelector((state) => [state.inputs, state.routines, state.scoring]);
   const [buttons, setButtons] = useState([]);
+  const [classes, setClasses] = useState({ classes: '', buttonId: '' });
 
   useEffect(() => {
-    Promise.all([
-      dispatch(getRoutineList(inputs)),
-      getButtons()
-        .then((response) => {
-          if (!currentRoutine.performance_division_level_id) return;
-          setButtons(
-            response.data.find(
-              (b) =>
-                b.level_id === currentRoutine.performance_division_level_id,
-            ).level_4,
-          );
-        })
-        .catch((error) => {
-          // eslint-disable-next-line no-console
-          console.error(error);
-        }),
-    ]);
-  }, [inputs, dispatch, currentRoutine.performance_division_level_id]);
+    dispatch(getRoutineList(inputs));
+    // eslint-disable-next-line
+  }, []);
 
-  const handleClick = (button) => {
-    const selectedButton = document.getElementById(button.id);
-    // TODO make helper function to combine .find
-    const buttonIsGrey = !reduxButtons.find(
-      (reduxButton) => reduxButton.level_4_id === button.id,
-    );
-    const buttonIsGreen = reduxButtons.find(
-      (reduxButton) =>
-        reduxButton.level_4_id === button.id && reduxButton.good === true,
-    );
-    const buttonIsRed = reduxButtons.find(
-      (reduxButton) =>
-        reduxButton.level_4_id === button.id && reduxButton.good === false,
-    );
-    // TODO separate into helper functions (in separate folder)
-    if (buttonIsGrey) {
+  useEffect(() => {
+    getButtons()
+      .then((response) => {
+        const currentLevelId = currentRoutine.performance_division_level_id;
+        if (!currentLevelId) return;
+        setButtons(
+          response.data.find((b) => b.level_id === currentLevelId).level_4,
+        );
+      })
+      .catch((error) => {
+        // eslint-disable-next-line no-console
+        console.error(error);
+      });
+    // eslint-disable-next-line
+  }, [currentRoutine]);
+
+  const changeButtonColor = (button, buttonColor) => {
+    if (buttonColor === 'buttonIsGrey') {
       dispatch(
         makeButtonGreen({
           level_4_id: button.id,
@@ -63,9 +57,9 @@ export default function Scoring() {
           good: true,
         }),
       );
-      selectedButton.classList.add('button--scoring--green');
+      setClasses({ classes: 'button--scoring--green', buttonId: button.id });
     }
-    if (buttonIsGreen) {
+    if (buttonColor === 'buttonIsGreen') {
       dispatch(
         makeButtonRed({
           level_4_id: button.id,
@@ -73,81 +67,76 @@ export default function Scoring() {
           good: false,
         }),
       );
-      selectedButton.classList.remove('button--scoring--green');
-      selectedButton.classList.add('button--scoring--red');
+      setClasses({ classes: 'button--scoring--red', buttonId: button.id });
     }
-    if (buttonIsRed) {
+    if (buttonColor === 'buttonIsRed') {
       dispatch(deleteButton({ level_4_id: button.id }));
-      selectedButton.classList.remove('button--scoring--red');
+      setClasses({ classes: '', buttonId: button.id });
     }
   };
 
-  // use helper functions (1. determining whether header or other button. 2. returning button name) and classnames
+  const handleClick = (button) => {
+    const buttonColor = determineButtonColor(button, reduxButtons);
+    changeButtonColor(button, buttonColor);
+  };
+
   const allButtons = buttons.map((button) => {
-    if (button.header_level) {
-      return (
-        <button
-          type="button"
-          key={button.id}
-          id={button.id}
-          className={`button button--judging button--header-level-${button.header_level}`}
-        >
-          {button.header_name}
-        </button>
-      );
-    }
-    if (button.level_4_name === null && button.level_3_name) {
-      return (
-        <button
-          type="button"
-          key={button.id}
-          id={button.id}
-          className="button button--judging button--scoring"
-          onClick={(e) => handleClick(button, e)}
-          // onClick={clickableButton && ((e) => handleClick(button, e))}
-        >
-          {button.level_3_name}
-        </button>
-      );
-    }
-    if (button.level_4_name) {
-      return (
-        <button
-          type="button"
-          key={button.id}
-          id={button.id}
-          className="button button--judging button--scoring"
-          onClick={() => handleClick(button)}
-        >
-          {button.level_4_name}
-        </button>
-      );
-    }
-    return null;
+    const allButtonsInfo = [
+      {
+        type: 'headerButton',
+        name: button.header_name,
+        className: `button--header-level-${button.header_level}`,
+        clickable: false,
+      },
+      {
+        type: 'level3Button',
+        name: button.level_3_name,
+        className: 'button--scoring',
+        clickable: true,
+      },
+      {
+        type: 'level4Button',
+        name: button.level_4_name,
+        className: 'button--scoring',
+        clickable: true,
+      },
+    ];
+    const buttonType = determineButtonType(button);
+    const buttonInfo = allButtonsInfo.find((b) => b.type === buttonType);
+
+    return (
+      <button
+        type="button"
+        key={button.id}
+        id={button.id}
+        className={classNames(
+          'button',
+          'button--judging',
+          buttonInfo.className,
+          button.id === classes.buttonId ? classes.classes : '',
+        )}
+        onClick={buttonInfo.clickable ? (e) => handleClick(button, e) : null}
+      >
+        {buttonInfo.name}
+      </button>
+    );
   });
 
-  // TODO put these in useEffect + put into bigger function that describes what this is doing
-  const performanceButton = allButtons.find(
-    (button) => button.props.children === 'Performance',
-  );
-  const foundationButtons = allButtons.splice(
-    0,
-    allButtons.indexOf(performanceButton),
-  );
-  const perfAndCreativeButtons = allButtons;
+  const buttonPages = splitButtonsIntoPages(allButtons);
 
   return (
     <>
       <NavbarScoring />
+
       <div className="button__container button__container--firstPage">
-        {foundationButtons}
-      </div>
-      <div className="button__container button__container--secondPage">
-        {perfAndCreativeButtons}
+        {buttonPages.foundationButtons}
       </div>
 
-      {/* TODO put in helper function to make it readable */}
-      <div>{currentRoutine && <ScoringBreakdown />}</div>
+      <div className="button__container button__container--secondPage">
+        {buttonPages.perfAndCreativeButtons}
+      </div>
+
+      <div>{currentRoutine.date_routine_id && <ScoringBreakdown />}</div>
     </>
   );
 }

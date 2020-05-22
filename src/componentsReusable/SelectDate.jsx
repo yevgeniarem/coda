@@ -18,7 +18,8 @@ export default function SelectDate({ inputs, variable, name }) {
 
   useEffect(() => {
     dispatch(updateInput({ variable, id }));
-  }, [dispatch, id, variable]);
+    // eslint-disable-next-line
+  }, [id]);
 
   return (
     <SelectInput

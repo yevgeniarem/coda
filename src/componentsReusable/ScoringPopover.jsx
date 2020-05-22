@@ -14,7 +14,8 @@ export default function ScoringPopover() {
 
   useEffect(() => {
     dispatch(getScoringBreakdown(eventId));
-  }, [eventId, dispatch]);
+    // eslint-disable-next-line
+  }, []);
 
   const popover = (
     <Popover className="score-popover">

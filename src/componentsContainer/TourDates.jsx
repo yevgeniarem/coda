@@ -14,7 +14,8 @@ export default function TourDates() {
 
   useEffect(() => {
     dispatch(getTourDates(currentEvent));
-  }, [dispatch, currentEvent]);
+    // eslint-disable-next-line
+  }, []);
 
   return (
     <>

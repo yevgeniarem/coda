@@ -10,6 +10,7 @@ import {
   getCompetitionGroupList,
 } from '../redux/actions/appActions';
 import { positions, teacherJudge } from '../utils/constants';
+import { toCamelCase } from '../utils/helpers';
 
 export default function Judges() {
   const dispatch = useDispatch();
@@ -23,34 +24,31 @@ export default function Judges() {
       dispatch(getJudgeList()),
       dispatch(getCompetitionGroupList()),
     ]);
-  }, [dispatch]);
+    // eslint-disable-next-line
+  }, []);
 
   const judgeSelectInputs = [
     {
       name: 'Judge',
-      variable: 'judge',
       inputs: judgeList,
     },
     {
       name: 'Position',
-      variable: 'position',
       inputs: positions,
     },
     {
       name: 'Teacher Judge',
-      variable: 'teacherJudge',
       inputs: teacherJudge,
     },
     {
       name: 'Competition Group',
-      variable: 'competitionGroup',
       inputs: competitionGroupList,
     },
   ];
 
-  const modalMessage = `${modalJudgeName && modalJudgeName.fname} ${
-    modalJudgeName && modalJudgeName.lname
-  } already has scores from this position for this tour date. If judges are being swapped, this is fine. Continue?`;
+  const modalMessage =
+    modalJudgeName &&
+    `${modalJudgeName.fname} ${modalJudgeName.lname} already has scores from this position for this tour date. If judges are being swapped, this is fine. Continue?`;
 
   return (
     <>
@@ -74,8 +72,7 @@ export default function Judges() {
             judgeSelectInputs.map((i) => (
               <SelectInput
                 name={i.name}
-                variable={i.variable}
-                // variable={toCamelCase(i.name)}
+                variable={toCamelCase(i.name)}
                 inputs={i.inputs}
                 key={i.name}
               />
