@@ -8,6 +8,7 @@ import InputGroup from '../componentsReusable/InputGroup';
 import Modal from '../componentsReusable/Modal';
 import SubmitButton from '../componentsReusable/buttons/SubmitButton';
 import { tryLogin } from '../redux/actions/appActions';
+import { formInputs } from '../utils/constants';
 
 export default function Login() {
   const history = useHistory();
@@ -26,19 +27,6 @@ export default function Login() {
       console.error(err);
     }
   };
-
-  const formInputs = [
-    {
-      name: 'name',
-      registerOptions: { required: 'Username is required' },
-      controlId: 'formBasicEmail',
-    },
-    {
-      name: 'password',
-      registerOptions: { required: 'Password is required' },
-      controlId: 'formBasicPassword',
-    },
-  ];
 
   return (
     <>

@@ -20,3 +20,26 @@ export const buttonCategories = [
   { name: 'performanceButtons', id: 12 },
   { name: 'creativeButtons', id: 13 },
 ];
+
+export const formInputs = [
+  {
+    name: 'name',
+    registerOptions: { required: 'Username is required' },
+    controlId: 'formBasicEmail',
+  },
+  {
+    name: 'password',
+    registerOptions: { required: 'Password is required' },
+    controlId: 'formBasicPassword',
+  },
+];
+
+export const dropdownItems = [
+  { name: 'CHANGE JUDGE INFO', info: 'change-judge' },
+  { name: 'SIGN OUT', info: 'sign-out' },
+];
+
+export const loginIconClasses = {
+  name: ['far', 'envelope'],
+  password: ['fas', 'lock'],
+};

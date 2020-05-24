@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { toggleSidebar, runRoutineModal } from '../redux/actions/appActions';
 import Modal from './Modal';
 import RefreshButton from './buttons/RefreshButton';
-import { formatTourDate } from '../utils/helpers';
+import { formatTourDate, renderRoutineNumber } from '../utils/helpers';
 import CONST from '../utils/constants';
 
 export default function Sidebar() {
@@ -30,20 +30,36 @@ export default function Sidebar() {
     tourDates.find((city) => city.id === inputs.tourDateId),
   );
 
-  const handleClick = () => {
-    dispatch(toggleSidebar());
-  };
+  const handleClick = () => dispatch(toggleSidebar());
 
-  const handleButtonClick = async (routine) => {
+  const handleButtonClick = (routine) => {
     setClickedRoutine(routine);
     dispatch(runRoutineModal(true));
   };
 
-  const routineListButtons =
+  const routineButtons =
     routineList &&
     routineList.map((routine) => {
-      const renderRoutineNumber = () =>
-        routine.has_a ? `#${routine.number}a` : `#${routine.number}`;
+      // const routineButtonTypes = [
+      //   {
+      //     type: 'disabled',
+      //     conditions: !!routine.score || routine.score === 0,
+      //     className: 'navbar__sidebar--button--disabled',
+      //     text: routine.routine,
+      //   },
+      //   {
+      //     type: 'active',
+      //     conditions: routine.routine === currentRoutine.routine,
+      //     className: 'navbar__sidebar--button--active',
+      //     text: currentRoutine.routine,
+      //   },
+      //   {
+      //     type: 'cancelled',
+      //     conditions: routine.canceled,
+      //     className: 'navbar__sidebar--button--disabled',
+      //     text: routine.routine,
+      //   },
+      // ];
 
       if (!!routine.score || routine.score === 0) {
         return (
@@ -53,7 +69,7 @@ export default function Sidebar() {
             key={routine.routine_id}
             type="button"
           >
-            <span>{renderRoutineNumber()}</span>
+            <span>{renderRoutineNumber(routine)}</span>
             <span className="navbar__sidebar--routine">{routine.routine}</span>
           </button>
         );
@@ -66,7 +82,7 @@ export default function Sidebar() {
             key={routine.routine_id}
             type="button"
           >
-            <span>{renderRoutineNumber()}</span>
+            <span>{renderRoutineNumber(routine)}</span>
             <span className="navbar__sidebar--routine">
               {currentRoutine.routine}
             </span>
@@ -81,7 +97,7 @@ export default function Sidebar() {
             key={routine.routine_id}
             type="button"
           >
-            <span>{renderRoutineNumber()}</span>
+            <span>{renderRoutineNumber(routine)}</span>
             <span className="navbar__sidebar--routine">{routine.routine}</span>
             <span className="float-right">CANCELED</span>
           </button>
@@ -94,7 +110,7 @@ export default function Sidebar() {
           key={routine.routine_id}
           type="button"
         >
-          <span>{renderRoutineNumber()}</span>
+          <span>{renderRoutineNumber(routine)}</span>
           <span className="navbar__sidebar--routine">{routine.routine}</span>
         </button>
       );
@@ -127,6 +143,7 @@ export default function Sidebar() {
         location="scoring"
         clickedRoutine={clickedRoutine}
       />
+
       <ReactSidebar
         sidebar={
           <div>
@@ -136,7 +153,7 @@ export default function Sidebar() {
               alt={`${currentEvent.name} logo`}
             />
             <span className="navbar__sidebar--heading">{currentTourDate}</span>
-            <div className="navbar__sidebar--buttons">{routineListButtons}</div>
+            <div className="navbar__sidebar--buttons">{routineButtons}</div>
             <RefreshButton />
           </div>
         }

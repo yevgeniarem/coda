@@ -17,6 +17,7 @@ export default function NavButtons({
         text={leftButtonText}
         initiallyDisabled={leftInitiallyDisabled}
       />
+
       <RightNavButton
         text={rightButtonText}
         initiallyDisabled={rightInitiallyDisabled}

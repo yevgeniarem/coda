@@ -100,3 +100,23 @@ export const calculateWeakestCategory = (buttonPercentages) => {
 
 export const findNextAvailableRoutine = (routineList) =>
   routineList.find((r) => !r.canceled && !r.score && r.score !== 0) || {};
+
+export const findJudgeNameById = (judgeList, judgeId) => {
+  const index = judgeList.map((judge) => judge.id === judgeId).indexOf(true);
+  const currentJudge = judgeList[index] || {};
+  return currentJudge.judge.toUpperCase();
+};
+
+export const applyDefaultNote = (judgeList, currentJudge) => {
+  const judgeObj = judgeList.find((judge) => judge.id === currentJudge);
+  let finalNote = judgeObj.default_notes;
+  if (!judgeObj.default_notes) finalNote = '';
+  return finalNote;
+};
+
+export const findNextAvailableDate = (inputs) =>
+  inputs &&
+  inputs.find((i) => moment.utc(i.endDate).isSameOrAfter(moment.utc()));
+
+export const renderRoutineNumber = (routine) =>
+  routine.has_a ? `#${routine.number}a` : `#${routine.number}`;

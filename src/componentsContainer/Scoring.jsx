@@ -128,12 +128,15 @@ export default function Scoring() {
   return (
     <>
       <NavbarScoring />
+
       <div className="button__container button__container--firstPage">
         {buttonPages.foundationButtons}
       </div>
+
       <div className="button__container button__container--secondPage">
         {buttonPages.perfAndCreativeButtons}
       </div>
+
       <div>{!isCompetitionOver(currentRoutine) && <ScoringBreakdown />}</div>
     </>
   );

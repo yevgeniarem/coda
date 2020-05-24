@@ -1,20 +1,14 @@
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
-import moment from 'moment';
 
 import SelectInput from './SelectInput';
 import { updateInput } from '../redux/actions/appActions';
-import { formatTourDate } from '../utils/helpers';
+import { formatTourDate, findNextAvailableDate } from '../utils/helpers';
 
 export default function SelectDate({ inputs, variable, name }) {
   const dispatch = useDispatch();
-  const { id } =
-    (inputs &&
-      inputs.find((input) =>
-        moment.utc(input.endDate).isSameOrAfter(moment.utc()),
-      )) ||
-    {};
+  const { id } = findNextAvailableDate(inputs) || {};
 
   useEffect(() => {
     dispatch(updateInput({ variable, id }));

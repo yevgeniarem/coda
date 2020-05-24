@@ -2,6 +2,8 @@ import React from 'react';
 import { Dropdown as BootstrapDropdown } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
 
+import { dropdownItems } from '../utils/constants';
+
 export default function Dropdown() {
   const history = useHistory();
 
@@ -9,11 +11,6 @@ export default function Dropdown() {
     if (action === 'change-judge') history.push('/Judges');
     if (action === 'sign-out') history.push('/Login');
   };
-
-  const dropdownItems = [
-    { name: 'CHANGE JUDGE INFO', info: 'change-judge' },
-    { name: 'SIGN OUT', info: 'sign-out' },
-  ];
 
   return (
     <BootstrapDropdown>

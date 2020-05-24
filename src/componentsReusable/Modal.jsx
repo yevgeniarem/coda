@@ -19,6 +19,7 @@ import {
   calculateGoodBtnPercentage,
   calculateStrongestCategory,
   calculateWeakestCategory,
+  applyDefaultNote,
 } from '../utils/helpers';
 import { buttonCategories } from '../utils/constants';
 
@@ -82,11 +83,7 @@ export default function Modal({
     if (location === 'scoring') dispatch(updateCurrentRoutine(clickedRoutine));
     if (location === 'scoring-breakdown-comp') {
       let finalNote = note;
-      if (!finalNote) {
-        const judgeObj = judgeList.find((judge) => judge.id === currentJudge);
-        finalNote = judgeObj.default_notes;
-        if (!judgeObj.default_notes) finalNote = '';
-      }
+      if (!note) finalNote = applyDefaultNote(judgeList, currentJudge);
 
       const submitScore = async () => {
         try {
@@ -119,6 +116,7 @@ export default function Modal({
       };
       submitScore();
     }
+
     Promise.all([dispatch(closeSidebar()), dispatch(resetScoring())]);
   };
 

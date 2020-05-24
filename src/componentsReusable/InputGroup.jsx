@@ -6,13 +6,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import PropTypes from 'prop-types';
 
 import { updateLogin } from '../redux/actions/appActions';
+import { loginIconClasses } from '../utils/constants';
 
 export default function InputGroup({ type, register, errors }) {
   const dispatch = useDispatch();
-  const iconClasses = {
-    name: ['far', 'envelope'],
-    password: ['fas', 'lock'],
-  };
 
   const handleChange = (e) =>
     dispatch(updateLogin({ value: e.target.value, type }));
@@ -22,7 +19,10 @@ export default function InputGroup({ type, register, errors }) {
       <BootstrapInputGroup className="text-input text-input--icon-left mb-3">
         <BootstrapInputGroup.Prepend>
           <BootstrapInputGroup.Text className="text-input--icon-left__icon">
-            <FontAwesomeIcon icon={iconClasses[type]} className="icon fa-lg" />
+            <FontAwesomeIcon
+              icon={loginIconClasses[type]}
+              className="icon fa-lg"
+            />
           </BootstrapInputGroup.Text>
         </BootstrapInputGroup.Prepend>
         <Form.Control
@@ -33,6 +33,7 @@ export default function InputGroup({ type, register, errors }) {
           ref={register}
         />
       </BootstrapInputGroup>
+
       <ErrorMessage errors={errors} name={type}>
         {({ message }) => <p className="form form__error-message">{message}</p>}
       </ErrorMessage>

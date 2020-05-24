@@ -132,6 +132,7 @@ export default function ScoringBreakdown() {
                 </label>
               </div>
             ))}
+
             <SubmitButton
               text="SUBMIT"
               classes={['action-button--scoring-submit']}
