@@ -14,6 +14,13 @@ import {
   resetScoring,
   postScore,
 } from '../redux/actions/appActions';
+import {
+  filterButtonsById,
+  calculateGoodBtnPercentage,
+  calculateStrongestCategory,
+  calculateWeakestCategory,
+} from '../utils/helpers';
+import { buttonCategories } from '../utils/constants';
 
 export default function Modal({
   isShown,
@@ -59,49 +66,60 @@ export default function Modal({
     setShow(false);
   };
 
-  const foundationButtons =
-    buttons && buttons.filter((button) => button.level_1_id === 11);
-  const performanceButtons =
-    buttons && buttons.filter((button) => button.level_1_id === 12);
-  const creativeButtons =
-    buttons && buttons.filter((button) => button.level_1_id === 13);
+  const buttonsOrdByCategories = buttonCategories.map((category) => ({
+    name: category.name,
+    buttons: filterButtonsById(buttons, category.id),
+  }));
 
-  const calculatePercentage = (b) => {
-    const array = (b && b.map((button) => button.good)) || [];
-    const percentage =
-      (array.filter((e) => e === true).length / array.length) * 100;
-    if (Number.isNaN(percentage)) return 50;
-    return Math.floor(percentage);
-  };
+  const buttonPercentages = buttonsOrdByCategories.map((b) => ({
+    name: b.name,
+    percentage: calculateGoodBtnPercentage(b.buttons),
+  }));
 
-  const foundationPercentage = calculatePercentage(foundationButtons);
-  const performancePercentage = calculatePercentage(performanceButtons);
-  const creativePercentage = calculatePercentage(creativeButtons);
+  const handleClick = async () => {
+    await handleClose();
+    if (location === 'judges') history.push('/scoring');
+    if (location === 'scoring') dispatch(updateCurrentRoutine(clickedRoutine));
+    if (location === 'scoring-breakdown-comp') {
+      let finalNote = note;
+      if (!finalNote) {
+        const judgeObj = judgeList.find((judge) => judge.id === currentJudge);
+        finalNote = judgeObj.default_notes;
+        if (!judgeObj.default_notes) finalNote = '';
+      }
 
-  const calculateStrongest = () => {
-    const max = Math.max(
-      foundationPercentage,
-      performancePercentage,
-      creativePercentage,
-    );
-
-    if (foundationPercentage === max) return 11;
-    if (performancePercentage === max) return 12;
-    if (creativePercentage === max) return 13;
-    return null;
-  };
-
-  const calculateWeakest = () => {
-    const min = Math.min(
-      foundationPercentage,
-      performancePercentage,
-      creativePercentage,
-    );
-
-    if (foundationPercentage === min) return 11;
-    if (performancePercentage === min) return 12;
-    if (creativePercentage === min) return 13;
-    return null;
+      const submitScore = async () => {
+        try {
+          dispatch(
+            postScore({
+              competitionGroup,
+              currentRoutine,
+              currentEvent,
+              tourDateId,
+              currentJudge,
+              finalNote,
+              score,
+              not_friendly,
+              i_choreographed,
+              position,
+              teacherJudge,
+              is_coda,
+              buttons,
+              strongest_level_1_id: calculateStrongestCategory(
+                buttonPercentages,
+              ),
+              weakest_level_1_id: calculateWeakestCategory(buttonPercentages),
+              routineList,
+            }),
+          );
+        } catch (err) {
+          // eslint-disable-next-line no-console
+          console.error(err);
+        }
+      };
+      submitScore();
+    }
+    Promise.all([dispatch(closeSidebar()), dispatch(resetScoring())]);
   };
 
   const renderButtons = () => {
@@ -131,57 +149,7 @@ export default function Modal({
           </Button>
           <Button
             variant="secondary"
-            onClick={() => {
-              handleClose();
-              if (location === 'judges') history.push('/scoring');
-              if (location === 'scoring') {
-                dispatch(updateCurrentRoutine(clickedRoutine));
-              }
-              if (location === 'scoring-breakdown-comp') {
-                const strongest_level_1_id = calculateStrongest();
-                const weakest_level_1_id = calculateWeakest();
-
-                let finalNote = note;
-                if (!finalNote) {
-                  const judgeObj = judgeList.find(
-                    (judge) => judge.id === currentJudge,
-                  );
-                  finalNote = judgeObj.default_notes;
-
-                  if (!judgeObj.default_notes) finalNote = '';
-                }
-
-                const submitScore = async () => {
-                  try {
-                    dispatch(
-                      postScore({
-                        competitionGroup,
-                        currentRoutine,
-                        currentEvent,
-                        tourDateId,
-                        currentJudge,
-                        finalNote,
-                        score,
-                        not_friendly,
-                        i_choreographed,
-                        position,
-                        teacherJudge,
-                        is_coda,
-                        buttons,
-                        strongest_level_1_id,
-                        weakest_level_1_id,
-                        routineList,
-                      }),
-                    );
-                  } catch (err) {
-                    // eslint-disable-next-line no-console
-                    console.error(err);
-                  }
-                };
-                submitScore();
-              }
-              Promise.all([dispatch(closeSidebar()), dispatch(resetScoring())]);
-            }}
+            onClick={handleClick}
             className="button action-button--navigation action-button--blue"
           >
             {button2}

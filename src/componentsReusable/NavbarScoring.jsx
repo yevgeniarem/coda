@@ -5,6 +5,7 @@ import { Navbar } from 'react-bootstrap';
 import { updateCurrentRoutine } from '../redux/actions/appActions';
 import Sidebar from './Sidebar';
 import JudgeProfile from './JudgeProfile';
+import { isCompetitionOver, findNextAvailableRoutine } from '../utils/helpers';
 
 export default function NavbarScoring() {
   const dispatch = useDispatch();
@@ -14,7 +15,7 @@ export default function NavbarScoring() {
   let title = `#${currentRoutine.number} - ${currentRoutine.routine}`;
   let subtitle = `${currentRoutine.age_division} • ${currentRoutine.performance_division} • ${currentRoutine.routine_category}`;
 
-  if (!currentRoutine.routine_id) {
+  if (isCompetitionOver(currentRoutine)) {
     title = 'COMPETITION IS OVER';
     subtitle = '';
   }
@@ -23,12 +24,7 @@ export default function NavbarScoring() {
     if (!currentRoutine.routine_id) {
       dispatch(
         updateCurrentRoutine(
-          (routineList &&
-            routineList.find(
-              (routine) =>
-                !routine.canceled && !routine.score && routine.score !== 0,
-            )) ||
-            {},
+          (routineList && findNextAvailableRoutine(routineList)) || {},
         ),
       );
     }

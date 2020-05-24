@@ -14,3 +14,9 @@ export const teacherJudge = [
   { id: true, teacherJudge: 'IS Teacher Judge' },
   { id: false, teacherJudge: 'IS NOT Teacher Judge' },
 ];
+
+export const buttonCategories = [
+  { name: 'foundationButtons', id: 11 },
+  { name: 'performanceButtons', id: 12 },
+  { name: 'creativeButtons', id: 13 },
+];

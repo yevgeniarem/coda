@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import classNames from 'classnames';
 
 import { getRoutineList } from '../../redux/actions/appActions';
 
@@ -19,10 +20,12 @@ export default function RefreshButton() {
   return (
     <Button
       type="button"
-      // TODO use classnames package
-      className={`button action-button--submit action-button--green ${
-        isFetching ? 'action-button--refreshing' : ''
-      }`}
+      className={classNames(
+        'button',
+        'action-button--submit',
+        'action-button--green',
+        isFetching ? 'action-button--refreshing' : '',
+      )}
       onClick={handleRefresh}
     >
       <FontAwesomeIcon icon={['fas', 'redo']} className="icon--refresh" />{' '}

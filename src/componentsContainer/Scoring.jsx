@@ -15,6 +15,7 @@ import {
   determineButtonColor,
   determineButtonType,
   splitButtonsIntoPages,
+  isCompetitionOver,
 } from '../utils/helpers';
 
 export default function Scoring() {
@@ -127,16 +128,13 @@ export default function Scoring() {
   return (
     <>
       <NavbarScoring />
-
       <div className="button__container button__container--firstPage">
         {buttonPages.foundationButtons}
       </div>
-
       <div className="button__container button__container--secondPage">
         {buttonPages.perfAndCreativeButtons}
       </div>
-
-      <div>{currentRoutine.date_routine_id && <ScoringBreakdown />}</div>
+      <div>{!isCompetitionOver(currentRoutine) && <ScoringBreakdown />}</div>
     </>
   );
 }

@@ -136,7 +136,7 @@ export default function Sidebar() {
               alt={`${currentEvent.name} logo`}
             />
             <span className="navbar__sidebar--heading">{currentTourDate}</span>
-            <div className="navbar__sidebar--butons">{routineListButtons}</div>
+            <div className="navbar__sidebar--buttons">{routineListButtons}</div>
             <RefreshButton />
           </div>
         }

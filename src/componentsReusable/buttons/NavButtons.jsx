@@ -16,7 +16,6 @@ export default function NavButtons({
       <LeftNavButton
         text={leftButtonText}
         initiallyDisabled={leftInitiallyDisabled}
-        location={location}
       />
       <RightNavButton
         text={rightButtonText}

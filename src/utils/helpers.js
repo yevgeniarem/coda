@@ -55,3 +55,48 @@ export const splitButtonsIntoPages = (allButtons) => {
   const perfAndCreativeButtons = allButtons.slice(splitIndex);
   return { foundationButtons, perfAndCreativeButtons };
 };
+
+export const isCompetitionOver = (currentRoutine) =>
+  currentRoutine && !currentRoutine.date_routine_id;
+
+export const isEven = (i) => i % 2 === 0;
+
+export const filterButtonsById = (buttons, id) =>
+  buttons && buttons.filter((b) => b.level_1_id === id);
+
+export const calculateGoodBtnPercentage = (btn) => {
+  const btns = (btn && btn.map((b) => b.good)) || [];
+  const percentage =
+    (btns.filter((isGood) => isGood === true).length / btns.length) * 100;
+  if (Number.isNaN(percentage)) return 50;
+  return Math.floor(percentage);
+};
+
+export const calculateStrongestCategory = (buttonPercentages) => {
+  const max = Math.max(
+    buttonPercentages.foundationButtons,
+    buttonPercentages.performanceButtons,
+    buttonPercentages.creativeButtons,
+  );
+
+  if (buttonPercentages.foundationPercentage === max) return 11;
+  if (buttonPercentages.performanceButtons === max) return 12;
+  if (buttonPercentages.creativeButtons === max) return 13;
+  return null;
+};
+
+export const calculateWeakestCategory = (buttonPercentages) => {
+  const min = Math.min(
+    buttonPercentages.foundationButtons,
+    buttonPercentages.performanceButtons,
+    buttonPercentages.creativeButtons,
+  );
+
+  if (buttonPercentages.foundationPercentage === min) return 11;
+  if (buttonPercentages.performanceButtons === min) return 12;
+  if (buttonPercentages.creativeButtons === min) return 13;
+  return null;
+};
+
+export const findNextAvailableRoutine = (routineList) =>
+  routineList.find((r) => !r.canceled && !r.score && r.score !== 0) || {};

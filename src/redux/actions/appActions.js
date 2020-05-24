@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 import CONST from '../../utils/constants';
+import { findNextAvailableRoutine } from '../../utils/helpers';
 
 export const createEvents = (payload) => (dispatch) => {
   const events = [];
@@ -358,9 +359,7 @@ export const postScore = ({
       (routine) => routine.routine_id === currentRoutine.routine_id,
     );
     const newRoutineArr = routineList.slice(routineIndex + 1);
-    const newCurrentRoutine = newRoutineArr.find(
-      (routine) => !routine.canceled && !routine.score && routine.score !== 0,
-    );
+    const newCurrentRoutine = findNextAvailableRoutine(newRoutineArr);
     await dispatch(updateCurrentRoutine(newCurrentRoutine));
     window.scrollTo(0, 0);
   } catch (err) {

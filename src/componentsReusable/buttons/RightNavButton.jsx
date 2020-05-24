@@ -33,9 +33,7 @@ export default function RightNavButton({ text, initiallyDisabled, location }) {
 
   const isDisabled = () => {
     if (initiallyDisabled === false) return false;
-    if (!inputs.judge || !inputs.position || !inputs.teacherJudge) {
-      return true;
-    }
+    if (!inputs.judge || !inputs.position || !inputs.teacherJudge) return true;
     return false;
   };
 
