@@ -24,7 +24,7 @@ export default function RefreshButton() {
         'button',
         'action-button--submit',
         'action-button--green',
-        isFetching ? 'action-button--refreshing' : '',
+        isFetching && 'action-button--refreshing',
       )}
       onClick={handleRefresh}
     >

@@ -21,7 +21,7 @@ export default function EventLogo({ id, imgSrc, imgAlt, index }) {
     <div
       className={classNames(
         'img-event__container',
-        isEven(index) ? 'img-event__container--isLeft' : '',
+        isEven(index) && 'img-event__container--isLeft',
       )}
       onClick={handleClick}
       role="button"

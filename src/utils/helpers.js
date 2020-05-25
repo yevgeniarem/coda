@@ -46,14 +46,17 @@ export const determineButtonType = (button) => {
   return 'level4Button';
 };
 
-export const splitButtonsIntoPages = (allButtons) => {
-  const firstPerformanceButton = allButtons.find(
-    (b) => b.props.children === 'Performance',
+export const splitButtonsIndex = (buttons) => {
+  const firstPerformanceButton = buttons.find(
+    (b) => b.header_name === 'Performance',
   );
-  const splitIndex = allButtons.indexOf(firstPerformanceButton);
-  const foundationButtons = allButtons.slice(0, splitIndex);
-  const perfAndCreativeButtons = allButtons.slice(splitIndex);
-  return { foundationButtons, perfAndCreativeButtons };
+  return buttons.indexOf(firstPerformanceButton);
+};
+
+export const splitButtonsIntoPages = (buttons, splitIndex, type) => {
+  const foundationButtons = buttons.slice(0, splitIndex);
+  const perfAndCreativeButtons = buttons.slice(splitIndex);
+  return { foundationButtons, perfAndCreativeButtons }[type];
 };
 
 export const isCompetitionOver = (currentRoutine) =>

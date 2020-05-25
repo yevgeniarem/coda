@@ -12,22 +12,24 @@ export default function NavbarScoring() {
   const { routineList, currentRoutine } = useSelector(
     (state) => state.routines,
   );
-  let title = `#${currentRoutine.number} - ${currentRoutine.routine}`;
-  let subtitle = `${currentRoutine.age_division} • ${currentRoutine.performance_division} • ${currentRoutine.routine_category}`;
 
-  if (isCompetitionOver(currentRoutine)) {
-    title = 'COMPETITION IS OVER';
-    subtitle = '';
-  }
+  const content = isCompetitionOver(currentRoutine)
+    ? {
+        title: 'COMPETITION IS OVER',
+        subtitle: '',
+      }
+    : {
+        title: `#${currentRoutine.number} - ${currentRoutine.routine}`,
+        subtitle: `${currentRoutine.age_division} • ${currentRoutine.performance_division} • ${currentRoutine.routine_category}`,
+      };
 
   useEffect(() => {
-    if (!currentRoutine.routine_id) {
-      dispatch(
-        updateCurrentRoutine(
-          (routineList && findNextAvailableRoutine(routineList)) || {},
-        ),
-      );
-    }
+    if (currentRoutine.routine_id) return;
+    dispatch(
+      updateCurrentRoutine(
+        (routineList && findNextAvailableRoutine(routineList)) || {},
+      ),
+    );
     // eslint-disable-next-line
   }, [routineList]);
 
@@ -36,8 +38,8 @@ export default function NavbarScoring() {
       <Navbar className="navbar">
         <div style={{ width: 174 }} />
         <div className="navbar__main-header">
-          <h1 className="navbar__text">{title}</h1>
-          <h2 className="navbar__subtext">{subtitle}</h2>
+          <h1 className="navbar__text">{content.title}</h1>
+          <h2 className="navbar__subtext">{content.subtitle}</h2>
         </div>
         <JudgeProfile />
       </Navbar>

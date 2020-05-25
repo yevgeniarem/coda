@@ -11,12 +11,7 @@ export default function SelectInput({ inputs, variable, name }) {
 
   const handleChange = (e) => {
     if (variable === 'teacherJudge') {
-      if (e.target.value === 'true') {
-        // make it a boolean
-        dispatch(updateInput({ variable, id: true }));
-      } else {
-        dispatch(updateInput({ variable, id: false }));
-      }
+      dispatch(updateInput({ variable, id: e.target.value === 'true' }));
     } else {
       dispatch(updateInput({ variable, id: Number(e.target.value) }));
     }

@@ -7,9 +7,8 @@ import { dropdownItems } from '../utils/constants';
 export default function Dropdown() {
   const history = useHistory();
 
-  const handleClick = (action) => {
-    if (action === 'change-judge') history.push('/Judges');
-    if (action === 'sign-out') history.push('/Login');
+  const handleClick = (path) => {
+    history.push(path);
   };
 
   return (
@@ -20,7 +19,7 @@ export default function Dropdown() {
           <BootstrapDropdown.Item
             className="profile-dropdown__item"
             href={`#/${i.info}`}
-            onClick={() => handleClick(i.info)}
+            onClick={() => handleClick(i.path)}
             key={i.info}
           >
             {i.name}

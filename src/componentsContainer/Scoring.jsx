@@ -14,9 +14,11 @@ import {
   getButtons,
   determineButtonColor,
   determineButtonType,
+  splitButtonsIndex,
   splitButtonsIntoPages,
   isCompetitionOver,
 } from '../utils/helpers';
+import { allButtonsInfo } from '../utils/constants';
 
 export default function Scoring() {
   const dispatch = useDispatch();
@@ -26,6 +28,7 @@ export default function Scoring() {
     { buttons: reduxButtons },
   ] = useSelector((state) => [state.inputs, state.routines, state.scoring]);
   const [buttons, setButtons] = useState([]);
+  const [splitIndex, setSplitIndex] = useState(null);
   const [classes, setClasses] = useState({ classes: '', buttonId: '' });
 
   useEffect(() => {
@@ -34,13 +37,16 @@ export default function Scoring() {
   }, []);
 
   useEffect(() => {
+    // TODO only get buttons on mount, put it in redux
     getButtons()
       .then((response) => {
         const currentLevelId = currentRoutine.performance_division_level_id;
         if (!currentLevelId) return;
-        setButtons(
-          response.data.find((b) => b.level_id === currentLevelId).level_4,
-        );
+        const buttonsToSet = response.data.find(
+          (b) => b.level_id === currentLevelId,
+        ).level_4;
+        setButtons(buttonsToSet);
+        setSplitIndex(splitButtonsIndex(buttonsToSet));
       })
       .catch((error) => {
         // eslint-disable-next-line no-console
@@ -71,6 +77,7 @@ export default function Scoring() {
       setClasses({ classes: 'button--scoring--red', buttonId: button.id });
     }
     if (buttonColor === 'buttonIsRed') {
+      // TODO rename deleteButton bc its not being deleted
       dispatch(deleteButton({ level_4_id: button.id }));
       setClasses({ classes: '', buttonId: button.id });
     }
@@ -81,61 +88,47 @@ export default function Scoring() {
     changeButtonColor(button, buttonColor);
   };
 
-  const allButtons = buttons.map((button) => {
-    const allButtonsInfo = [
-      {
-        type: 'headerButton',
-        name: button.header_name,
-        className: `button--header-level-${button.header_level}`,
-        clickable: false,
-      },
-      {
-        type: 'level3Button',
-        name: button.level_3_name,
-        className: 'button--scoring',
-        clickable: true,
-      },
-      {
-        type: 'level4Button',
-        name: button.level_4_name,
-        className: 'button--scoring',
-        clickable: true,
-      },
-    ];
-    const buttonType = determineButtonType(button);
-    const buttonInfo = allButtonsInfo.find((b) => b.type === buttonType);
-
-    return (
-      <button
-        type="button"
-        key={button.id}
-        id={button.id}
-        className={classNames(
-          'button',
-          'button--judging',
-          buttonInfo.className,
-          button.id === classes.buttonId ? classes.classes : '',
-        )}
-        onClick={buttonInfo.clickable ? (e) => handleClick(button, e) : null}
-      >
-        {buttonInfo.name}
-      </button>
-    );
-  });
-
-  const buttonPages = splitButtonsIntoPages(allButtons);
+  const scoringPages = [
+    { name: 'firstPage', buttons: 'foundationButtons' },
+    { name: 'secondPage', buttons: 'perfAndCreativeButtons' },
+  ];
 
   return (
     <>
       <NavbarScoring />
 
-      <div className="button__container button__container--firstPage">
-        {buttonPages.foundationButtons}
-      </div>
+      {scoringPages.map((sp) => (
+        <div className={`button__container button__container--${sp.name}`}>
+          {splitButtonsIntoPages(buttons, splitIndex, sp.buttons).map(
+            (button) => {
+              const buttonInfo = allButtonsInfo.find(
+                (b) => b.type === determineButtonType(button),
+              );
 
-      <div className="button__container button__container--secondPage">
-        {buttonPages.perfAndCreativeButtons}
-      </div>
+              return (
+                <button
+                  type="button"
+                  key={button.id}
+                  id={button.id}
+                  className={classNames(
+                    'button',
+                    'button--judging',
+                    buttonInfo.className,
+                    button.header_level &&
+                      `button--header-level-${button.header_level}`,
+                    button.id === classes.buttonId && classes.classes,
+                  )}
+                  onClick={
+                    buttonInfo.clickable ? (e) => handleClick(button, e) : null
+                  }
+                >
+                  {button[buttonInfo.name]}
+                </button>
+              );
+            },
+          )}
+        </div>
+      ))}
 
       <div>{!isCompetitionOver(currentRoutine) && <ScoringBreakdown />}</div>
     </>

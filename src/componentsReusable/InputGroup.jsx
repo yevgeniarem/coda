@@ -11,8 +11,9 @@ import { loginIconClasses } from '../utils/constants';
 export default function InputGroup({ type, register, errors }) {
   const dispatch = useDispatch();
 
-  const handleChange = (e) =>
+  const handleChange = (e) => {
     dispatch(updateLogin({ value: e.target.value, type }));
+  };
 
   return (
     <>

@@ -27,15 +27,15 @@ export default function ScoringBreakdown() {
     setNoteValue(note);
   }, [note]);
 
-  const handleClick = (action) => {
-    if (action === 'minus') {
+  const handleClick = {
+    minus: () => {
       if (score === 0) return;
       dispatch(updateScore(score - 1));
-    }
-    if (action === 'plus') {
+    },
+    plus: () => {
       if (score === 100) return;
       dispatch(updateScore(score + 1));
-    }
+    },
   };
 
   const handleSubmit = (event) => {
@@ -93,7 +93,7 @@ export default function ScoringBreakdown() {
             <FontAwesomeIcon
               icon={['fas', 'minus']}
               className="col-2 scoring-breakdown--minus-icon"
-              onClick={() => handleClick('minus')}
+              onClick={() => handleClick.minus()}
             />
             <div className="col-8">
               <span className="scoring-breakdown--score">{score}</span>
@@ -101,7 +101,7 @@ export default function ScoringBreakdown() {
             <FontAwesomeIcon
               icon={['fas', 'plus']}
               className="col-2 scoring-breakdown--plus-icon"
-              onClick={() => handleClick('plus')}
+              onClick={() => handleClick.plus()}
             />
           </div>
         </div>

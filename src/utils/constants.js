@@ -35,11 +35,32 @@ export const formInputs = [
 ];
 
 export const dropdownItems = [
-  { name: 'CHANGE JUDGE INFO', info: 'change-judge' },
-  { name: 'SIGN OUT', info: 'sign-out' },
+  { name: 'CHANGE JUDGE INFO', info: 'change-judge', path: '/Judges' },
+  { name: 'SIGN OUT', info: 'sign-out', path: '/Login' },
 ];
 
 export const loginIconClasses = {
   name: ['far', 'envelope'],
   password: ['fas', 'lock'],
 };
+
+export const allButtonsInfo = [
+  {
+    type: 'headerButton',
+    name: 'header_name',
+    className: 'button--header-level',
+    clickable: false,
+  },
+  {
+    type: 'level3Button',
+    name: 'level_3_name',
+    className: 'button--scoring',
+    clickable: true,
+  },
+  {
+    type: 'level4Button',
+    name: 'level_4_name',
+    className: 'button--scoring',
+    clickable: true,
+  },
+];

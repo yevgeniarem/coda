@@ -23,6 +23,8 @@ import {
 } from '../utils/helpers';
 import { buttonCategories } from '../utils/constants';
 
+// TODO refactor this modal into multiple modals that have 1 job
+
 export default function Modal({
   isShown,
   title,
