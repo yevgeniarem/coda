@@ -5,9 +5,9 @@ import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import {
-  invalidLogin,
+  runLoginModal,
   runJudgeModal,
-  runRoutineModal,
+  runSidebarModal,
   updateCurrentRoutine,
   closeSidebar,
   runSubmitModal,
@@ -22,8 +22,6 @@ import {
   applyDefaultNote,
 } from '../utils/helpers';
 import { buttonCategories } from '../utils/constants';
-
-// TODO refactor this modal into multiple modals that have 1 job
 
 export default function Modal({
   isShown,
@@ -62,9 +60,9 @@ export default function Modal({
   }, [isShown]);
 
   const handleClose = () => {
-    if (location === 'login') dispatch(invalidLogin(false));
+    if (location === 'login') dispatch(runLoginModal(false));
     if (location === 'judges') dispatch(runJudgeModal(''));
-    if (location === 'scoring') dispatch(runRoutineModal(false));
+    if (location === 'scoring') dispatch(runSidebarModal(false));
     if (location === 'scoring-breakdown-comp') dispatch(runSubmitModal(false));
     setShow(false);
   };

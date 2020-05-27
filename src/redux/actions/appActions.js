@@ -72,9 +72,9 @@ export const authLogin = () => (dispatch) => {
   });
 };
 
-export const invalidLogin = (payload) => (dispatch) => {
+export const runLoginModal = (payload) => (dispatch) => {
   dispatch({
-    type: 'INVALID_LOGIN',
+    type: 'RUN_LOGIN_MODAL',
     payload,
   });
 };
@@ -86,9 +86,9 @@ export const runJudgeModal = (payload) => (dispatch) => {
   });
 };
 
-export const runRoutineModal = (payload) => (dispatch) => {
+export const runSidebarModal = (payload) => (dispatch) => {
   dispatch({
-    type: 'RUN_ROUTINE_MODAL',
+    type: 'RUN_SIDEBAR_MODAL',
     payload,
   });
 };
@@ -140,12 +140,12 @@ export const makeButtonRed = (payload) => (dispatch, getState) => {
   });
 };
 
-export const deleteButton = (payload) => (dispatch, getState) => {
+export const makeButtonGrey = (payload) => (dispatch, getState) => {
   const { buttons } = getState().scoring;
   const filteredButtons = buttons.filter(
     (button) => button.level_4_id !== payload.level_4_id,
   );
-  dispatch({ type: 'DELETE_BUTTON', payload: filteredButtons });
+  dispatch({ type: 'MAKE_BUTTON_GREY', payload: filteredButtons });
 };
 
 export const updateScoringBreakdown = (payload) => (dispatch) => {
@@ -209,7 +209,7 @@ export const tryLogin = ({ name, password }) => async (dispatch) => {
     });
     await dispatch(authLogin());
   } catch (err) {
-    dispatch(invalidLogin(true));
+    dispatch(runLoginModal(true));
   }
 };
 

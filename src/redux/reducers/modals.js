@@ -1,25 +1,31 @@
 const initialState = {
   judgeName: null,
-  isRoutineModalShown: false,
-  isSubmitModalShown: false,
+  isLoginModalShown: false,
+  isSidebarModalShown: false,
+  isScoringBreakdownModalShown: false,
 };
 
 const modals = (state = initialState, action) => {
   switch (action.type) {
+    case 'RUN_LOGIN_MODAL':
+      return {
+        ...state,
+        isLoginModalShown: action.payload,
+      };
     case 'RUN_JUDGE_MODAL':
       return {
         ...state,
         judgeName: action.payload,
       };
-    case 'RUN_ROUTINE_MODAL':
+    case 'RUN_SIDEBAR_MODAL':
       return {
         ...state,
-        isRoutineModalShown: action.payload,
+        isSidebarModalShown: action.payload,
       };
-    case 'RUN_SUBMIT_MODAL':
+    case 'RUN_SCORING_BREAKDOWN_MODAL':
       return {
         ...state,
-        isSubmitModalShown: action.payload,
+        isScoringBreakdownModalShown: action.payload,
       };
     default:
       return state;

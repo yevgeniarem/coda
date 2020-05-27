@@ -4,8 +4,8 @@ import { Image } from 'react-bootstrap';
 import ReactSidebar from 'react-sidebar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { toggleSidebar, runRoutineModal } from '../redux/actions/appActions';
-import Modal from './Modal';
+import { toggleSidebar, runSidebarModal } from '../redux/actions/appActions';
+import SidebarModal from './modals/SidebarModal';
 import RefreshButton from './buttons/RefreshButton';
 import { formatTourDate, renderRoutineNumber } from '../utils/helpers';
 import CONST from '../utils/constants';
@@ -16,7 +16,7 @@ export default function Sidebar() {
     { routineList, currentRoutine },
     { currentEvent, tourDates },
     inputs,
-    { isRoutineModalShown },
+    { isSidebarModalShown },
     isSidebarOpen,
   ] = useSelector((state) => [
     state.routines,
@@ -34,7 +34,7 @@ export default function Sidebar() {
 
   const handleButtonClick = (routine) => {
     setClickedRoutine(routine);
-    dispatch(runRoutineModal(true));
+    dispatch(runSidebarModal(true));
   };
 
   const routineButtons =
@@ -133,14 +133,12 @@ export default function Sidebar() {
 
   return (
     <>
-      <Modal
-        isShown={isRoutineModalShown}
+      <SidebarModal
+        isShown={isSidebarModalShown}
         title="Alert"
         body="Are you sure you want to switch routines? Your changes will not be saved."
-        numButtons="2"
         button1="GO BACK"
         button2="YES, SWITCH"
-        location="scoring"
         clickedRoutine={clickedRoutine}
       />
 

@@ -2,7 +2,6 @@ const initialState = {
   name: null,
   password: null,
   isLoggedIn: false,
-  isInvalid: false,
 };
 
 const login = (state = initialState, action) => {
@@ -16,11 +15,6 @@ const login = (state = initialState, action) => {
       return {
         ...state,
         isLoggedIn: action.payload,
-      };
-    case 'INVALID_LOGIN':
-      return {
-        ...state,
-        isInvalid: action.payload,
       };
     default:
       return state;

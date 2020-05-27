@@ -20,6 +20,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    user-select: none;
   }
 
   &__score-container {
@@ -35,6 +36,7 @@
     line-height: 1;
     display: table;
     margin: 0 auto;
+    user-select: none;
   }
 
   &--minus-icon {

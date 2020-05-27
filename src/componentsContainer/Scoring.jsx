@@ -8,7 +8,7 @@ import {
   getRoutineList,
   makeButtonGreen,
   makeButtonRed,
-  deleteButton,
+  makeButtonGrey,
 } from '../redux/actions/appActions';
 import {
   getButtons,
@@ -77,8 +77,7 @@ export default function Scoring() {
       setClasses({ classes: 'button--scoring--red', buttonId: button.id });
     }
     if (buttonColor === 'buttonIsRed') {
-      // TODO rename deleteButton bc its not being deleted
-      dispatch(deleteButton({ level_4_id: button.id }));
+      dispatch(makeButtonGrey({ level_4_id: button.id }));
       setClasses({ classes: '', buttonId: button.id });
     }
   };

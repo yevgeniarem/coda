@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import Navbar from '../componentsReusable/Navbar';
 import SelectInput from '../componentsReusable/SelectInput';
 import NavButtons from '../componentsReusable/buttons/NavButtons';
-import Modal from '../componentsReusable/Modal';
+import JudgeModal from '../componentsReusable/modals/JudgeModal';
 import {
   getJudgeList,
   getCompetitionGroupList,
@@ -52,12 +52,10 @@ export default function Judges() {
 
   return (
     <>
-      <Modal
-        location="judges"
+      <JudgeModal
         isShown={!!modalJudgeName}
         title="Alert"
         body={modalMessage}
-        numButtons="2"
         button1="Cancel"
         button2="YES"
       />

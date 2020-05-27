@@ -5,7 +5,7 @@ import { useHistory } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 
 import InputGroup from '../componentsReusable/InputGroup';
-import Modal from '../componentsReusable/Modal';
+import LoginModal from '../componentsReusable/modals/LoginModal';
 import SubmitButton from '../componentsReusable/buttons/SubmitButton';
 import { tryLogin } from '../redux/actions/appActions';
 import { formInputs } from '../utils/constants';
@@ -16,7 +16,10 @@ export default function Login() {
   const { handleSubmit, register, errors } = useForm({
     validateCriteriaMode: 'all',
   });
-  const { name, password, isInvalid } = useSelector((state) => state.login);
+  const [{ name, password }, { isLoginModalShown }] = useSelector((state) => [
+    state.login,
+    state.modals,
+  ]);
 
   const onSubmit = async () => {
     try {
@@ -30,13 +33,11 @@ export default function Login() {
 
   return (
     <>
-      <Modal
-        isShown={isInvalid}
+      <LoginModal
+        isShown={isLoginModalShown}
         title="Sorry"
         body="You have entered an invalid username or password."
-        numButtons="1"
         button1="OK"
-        location="login"
       />
 
       <Image

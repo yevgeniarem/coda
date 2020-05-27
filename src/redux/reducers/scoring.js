@@ -17,7 +17,7 @@ const scoring = (state = initialState, action) => {
       return { ...state, buttons: action.payload };
     case 'MAKE_BUTTON_RED':
       return { ...state, buttons: action.payload };
-    case 'DELETE_BUTTON':
+    case 'MAKE_BUTTON_GREY':
       return { ...state, buttons: action.payload };
     case 'UPDATE_SCORING_BREAKDOWN':
       return { ...state, scoring_breakdown: action.payload };
