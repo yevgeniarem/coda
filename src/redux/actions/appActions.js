@@ -93,9 +93,9 @@ export const runSidebarModal = (payload) => (dispatch) => {
   });
 };
 
-export const runSubmitModal = (payload) => (dispatch) => {
+export const runScoringBreakdownModal = (payload) => (dispatch) => {
   dispatch({
-    type: 'RUN_SUBMIT_MODAL',
+    type: 'RUN_SCORING_BREAKDOWN_MODAL',
     payload,
   });
 };

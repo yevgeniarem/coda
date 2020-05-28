@@ -4,13 +4,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import {
   updateScore,
-  runSubmitModal,
+  runScoringBreakdownModal,
   toggleNotFriendly,
   toggleIChoreographed,
   updateNote,
   getRoutineList,
 } from '../redux/actions/appActions';
-import Modal from './Modal';
+import ScoringBreakdownModal from './modals/ScoringBreakdownModal';
 import ScoringPopover from './ScoringPopover';
 import SubmitButton from './buttons/SubmitButton';
 
@@ -19,7 +19,7 @@ export default function ScoringBreakdown() {
   const [
     { score, not_friendly, i_choreographed, note },
     inputs,
-    { isSubmitModalShown },
+    { isScoringBreakdownModalShown },
   ] = useSelector((state) => [state.scoring, state.inputs, state.modals]);
   const [noteValue, setNoteValue] = useState(note);
 
@@ -41,7 +41,7 @@ export default function ScoringBreakdown() {
   const handleSubmit = (event) => {
     event.preventDefault();
     Promise.all([
-      dispatch(runSubmitModal(true)),
+      dispatch(runScoringBreakdownModal(true)),
       dispatch(updateNote(noteValue)),
       dispatch(getRoutineList(inputs)),
     ]);
@@ -75,14 +75,12 @@ export default function ScoringBreakdown() {
 
   return (
     <>
-      <Modal
-        isShown={isSubmitModalShown}
+      <ScoringBreakdownModal
+        isShown={isScoringBreakdownModalShown}
         title="Alert"
         body="Are you sure you want to save?"
-        numButtons="2"
         button1="GO BACK"
         button2="YES, SAVE"
-        location="scoring-breakdown-comp"
       />
 
       <div className="scoring-breakdown__container">
