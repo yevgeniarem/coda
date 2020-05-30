@@ -1,10 +1,13 @@
 const initialState = {
   routineList: null,
   currentRoutine: {},
+  allButtons: null,
 };
 
 const routines = (state = initialState, action) => {
   switch (action.type) {
+    case 'GET_BUTTONS':
+      return { ...state, allButtons: action.payload };
     case 'UPDATE_ROUTINE_LIST':
       return {
         ...state,

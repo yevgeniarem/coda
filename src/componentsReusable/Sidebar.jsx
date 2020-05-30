@@ -3,12 +3,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Image } from 'react-bootstrap';
 import ReactSidebar from 'react-sidebar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import classNames from 'classnames';
 
 import { toggleSidebar, runSidebarModal } from '../redux/actions/appActions';
 import SidebarModal from './modals/SidebarModal';
 import RefreshButton from './buttons/RefreshButton';
 import { formatTourDate, renderRoutineNumber } from '../utils/helpers';
-import CONST from '../utils/constants';
+import CONST, { routineButtonTypes } from '../utils/constants';
 
 export default function Sidebar() {
   const dispatch = useDispatch();
@@ -30,7 +31,9 @@ export default function Sidebar() {
     tourDates.find((city) => city.id === inputs.tourDateId),
   );
 
-  const handleClick = () => dispatch(toggleSidebar());
+  const handleClick = () => {
+    dispatch(toggleSidebar());
+  };
 
   const handleButtonClick = (routine) => {
     setClickedRoutine(routine);
@@ -40,73 +43,23 @@ export default function Sidebar() {
   const routineButtons =
     routineList &&
     routineList.map((routine) => {
-      // const routineButtonTypes = [
-      //   {
-      //     type: 'disabled',
-      //     conditions: !!routine.score || routine.score === 0,
-      //     className: 'navbar__sidebar--button--disabled',
-      //     text: routine.routine,
-      //   },
-      //   {
-      //     type: 'active',
-      //     conditions: routine.routine === currentRoutine.routine,
-      //     className: 'navbar__sidebar--button--active',
-      //     text: currentRoutine.routine,
-      //   },
-      //   {
-      //     type: 'cancelled',
-      //     conditions: routine.canceled,
-      //     className: 'navbar__sidebar--button--disabled',
-      //     text: routine.routine,
-      //   },
-      // ];
+      let routineButtonType = 'regular';
+      if (!!routine.score || routine.score === 0)
+        routineButtonType = 'disabled';
+      if (routine.routine === currentRoutine.routine)
+        routineButtonType = 'active';
+      if (routine.canceled) routineButtonType = 'canceled';
 
-      if (!!routine.score || routine.score === 0) {
-        return (
-          <button
-            onClick={() => handleButtonClick(routine)}
-            className="navbar__sidebar--button navbar__sidebar--button--disabled"
-            key={routine.routine_id}
-            type="button"
-          >
-            <span>{renderRoutineNumber(routine)}</span>
-            <span className="navbar__sidebar--routine">{routine.routine}</span>
-          </button>
-        );
-      }
-      if (routine.routine === currentRoutine.routine) {
-        return (
-          <button
-            onClick={() => handleButtonClick(routine)}
-            className="navbar__sidebar--button navbar__sidebar--button--active"
-            key={routine.routine_id}
-            type="button"
-          >
-            <span>{renderRoutineNumber(routine)}</span>
-            <span className="navbar__sidebar--routine">
-              {currentRoutine.routine}
-            </span>
-          </button>
-        );
-      }
-      if (routine.canceled) {
-        return (
-          <button
-            onClick={() => handleButtonClick(routine)}
-            className="navbar__sidebar--button navbar__sidebar--button--disabled"
-            key={routine.routine_id}
-            type="button"
-          >
-            <span>{renderRoutineNumber(routine)}</span>
-            <span className="navbar__sidebar--routine">{routine.routine}</span>
-            <span className="float-right">CANCELED</span>
-          </button>
-        );
-      }
       return (
         <button
           onClick={() => handleButtonClick(routine)}
-          className="navbar__sidebar--button"
+          className={classNames(
+            'navbar__sidebar--button',
+            routineButtonTypes.map((rbt) => {
+              if (rbt.type === routineButtonType) return rbt.className;
+              return '';
+            }),
+          )}
           key={routine.routine_id}
           type="button"
         >
@@ -115,21 +68,6 @@ export default function Sidebar() {
         </button>
       );
     });
-
-  const renderMenu = () => {
-    if (!isSidebarOpen) {
-      return (
-        <div role="button" tabIndex="0" onClick={handleClick}>
-          <FontAwesomeIcon icon={['fas', 'bars']} className="icon icon--menu" />
-        </div>
-      );
-    }
-    return (
-      <div onClick={handleClick} role="button" tabIndex="0">
-        <FontAwesomeIcon icon={['fas', 'times']} className="icon icon--menu" />
-      </div>
-    );
-  };
 
   return (
     <>
@@ -160,7 +98,12 @@ export default function Sidebar() {
         sidebarClassName="navbar__sidebar"
         styles={{ overlay: { backgroundColor: 'rgba(0,0,0,0)' } }}
       >
-        <div>{renderMenu()}</div>
+        <div role="button" tabIndex="0" onClick={handleClick}>
+          <FontAwesomeIcon
+            icon={isSidebarOpen ? ['fas', 'times'] : ['fas', 'bars']}
+            className="icon icon--menu"
+          />
+        </div>
       </ReactSidebar>
     </>
   );

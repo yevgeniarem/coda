@@ -13,6 +13,7 @@ import {
 import ScoringBreakdownModal from './modals/ScoringBreakdownModal';
 import ScoringPopover from './ScoringPopover';
 import SubmitButton from './buttons/SubmitButton';
+import { checkboxInputs } from '../utils/constants';
 
 export default function ScoringBreakdown() {
   const dispatch = useDispatch();
@@ -59,19 +60,6 @@ export default function ScoringBreakdown() {
   const handleTextChange = (event) => {
     setNoteValue(event.target.value);
   };
-
-  const checkboxInputs = [
-    {
-      name: 'not_friendly',
-      text: 'Routine is not family-friendly',
-      checked: not_friendly,
-    },
-    {
-      name: 'i_choreographed',
-      text: 'I choreographed this routine',
-      checked: i_choreographed,
-    },
-  ];
 
   return (
     <>
@@ -121,7 +109,9 @@ export default function ScoringBreakdown() {
                     name={i.name}
                     id={i.name}
                     type="checkbox"
-                    checked={i.checked}
+                    checked={
+                      i.name === 'not_friendly' ? not_friendly : i_choreographed
+                    }
                     onChange={handleInputChange}
                     className="scoring-breakdown__checkbox--check"
                   />

@@ -5,13 +5,13 @@ import { findNextAvailableRoutine } from '../../utils/helpers';
 
 export const createEvents = (payload) => (dispatch) => {
   const events = [];
-  payload.forEach((event) =>
+  payload.forEach((event) => {
     events.push({
       id: event.id,
       name: event.name,
       seasonId: event.current_season_id,
-    }),
-  );
+    });
+  });
   dispatch({
     type: 'CREATE_EVENTS',
     payload: events,
@@ -98,6 +98,16 @@ export const runScoringBreakdownModal = (payload) => (dispatch) => {
     type: 'RUN_SCORING_BREAKDOWN_MODAL',
     payload,
   });
+};
+
+export const getButtons = () => async (dispatch) => {
+  try {
+    const response = await axios.get(`${CONST.API}/coda/buttons`);
+    await dispatch({ type: 'GET_BUTTONS', payload: response.data });
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.error(err);
+  }
 };
 
 export const updateRoutineList = (payload) => (dispatch) => {

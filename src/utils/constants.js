@@ -64,3 +64,38 @@ export const allButtonsInfo = [
     clickable: true,
   },
 ];
+
+export const checkboxInputs = [
+  {
+    name: 'not_friendly',
+    text: 'Routine is not family-friendly',
+  },
+  {
+    name: 'i_choreographed',
+    text: 'I choreographed this routine',
+  },
+];
+
+export const scoringPages = [
+  { name: 'firstPage', buttons: 'foundationButtons' },
+  { name: 'secondPage', buttons: 'perfAndCreativeButtons' },
+];
+
+export const routineButtonTypes = [
+  {
+    type: 'regular',
+    className: '',
+  },
+  {
+    type: 'disabled',
+    className: 'navbar__sidebar--button--disabled',
+  },
+  {
+    type: 'active',
+    className: 'navbar__sidebar--button--active',
+  },
+  {
+    type: 'canceled',
+    className: 'navbar__sidebar--button--disabled',
+  },
+];

@@ -8,6 +8,7 @@ import {
   runScoringBreakdownModal,
   resetScoring,
   postScore,
+  getRoutineList,
 } from '../../redux/actions/appActions';
 import {
   filterButtonsById,
@@ -32,11 +33,13 @@ export default function Modal({ isShown, title, body, button1, button2 }) {
     },
     { currentRoutine, routineList },
     { note, score, not_friendly, i_choreographed, is_coda, buttons },
+    inputs,
   ] = useSelector((state) => [
     state.events,
     state.inputs,
     state.routines,
     state.scoring,
+    state.inputs,
   ]);
   const [show, setShow] = useState(false);
 
@@ -92,6 +95,7 @@ export default function Modal({ isShown, title, body, button1, button2 }) {
     };
     await submitScore();
     Promise.all([
+      dispatch(getRoutineList(inputs)),
       dispatch(closeSidebar()),
       dispatch(resetScoring()),
       handleClose(),

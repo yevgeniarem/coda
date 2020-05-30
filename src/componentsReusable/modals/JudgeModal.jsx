@@ -52,7 +52,11 @@ export default function JudgeModal({ isShown, title, body, button1, button2 }) {
 JudgeModal.propTypes = {
   isShown: PropTypes.bool.isRequired,
   title: PropTypes.string.isRequired,
-  body: PropTypes.string.isRequired,
+  body: PropTypes.string,
   button1: PropTypes.string.isRequired,
   button2: PropTypes.string.isRequired,
+};
+
+JudgeModal.defaultProps = {
+  body: null,
 };

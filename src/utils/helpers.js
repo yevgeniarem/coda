@@ -1,9 +1,4 @@
-import axios from 'axios';
 import moment from 'moment';
-
-import CONST from './constants';
-
-export const getButtons = () => axios.get(`${CONST.API}/coda/buttons`);
 
 export const formatTourDate = (t) => {
   let dates;
@@ -22,8 +17,8 @@ export const formatTourDate = (t) => {
   return `${t.eventCity} - ${dates}`;
 };
 
-export const toCamelCase = (str) => {
-  return str
+export const toCamelCase = (str) =>
+  str
     .split(' ')
     .map((word, index) =>
       index === 0
@@ -31,7 +26,6 @@ export const toCamelCase = (str) => {
         : word.charAt(0).toUpperCase() + word.slice(1).toLowerCase(),
     )
     .join('');
-};
 
 export const determineButtonColor = (button, reduxButtons) => {
   const reduxButton = reduxButtons.find((rb) => rb.level_4_id === button.id);
