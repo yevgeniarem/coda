@@ -16,25 +16,16 @@ export default function Login() {
   const { handleSubmit, register, errors } = useForm({
     validateCriteriaMode: 'all',
   });
-  const [{ name, password }, { isLoginModalShown }] = useSelector((state) => [
-    state.login,
-    state.modals,
-  ]);
+  const { name, password } = useSelector((state) => state.login);
 
   const onSubmit = async () => {
-    try {
-      await dispatch(tryLogin({ name, password }));
-      history.push('/Events');
-    } catch (err) {
-      // eslint-disable-next-line no-console
-      console.error(err);
-    }
+    await dispatch(tryLogin({ name, password }));
+    history.push('/Events');
   };
 
   return (
     <>
       <LoginModal
-        isShown={isLoginModalShown}
         title="Sorry"
         body="You have entered an invalid username or password."
         button1="OK"

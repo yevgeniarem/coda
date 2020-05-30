@@ -10,11 +10,22 @@ export default function SelectInput({ inputs, variable, name }) {
   const selectInputs = useSelector((state) => state.inputs);
 
   const handleChange = (e) => {
-    if (variable === 'teacherJudge') {
-      dispatch(updateInput({ variable, id: e.target.value === 'true' }));
-    } else {
-      dispatch(updateInput({ variable, id: Number(e.target.value) }));
-    }
+    // if (variable === 'teacherJudge') {
+    //   dispatch(updateInput({ variable, id: e.target.value === 'true' }));
+    // } else {
+    //   dispatch(updateInput({ variable, id: Number(e.target.value) }));
+    // }
+
+    // TODO fix bug with not teacher judge
+    dispatch(
+      updateInput({
+        variable,
+        id:
+          variable === 'teacherJudge'
+            ? Boolean(e.target.value)
+            : Number(e.target.value),
+      }),
+    );
   };
 
   return (

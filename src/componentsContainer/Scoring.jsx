@@ -48,26 +48,30 @@ export default function Scoring() {
   }, [currentRoutine, allButtons]);
 
   const changeButtonColor = (button, buttonColor) => {
-    if (buttonColor === 'buttonIsGrey') {
-      dispatch(
-        makeButtonGreen({
-          level_4_id: button.id,
-          level_1_id: button.level_1_id,
-          good: true,
-        }),
-      );
-    }
-    if (buttonColor === 'buttonIsGreen') {
-      dispatch(
-        makeButtonRed({
-          level_4_id: button.id,
-          level_1_id: button.level_1_id,
-          good: false,
-        }),
-      );
-    }
-    if (buttonColor === 'buttonIsRed') {
-      dispatch(makeButtonGrey({ level_4_id: button.id }));
+    switch (buttonColor) {
+      case 'buttonIsGrey':
+        dispatch(
+          makeButtonGreen({
+            level_4_id: button.id,
+            level_1_id: button.level_1_id,
+            good: true,
+          }),
+        );
+        break;
+      case 'buttonIsGreen':
+        dispatch(
+          makeButtonRed({
+            level_4_id: button.id,
+            level_1_id: button.level_1_id,
+            good: false,
+          }),
+        );
+        break;
+      case 'buttonIsRed':
+        dispatch(makeButtonGrey({ level_4_id: button.id }));
+        break;
+      default:
+        break;
     }
   };
 
@@ -97,6 +101,7 @@ export default function Scoring() {
                     type="button"
                     key={button.id}
                     id={button.id}
+                    // TODO figure out how to make the classes list more readable
                     className={classNames(
                       'button',
                       'button--judging',

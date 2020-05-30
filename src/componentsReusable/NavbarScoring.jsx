@@ -13,15 +13,17 @@ export default function NavbarScoring() {
     (state) => state.routines,
   );
 
-  const content = isCompetitionOver(currentRoutine)
-    ? {
-        title: 'COMPETITION IS OVER',
-        subtitle: '',
-      }
-    : {
-        title: `#${currentRoutine.number} - ${currentRoutine.routine}`,
-        subtitle: `${currentRoutine.age_division} • ${currentRoutine.performance_division} • ${currentRoutine.routine_category}`,
-      };
+  // TODO refactor to helper function
+  const initContent = (competitionOver) => ({
+    title: competitionOver
+      ? 'COMPETITION IS OVER'
+      : `#${currentRoutine.number} - ${currentRoutine.routine}`,
+    subtitle:
+      !competitionOver &&
+      `${currentRoutine.age_division} • ${currentRoutine.performance_division} • ${currentRoutine.routine_category}`,
+  });
+
+  const content = initContent(isCompetitionOver(currentRoutine));
 
   useEffect(() => {
     if (currentRoutine.routine_id) return;

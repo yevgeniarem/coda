@@ -9,7 +9,7 @@ import { toggleSidebar, runSidebarModal } from '../redux/actions/appActions';
 import SidebarModal from './modals/SidebarModal';
 import RefreshButton from './buttons/RefreshButton';
 import { formatTourDate, renderRoutineNumber } from '../utils/helpers';
-import CONST, { routineButtonTypes } from '../utils/constants';
+import CONST from '../utils/constants';
 
 export default function Sidebar() {
   const dispatch = useDispatch();
@@ -40,25 +40,47 @@ export default function Sidebar() {
     dispatch(runSidebarModal(true));
   };
 
+  // const determineRoutineButtonType = ({ score, canceled, routine }) => {
+  //   if (!!score || score === 0 || canceled) {
+  //     return 'disabled';
+  //   }
+  //   if (routine === currentRoutine.routine) {
+  //     return 'active';
+  //   }
+  //   return 'regular';
+  // };
+
+  const hasScore = ({ score }) => !!score || score === 0;
+
   const routineButtons =
     routineList &&
     routineList.map((routine) => {
-      let routineButtonType = 'regular';
-      if (!!routine.score || routine.score === 0)
-        routineButtonType = 'disabled';
-      if (routine.routine === currentRoutine.routine)
-        routineButtonType = 'active';
-      if (routine.canceled) routineButtonType = 'canceled';
+      // let routineButtonType = 'regular';
+      // if (!!routine.score || routine.score === 0)
+      //   routineButtonType = 'disabled';
+      // if (routine.routine === currentRoutine.routine)
+      //   routineButtonType = 'active';
+      // if (routine.canceled) routineButtonType = 'canceled';
+
+      // const routineButtonType = determineRoutineButtonType(routine);
 
       return (
         <button
           onClick={() => handleButtonClick(routine)}
           className={classNames(
             'navbar__sidebar--button',
-            routineButtonTypes.map((rbt) => {
-              if (rbt.type === routineButtonType) return rbt.className;
-              return '';
-            }),
+            // routineButtonTypes.map((rbt) => {
+            // if (rbt.type === routineButtonType) return rbt.className;
+            // return '';
+            // return rbt.type === routineButtonType && rbt.className;
+
+            // has score or canceled then : navbar__sidebar--button--disabled
+            // is active then : navbar__sidebar--button--active
+            // }),
+            (hasScore || routine.canceled) &&
+              'navbar__sidebar--button--disabled',
+            routine === currentRoutine.routine &&
+              'navbar__sidebar--button--active',
           )}
           key={routine.routine_id}
           type="button"

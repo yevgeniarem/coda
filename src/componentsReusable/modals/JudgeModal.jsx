@@ -2,15 +2,22 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Modal, Button } from 'react-bootstrap';
 import PropTypes from 'prop-types';
-import { useHistory } from 'react-router-dom';
 
 import { runJudgeModal } from '../../redux/actions/appActions';
 
-export default function JudgeModal({ isShown, title, body, button1, button2 }) {
+export default function JudgeModal({
+  isShown,
+  title,
+  body,
+  button1,
+  button2,
+  confirm,
+}) {
   const dispatch = useDispatch();
-  const history = useHistory();
   const [show, setShow] = useState(false);
 
+  // TODO combine all modals into 1
+  // TODO change all modals to use redux state like login modal
   useEffect(() => {
     if (isShown) setShow(true);
   }, [isShown]);
@@ -22,7 +29,7 @@ export default function JudgeModal({ isShown, title, body, button1, button2 }) {
 
   const handleClick = async () => {
     await handleClose();
-    history.push('/scoring');
+    confirm();
   };
 
   return (
@@ -55,8 +62,10 @@ JudgeModal.propTypes = {
   body: PropTypes.string,
   button1: PropTypes.string.isRequired,
   button2: PropTypes.string.isRequired,
+  confirm: PropTypes.func,
 };
 
 JudgeModal.defaultProps = {
   body: null,
+  confirm: null,
 };

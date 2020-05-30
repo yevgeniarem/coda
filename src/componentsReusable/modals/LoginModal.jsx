@@ -1,21 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { Modal, Button } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 
 import { runLoginModal } from '../../redux/actions/appActions';
 
-export default function LoginModal({ isShown, title, body, button1 }) {
+export default function LoginModal({ title, body, button1 }) {
   const dispatch = useDispatch();
-  const [show, setShow] = useState(false);
-
-  useEffect(() => {
-    if (isShown) setShow(true);
-  }, [isShown]);
+  const [show] = useSelector((state) => [state.modals.isLoginModalShown]);
 
   const handleClick = async () => {
     await dispatch(runLoginModal(false));
-    setShow(false);
   };
 
   return (
@@ -37,7 +32,6 @@ export default function LoginModal({ isShown, title, body, button1 }) {
 }
 
 LoginModal.propTypes = {
-  isShown: PropTypes.bool.isRequired,
   title: PropTypes.string.isRequired,
   body: PropTypes.string.isRequired,
   button1: PropTypes.string.isRequired,

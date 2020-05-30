@@ -10,6 +10,7 @@ export default function NavButtons({
   leftInitiallyDisabled,
   rightInitiallyDisabled,
   location,
+  judgeHandleClick,
 }) {
   return (
     <div className="button-wrapper">
@@ -22,6 +23,7 @@ export default function NavButtons({
         text={rightButtonText}
         initiallyDisabled={rightInitiallyDisabled}
         location={location}
+        judgeHandleClick={judgeHandleClick}
       />
     </div>
   );
@@ -33,9 +35,11 @@ NavButtons.propTypes = {
   leftInitiallyDisabled: PropTypes.bool,
   rightInitiallyDisabled: PropTypes.bool,
   location: PropTypes.string.isRequired,
+  judgeHandleClick: PropTypes.func,
 };
 
 NavButtons.defaultProps = {
   leftInitiallyDisabled: false,
   rightInitiallyDisabled: false,
+  judgeHandleClick: null,
 };

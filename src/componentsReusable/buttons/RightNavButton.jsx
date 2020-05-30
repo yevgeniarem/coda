@@ -1,37 +1,26 @@
 import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { Button } from 'react-bootstrap';
+import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import { Button } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 
-import { tryJudgeCheck } from '../../redux/actions/appActions';
-
-export default function RightNavButton({ text, initiallyDisabled, location }) {
+export default function RightNavButton({
+  text,
+  initiallyDisabled,
+  location,
+  judgeHandleClick,
+}) {
   const inputs = useSelector((state) => state.inputs);
   const history = useHistory();
-  const dispatch = useDispatch();
-
-  const checkJudge = async () => {
-    try {
-      const response = await dispatch(
-        tryJudgeCheck({
-          tourDateId: inputs.tourDateId,
-          position: inputs.position,
-        }),
-      );
-      if (!response.data) history.push('/scoring');
-    } catch (err) {
-      // eslint-disable-next-line no-console
-      console.error(err);
-    }
-  };
 
   const handleClick = () => {
+    // TODO refactor so you dont have handleclick within button
     if (location === 'tourDates') history.push('/judges');
-    if (location === 'judges') checkJudge();
+    if (location === 'judges') judgeHandleClick();
   };
 
   const isDisabled = () => {
+    // TODO figure out why you cant delete the first line
     if (initiallyDisabled === false) return false;
     if (!inputs.judge || !inputs.position || !inputs.teacherJudge) return true;
     return false;
@@ -52,8 +41,10 @@ RightNavButton.propTypes = {
   text: PropTypes.string.isRequired,
   initiallyDisabled: PropTypes.bool,
   location: PropTypes.string.isRequired,
+  judgeHandleClick: PropTypes.func,
 };
 
 RightNavButton.defaultProps = {
   initiallyDisabled: false,
+  judgeHandleClick: null,
 };

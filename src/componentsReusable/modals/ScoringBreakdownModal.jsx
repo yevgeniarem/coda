@@ -63,37 +63,33 @@ export default function Modal({ isShown, title, body, button1, button2 }) {
   }));
 
   const handleClick = async () => {
-    let finalNote = note;
-    if (!note) finalNote = applyDefaultNote(judgeList, currentJudge);
+    // const finalNote = note || applyDefaultNote(judgeList, currentJudge);
 
-    const submitScore = async () => {
-      try {
-        dispatch(
-          postScore({
-            competitionGroup,
-            currentRoutine,
-            currentEvent,
-            tourDateId,
-            currentJudge,
-            finalNote,
-            score,
-            not_friendly,
-            i_choreographed,
-            position,
-            teacherJudge,
-            is_coda,
-            buttons,
-            strongest_level_1_id: calculateStrongestCategory(buttonPercentages),
-            weakest_level_1_id: calculateWeakestCategory(buttonPercentages),
-            routineList,
-          }),
-        );
-      } catch (err) {
-        // eslint-disable-next-line no-console
-        console.error(err);
-      }
-    };
-    await submitScore();
+    // TODO same as code above
+    // let finalNote = note;
+    // if (!note) finalNote = applyDefaultNote(judgeList, currentJudge);
+
+    // TODO make sure any async code catches error somewhere
+    await dispatch(
+      postScore({
+        competitionGroup,
+        currentRoutine,
+        currentEvent,
+        tourDateId,
+        currentJudge,
+        finalNote: note || applyDefaultNote(judgeList, currentJudge),
+        score,
+        not_friendly,
+        i_choreographed,
+        position,
+        teacherJudge,
+        is_coda,
+        buttons,
+        strongest_level_1_id: calculateStrongestCategory(buttonPercentages),
+        weakest_level_1_id: calculateWeakestCategory(buttonPercentages),
+        routineList,
+      }),
+    );
     Promise.all([
       dispatch(getRoutineList(inputs)),
       dispatch(closeSidebar()),
@@ -113,6 +109,7 @@ export default function Modal({ isShown, title, body, button1, button2 }) {
       <BootstrapModal.Footer className="modal__footer">
         <Button
           variant="secondary"
+          // TODO put everything in 1 handleclose
           onClick={() => Promise.all([dispatch(closeSidebar()), handleClose()])}
           className="button action-button--navigation action-button--grey"
         >

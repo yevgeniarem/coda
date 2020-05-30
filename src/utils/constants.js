@@ -81,21 +81,17 @@ export const scoringPages = [
   { name: 'secondPage', buttons: 'perfAndCreativeButtons' },
 ];
 
-export const routineButtonTypes = [
-  {
-    type: 'regular',
-    className: '',
-  },
-  {
-    type: 'disabled',
-    className: 'navbar__sidebar--button--disabled',
-  },
-  {
-    type: 'active',
-    className: 'navbar__sidebar--button--active',
-  },
-  {
-    type: 'canceled',
-    className: 'navbar__sidebar--button--disabled',
-  },
-];
+// export const routineButtonTypes = [
+//   {
+//     type: 'regular',
+//     className: '',
+//   },
+//   {
+//     type: 'disabled',
+//     className: 'navbar__sidebar--button--disabled',
+//   },
+//   {
+//     type: 'active',
+//     className: 'navbar__sidebar--button--active',
+//   },
+// ];
