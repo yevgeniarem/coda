@@ -3,23 +3,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Modal as BootstrapModal, Button } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 
-import { runScoringBreakdownModal } from '../../redux/actions/appActions';
+import { runJudgeModal } from '../redux/actions/appActions';
 
-export default function Modal({
-  title,
-  body,
-  button1,
-  button2,
-  cancel,
-  confirm,
-}) {
+export default function Modal({ title, body, button1, button2, confirm }) {
   const dispatch = useDispatch();
-  const [show] = useSelector((state) => [
-    state.modals.isScoringBreakdownModalShown,
-  ]);
+  const [show] = useSelector((state) => [state.modals.judgeName]);
 
   const handleClose = () => {
-    Promise.all([cancel(), dispatch(runScoringBreakdownModal(false))]);
+    dispatch(runJudgeModal(''));
   };
 
   const handleClick = async () => {
@@ -28,7 +19,12 @@ export default function Modal({
   };
 
   return (
-    <BootstrapModal className="modal" show={show} onHide={handleClose} centered>
+    <BootstrapModal
+      className="modal"
+      show={Boolean(show)}
+      onHide={handleClose}
+      centered
+    >
       <BootstrapModal.Header className="modal__header">
         <BootstrapModal.Title className="modal__title">
           {title}
@@ -36,20 +32,21 @@ export default function Modal({
       </BootstrapModal.Header>
       <BootstrapModal.Body className="modal__body">{body}</BootstrapModal.Body>
       <BootstrapModal.Footer className="modal__footer">
+        {button2 && (
+          <Button
+            onClick={handleClose}
+            className="button action-button--navigation action-button--grey"
+          >
+            {button1}
+          </Button>
+        )}
         <Button
-          variant="secondary"
-          onClick={handleClose}
-          className="button action-button--navigation action-button--grey"
-        >
-          {button1}
-        </Button>
-        <Button
-          variant="secondary"
           onClick={handleClick}
           className="button action-button--navigation action-button--blue"
         >
           {button2}
         </Button>
+        )
       </BootstrapModal.Footer>
     </BootstrapModal>
   );
@@ -57,9 +54,14 @@ export default function Modal({
 
 Modal.propTypes = {
   title: PropTypes.string.isRequired,
-  body: PropTypes.string.isRequired,
+  body: PropTypes.string,
   button1: PropTypes.string.isRequired,
-  button2: PropTypes.string.isRequired,
-  cancel: PropTypes.func.isRequired,
-  confirm: PropTypes.func.isRequired,
+  button2: PropTypes.string,
+  confirm: PropTypes.func,
+};
+
+Modal.defaultProps = {
+  body: null,
+  confirm: null,
+  button2: null,
 };

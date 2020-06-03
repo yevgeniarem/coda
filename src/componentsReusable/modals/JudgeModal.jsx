@@ -1,30 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Modal, Button } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 
 import { runJudgeModal } from '../../redux/actions/appActions';
 
-export default function JudgeModal({
-  isShown,
-  title,
-  body,
-  button1,
-  button2,
-  confirm,
-}) {
+export default function JudgeModal({ title, body, button1, button2, confirm }) {
   const dispatch = useDispatch();
-  const [show, setShow] = useState(false);
+  const [show] = useSelector((state) => [state.modals.judgeName]);
 
-  // TODO combine all modals into 1
-  // TODO change all modals to use redux state like login modal
-  useEffect(() => {
-    if (isShown) setShow(true);
-  }, [isShown]);
-
-  const handleClose = async () => {
-    await dispatch(runJudgeModal(''));
-    setShow(false);
+  const handleClose = () => {
+    dispatch(runJudgeModal(''));
   };
 
   const handleClick = async () => {
@@ -33,7 +19,7 @@ export default function JudgeModal({
   };
 
   return (
-    <Modal className="modal" show={show} onHide={handleClose} centered>
+    <Modal className="modal" show={Boolean(show)} onHide={handleClose} centered>
       <Modal.Header className="modal__header">
         <Modal.Title className="modal__title">{title}</Modal.Title>
       </Modal.Header>
@@ -57,7 +43,6 @@ export default function JudgeModal({
 }
 
 JudgeModal.propTypes = {
-  isShown: PropTypes.bool.isRequired,
   title: PropTypes.string.isRequired,
   body: PropTypes.string,
   button1: PropTypes.string.isRequired,

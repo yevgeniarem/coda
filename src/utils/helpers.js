@@ -117,3 +117,23 @@ export const findNextAvailableDate = (inputs) =>
 
 export const renderRoutineNumber = (routine) =>
   routine.has_a ? `#${routine.number}a` : `#${routine.number}`;
+
+export const determineButtonColorClassName = (reduxButtons, button) => {
+  return reduxButtons.map((b) => {
+    if (b.level_4_id !== button.id) return '';
+    if (b.good) return 'button--scoring--green';
+    return 'button--scoring--red';
+  });
+};
+
+export const determineButtonHeaderLevel = (button) =>
+  button.header_level && `button--header-level-${button.header_level}`;
+
+export const isButtonDisabled = (location, inputs) => {
+  if (
+    location === 'judges' &&
+    (!inputs.judge || !inputs.position || !inputs.teacherJudge)
+  )
+    return true;
+  return false;
+};

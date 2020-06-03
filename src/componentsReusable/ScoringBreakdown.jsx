@@ -9,24 +9,92 @@ import {
   toggleIChoreographed,
   updateNote,
   getRoutineList,
+  resetScoring,
+  postScore,
+  closeSidebar,
 } from '../redux/actions/appActions';
 import ScoringBreakdownModal from './modals/ScoringBreakdownModal';
 import ScoringPopover from './ScoringPopover';
 import SubmitButton from './buttons/SubmitButton';
-import { checkboxInputs } from '../utils/constants';
+import { checkboxInputs, buttonCategories } from '../utils/constants';
+import {
+  filterButtonsById,
+  calculateGoodBtnPercentage,
+  calculateStrongestCategory,
+  calculateWeakestCategory,
+  applyDefaultNote,
+} from '../utils/helpers';
 
 export default function ScoringBreakdown() {
   const dispatch = useDispatch();
   const [
-    { score, not_friendly, i_choreographed, note },
+    { currentEvent },
+    {
+      competitionGroup,
+      tourDateId,
+      judgeList,
+      judge: currentJudge,
+      position,
+      teacherJudge,
+    },
+    { currentRoutine, routineList },
+    { note, score, not_friendly, i_choreographed, is_coda, buttons },
     inputs,
-    { isScoringBreakdownModalShown },
-  ] = useSelector((state) => [state.scoring, state.inputs, state.modals]);
+  ] = useSelector((state) => [
+    state.events,
+    state.inputs,
+    state.routines,
+    state.scoring,
+    state.inputs,
+  ]);
   const [noteValue, setNoteValue] = useState(note);
 
   useEffect(() => {
     setNoteValue(note);
   }, [note]);
+
+  const buttonsOrdByCategories = buttonCategories.map((bc) => ({
+    name: bc.name,
+    buttons: filterButtonsById(buttons, bc.id),
+  }));
+
+  const buttonPercentages = buttonsOrdByCategories.map((b) => ({
+    name: b.name,
+    percentage: calculateGoodBtnPercentage(b.buttons),
+  }));
+
+  const handlers = {
+    onScoringBreakdownModalConfirm: async () => {
+      await dispatch(
+        postScore({
+          competitionGroup,
+          currentRoutine,
+          currentEvent,
+          tourDateId,
+          currentJudge,
+          finalNote: note || applyDefaultNote(judgeList, currentJudge),
+          score,
+          not_friendly,
+          i_choreographed,
+          position,
+          teacherJudge,
+          is_coda,
+          buttons,
+          strongest_level_1_id: calculateStrongestCategory(buttonPercentages),
+          weakest_level_1_id: calculateWeakestCategory(buttonPercentages),
+          routineList,
+        }),
+      );
+      Promise.all([
+        dispatch(getRoutineList(inputs)),
+        dispatch(closeSidebar()),
+        dispatch(resetScoring()),
+      ]);
+    },
+    onScoringBreakdownModalCancel: () => {
+      dispatch(closeSidebar());
+    },
+  };
 
   const handleClick = {
     minus: () => {
@@ -64,11 +132,12 @@ export default function ScoringBreakdown() {
   return (
     <>
       <ScoringBreakdownModal
-        isShown={isScoringBreakdownModalShown}
         title="Alert"
         body="Are you sure you want to save?"
         button1="GO BACK"
         button2="YES, SAVE"
+        confirm={handlers.onScoringBreakdownModalConfirm}
+        cancel={handlers.onScoringBreakdownModalCancel}
       />
 
       <div className="scoring-breakdown__container">

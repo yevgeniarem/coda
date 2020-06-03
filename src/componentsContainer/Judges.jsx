@@ -5,11 +5,12 @@ import { useHistory } from 'react-router-dom';
 import Navbar from '../componentsReusable/Navbar';
 import SelectInput from '../componentsReusable/SelectInput';
 import NavButtons from '../componentsReusable/buttons/NavButtons';
-import JudgeModal from '../componentsReusable/modals/JudgeModal';
+import Modal from '../componentsReusable/Modal';
 import {
   getJudgeList,
   getCompetitionGroupList,
   tryJudgeCheck,
+  runJudgeModal,
 } from '../redux/actions/appActions';
 import { positions, teacherJudge } from '../utils/constants';
 import { toCamelCase } from '../utils/helpers';
@@ -17,7 +18,6 @@ import { toCamelCase } from '../utils/helpers';
 export default function Judges() {
   const dispatch = useDispatch();
   const history = useHistory();
-
   const [
     { judgeName: modalJudgeName },
     { judgeList, competitionGroupList, tourDateId, position },
@@ -32,26 +32,19 @@ export default function Judges() {
   }, []);
 
   const checkJudge = async () => {
-    try {
-      const response = await dispatch(
-        tryJudgeCheck({
-          tourDateId,
-          position,
-        }),
-      );
-      if (response.data) {
-        // TODO turn modal on, if modal is canceled, then return; (ends function) if confirmed, let it continue to history.push
-      }
-      history.push('/scoring');
-    } catch (err) {
-      // eslint-disable-next-line no-console
-      console.error(err);
+    const response = await dispatch(
+      tryJudgeCheck({
+        tourDateId,
+        position,
+      }),
+    );
+    if (response.data) {
+      dispatch(runJudgeModal(response.data));
     }
   };
 
   const handlers = {
     onJudgeCheckConfirmed: () => {
-      // TODO you shouldnt need this if above is done correctly
       history.push('/scoring');
     },
   };
@@ -81,8 +74,7 @@ export default function Judges() {
 
   return (
     <>
-      <JudgeModal
-        isShown={!!modalJudgeName}
+      <Modal
         title="Alert"
         body={modalMessage}
         button1="Cancel"
@@ -111,8 +103,7 @@ export default function Judges() {
           leftButtonText="BACK"
           rightButtonText="NEXT"
           location="judges"
-          rightInitiallyDisabled
-          judgeHandleClick={checkJudge}
+          handleClick={checkJudge}
         />
       </div>
     </>

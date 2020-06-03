@@ -17,6 +17,8 @@ import {
   splitButtonsIndex,
   splitButtonsIntoPages,
   isCompetitionOver,
+  determineButtonColorClassName,
+  determineButtonHeaderLevel,
 } from '../utils/helpers';
 import { allButtonsInfo, scoringPages } from '../utils/constants';
 
@@ -101,18 +103,12 @@ export default function Scoring() {
                     type="button"
                     key={button.id}
                     id={button.id}
-                    // TODO figure out how to make the classes list more readable
                     className={classNames(
                       'button',
                       'button--judging',
-                      buttonInfo.className,
-                      button.header_level &&
-                        `button--header-level-${button.header_level}`,
-                      reduxButtons.map((b) => {
-                        if (b.level_4_id !== button.id) return '';
-                        if (b.good) return 'button--scoring--green';
-                        return 'button--scoring--red';
-                      }),
+                      buttonInfo.typeClassName,
+                      determineButtonHeaderLevel(button),
+                      determineButtonColorClassName(reduxButtons, button),
                     )}
                     onClick={
                       buttonInfo.clickable

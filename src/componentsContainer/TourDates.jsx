@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Image } from 'react-bootstrap';
+import { useHistory } from 'react-router-dom';
 
 import Navbar from '../componentsReusable/Navbar';
 import SelectDate from '../componentsReusable/SelectDate';
@@ -10,6 +11,7 @@ import CONST from '../utils/constants';
 
 export default function TourDates() {
   const dispatch = useDispatch();
+  const history = useHistory();
   const { currentEvent, tourDates } = useSelector((state) => state.events);
 
   useEffect(() => {
@@ -40,6 +42,7 @@ export default function TourDates() {
           leftButtonText="BACK"
           rightButtonText="NEXT"
           location="tourDates"
+          handleClick={() => history.push('/judges')}
         />
       </div>
     </>

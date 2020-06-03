@@ -7,23 +7,17 @@ import RightNavButton from './RightNavButton';
 export default function NavButtons({
   leftButtonText,
   rightButtonText,
-  leftInitiallyDisabled,
-  rightInitiallyDisabled,
   location,
-  judgeHandleClick,
+  handleClick,
 }) {
   return (
     <div className="button-wrapper">
-      <LeftNavButton
-        text={leftButtonText}
-        initiallyDisabled={leftInitiallyDisabled}
-      />
+      <LeftNavButton text={leftButtonText} />
 
       <RightNavButton
         text={rightButtonText}
-        initiallyDisabled={rightInitiallyDisabled}
         location={location}
-        judgeHandleClick={judgeHandleClick}
+        handleClick={handleClick}
       />
     </div>
   );
@@ -32,14 +26,6 @@ export default function NavButtons({
 NavButtons.propTypes = {
   leftButtonText: PropTypes.string.isRequired,
   rightButtonText: PropTypes.string.isRequired,
-  leftInitiallyDisabled: PropTypes.bool,
-  rightInitiallyDisabled: PropTypes.bool,
   location: PropTypes.string.isRequired,
-  judgeHandleClick: PropTypes.func,
-};
-
-NavButtons.defaultProps = {
-  leftInitiallyDisabled: false,
-  rightInitiallyDisabled: false,
-  judgeHandleClick: null,
+  handleClick: PropTypes.func.isRequired,
 };

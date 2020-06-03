@@ -86,6 +86,13 @@ export const runJudgeModal = (payload) => (dispatch) => {
   });
 };
 
+export const closeSidebar = () => (dispatch) => {
+  dispatch({
+    type: 'CLOSE_SIDEBAR',
+    payload: false,
+  });
+};
+
 export const runSidebarModal = (payload) => (dispatch) => {
   dispatch({
     type: 'RUN_SIDEBAR_MODAL',
@@ -201,13 +208,6 @@ export const toggleSidebar = () => (dispatch, getState) => {
   dispatch({
     type: 'TOGGLE_SIDEBAR',
     payload: !state,
-  });
-};
-
-export const closeSidebar = () => (dispatch) => {
-  dispatch({
-    type: 'CLOSE_SIDEBAR',
-    payload: false,
   });
 };
 

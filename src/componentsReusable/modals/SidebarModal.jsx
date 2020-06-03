@@ -1,41 +1,28 @@
-import React, { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Modal, Button } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 
-import {
-  runSidebarModal,
-  updateCurrentRoutine,
-  closeSidebar,
-  resetScoring,
-} from '../../redux/actions/appActions';
+import { runSidebarModal } from '../../redux/actions/appActions';
 
 export default function SidebarModal({
-  isShown,
   title,
   body,
   button1,
   button2,
-  clickedRoutine,
+  confirm,
+  cancel,
 }) {
   const dispatch = useDispatch();
-  const [show, setShow] = useState(false);
+  const [show] = useSelector((state) => [state.modals.isSidebarModalShown]);
 
-  useEffect(() => {
-    if (isShown) setShow(true);
-  }, [isShown]);
-
-  const handleClose = async () => {
-    await Promise.all([
-      dispatch(closeSidebar()),
-      dispatch(runSidebarModal(false)),
-    ]);
-    setShow(false);
+  const handleClose = () => {
+    Promise.all([cancel(), dispatch(runSidebarModal(false))]);
   };
 
   const handleClick = async () => {
-    await dispatch(updateCurrentRoutine(clickedRoutine));
-    Promise.all([handleClose(), dispatch(resetScoring())]);
+    await handleClose();
+    confirm();
   };
 
   return (
@@ -63,10 +50,10 @@ export default function SidebarModal({
 }
 
 SidebarModal.propTypes = {
-  isShown: PropTypes.bool.isRequired,
   title: PropTypes.string.isRequired,
   body: PropTypes.string.isRequired,
   button1: PropTypes.string.isRequired,
   button2: PropTypes.string.isRequired,
-  clickedRoutine: PropTypes.shape({}).isRequired,
+  confirm: PropTypes.func.isRequired,
+  cancel: PropTypes.func.isRequired,
 };

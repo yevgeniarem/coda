@@ -48,19 +48,19 @@ export const allButtonsInfo = [
   {
     type: 'headerButton',
     name: 'header_name',
-    className: 'button--header-level',
+    typeClassName: 'button--header-level',
     clickable: false,
   },
   {
     type: 'level3Button',
     name: 'level_3_name',
-    className: 'button--scoring',
+    typeClassName: 'button--scoring',
     clickable: true,
   },
   {
     type: 'level4Button',
     name: 'level_4_name',
-    className: 'button--scoring',
+    typeClassName: 'button--scoring',
     clickable: true,
   },
 ];
@@ -80,18 +80,3 @@ export const scoringPages = [
   { name: 'firstPage', buttons: 'foundationButtons' },
   { name: 'secondPage', buttons: 'perfAndCreativeButtons' },
 ];
-
-// export const routineButtonTypes = [
-//   {
-//     type: 'regular',
-//     className: '',
-//   },
-//   {
-//     type: 'disabled',
-//     className: 'navbar__sidebar--button--disabled',
-//   },
-//   {
-//     type: 'active',
-//     className: 'navbar__sidebar--button--active',
-//   },
-// ];

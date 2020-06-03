@@ -5,7 +5,13 @@ import ReactSidebar from 'react-sidebar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames';
 
-import { toggleSidebar, runSidebarModal } from '../redux/actions/appActions';
+import {
+  toggleSidebar,
+  runSidebarModal,
+  updateCurrentRoutine,
+  resetScoring,
+  closeSidebar,
+} from '../redux/actions/appActions';
 import SidebarModal from './modals/SidebarModal';
 import RefreshButton from './buttons/RefreshButton';
 import { formatTourDate, renderRoutineNumber } from '../utils/helpers';
@@ -17,19 +23,27 @@ export default function Sidebar() {
     { routineList, currentRoutine },
     { currentEvent, tourDates },
     inputs,
-    { isSidebarModalShown },
     isSidebarOpen,
   ] = useSelector((state) => [
     state.routines,
     state.events,
     state.inputs,
-    state.modals,
     state.sidebar,
   ]);
   const [clickedRoutine, setClickedRoutine] = useState({});
   const currentTourDate = formatTourDate(
     tourDates.find((city) => city.id === inputs.tourDateId),
   );
+
+  const handlers = {
+    onSidebarModalConfirm: async () => {
+      await dispatch(updateCurrentRoutine(clickedRoutine));
+      Promise.all([dispatch(closeSidebar()), dispatch(resetScoring())]);
+    },
+    onSidebarModalCancel: () => {
+      dispatch(closeSidebar());
+    },
+  };
 
   const handleClick = () => {
     dispatch(toggleSidebar());
@@ -77,9 +91,9 @@ export default function Sidebar() {
             // has score or canceled then : navbar__sidebar--button--disabled
             // is active then : navbar__sidebar--button--active
             // }),
-            (hasScore || routine.canceled) &&
+            (hasScore(routine) || routine.canceled) &&
               'navbar__sidebar--button--disabled',
-            routine === currentRoutine.routine &&
+            routine.routine === currentRoutine.routine &&
               'navbar__sidebar--button--active',
           )}
           key={routine.routine_id}
@@ -94,12 +108,12 @@ export default function Sidebar() {
   return (
     <>
       <SidebarModal
-        isShown={isSidebarModalShown}
         title="Alert"
         body="Are you sure you want to switch routines? Your changes will not be saved."
         button1="GO BACK"
         button2="YES, SWITCH"
-        clickedRoutine={clickedRoutine}
+        confirm={handlers.onSidebarModalConfirm}
+        cancel={handlers.onSidebarModalCancel}
       />
 
       <ReactSidebar

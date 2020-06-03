@@ -27,6 +27,7 @@ const modals = (state = initialState, action) => {
         ...state,
         isScoringBreakdownModalShown: action.payload,
       };
+
     default:
       return state;
   }

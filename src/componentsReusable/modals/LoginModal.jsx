@@ -9,8 +9,8 @@ export default function LoginModal({ title, body, button1 }) {
   const dispatch = useDispatch();
   const [show] = useSelector((state) => [state.modals.isLoginModalShown]);
 
-  const handleClick = async () => {
-    await dispatch(runLoginModal(false));
+  const handleClick = () => {
+    dispatch(runLoginModal(false));
   };
 
   return (
