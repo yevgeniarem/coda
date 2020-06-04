@@ -8,6 +8,7 @@ import '@fortawesome/fontawesome-free/js/all';
 
 import './styles/index.scss';
 import Login from './componentsContainer/Login';
+import Modal from './componentsReusable/Modal';
 import PrivateRoute from './componentsReusable/PrivateRoute';
 import routes from './routes';
 
@@ -30,6 +31,7 @@ ReactDOM.render(
           <Login />
         </Route>
       </Switch>
+      <Modal />
     </Router>
   </Provider>,
   document.getElementById('root'),

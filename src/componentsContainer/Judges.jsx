@@ -5,12 +5,11 @@ import { useHistory } from 'react-router-dom';
 import Navbar from '../componentsReusable/Navbar';
 import SelectInput from '../componentsReusable/SelectInput';
 import NavButtons from '../componentsReusable/buttons/NavButtons';
-import Modal from '../componentsReusable/Modal';
 import {
   getJudgeList,
   getCompetitionGroupList,
-  tryJudgeCheck,
-  runJudgeModal,
+  tryModalJudgeCheck,
+  runModal,
 } from '../redux/actions/appActions';
 import { positions, teacherJudge } from '../utils/constants';
 import { toCamelCase } from '../utils/helpers';
@@ -18,10 +17,9 @@ import { toCamelCase } from '../utils/helpers';
 export default function Judges() {
   const dispatch = useDispatch();
   const history = useHistory();
-  const [
-    { judgeName: modalJudgeName },
-    { judgeList, competitionGroupList, tourDateId, position },
-  ] = useSelector((state) => [state.modals, state.inputs]);
+  const { judgeList, competitionGroupList, tourDateId, position } = useSelector(
+    (state) => state.inputs,
+  );
 
   useEffect(() => {
     Promise.all([
@@ -31,20 +29,8 @@ export default function Judges() {
     // eslint-disable-next-line
   }, []);
 
-  const checkJudge = async () => {
-    const response = await dispatch(
-      tryJudgeCheck({
-        tourDateId,
-        position,
-      }),
-    );
-    if (response.data) {
-      dispatch(runJudgeModal(response.data));
-    }
-  };
-
   const handlers = {
-    onJudgeCheckConfirmed: () => {
+    onModalJudgeCheckConfirmed: () => {
       history.push('/scoring');
     },
   };
@@ -68,20 +54,31 @@ export default function Judges() {
     },
   ];
 
-  const modalMessage =
-    modalJudgeName &&
-    `${modalJudgeName.fname} ${modalJudgeName.lname} already has scores from this position for this tour date. If judges are being swapped, this is fine. Continue?`;
+  const checkModalJudge = async () => {
+    const response = await dispatch(
+      tryModalJudgeCheck({
+        tourDateId,
+        position,
+      }),
+    );
+    if (response.data) {
+      dispatch(
+        runModal({
+          isModalShown: true,
+          modalInfo: {
+            title: 'Alert',
+            body: `${response.data.fname} ${response.data.lname} already has scores from this position for this tour date. If judges are being swapped, this is fine. Continue?`,
+            button1: 'Cancel',
+            button2: 'YES',
+            confirm: handlers.onModalJudgeCheckConfirmed,
+          },
+        }),
+      );
+    }
+  };
 
   return (
     <>
-      <Modal
-        title="Alert"
-        body={modalMessage}
-        button1="Cancel"
-        button2="YES"
-        confirm={handlers.onJudgeCheckConfirmed}
-      />
-
       <Navbar text="judge information" />
 
       <div className="main-container">
@@ -103,7 +100,7 @@ export default function Judges() {
           leftButtonText="BACK"
           rightButtonText="NEXT"
           location="judges"
-          handleClick={checkJudge}
+          handleClick={checkModalJudge}
         />
       </div>
     </>

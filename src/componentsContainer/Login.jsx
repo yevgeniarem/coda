@@ -5,7 +5,6 @@ import { useHistory } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 
 import InputGroup from '../componentsReusable/InputGroup';
-import Modal from '../componentsReusable/Modal';
 import SubmitButton from '../componentsReusable/buttons/SubmitButton';
 import { tryLogin } from '../redux/actions/appActions';
 import { formInputs } from '../utils/constants';
@@ -25,12 +24,6 @@ export default function Login() {
 
   return (
     <>
-      <Modal
-        title="Sorry"
-        body="You have entered an invalid username or password."
-        button1="OK"
-      />
-
       <Image
         className="img-logo img-logo--home"
         src="./images/coda.svg"

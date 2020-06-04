@@ -72,17 +72,11 @@ export const authLogin = () => (dispatch) => {
   });
 };
 
-export const runLoginModal = (payload) => (dispatch) => {
+export const runModal = ({ isModalShown, modalInfo }) => (dispatch) => {
   dispatch({
-    type: 'RUN_LOGIN_MODAL',
-    payload,
-  });
-};
-
-export const runJudgeModal = (payload) => (dispatch) => {
-  dispatch({
-    type: 'RUN_JUDGE_MODAL',
-    payload,
+    type: 'RUN_MODAL',
+    isModalShown,
+    modalInfo,
   });
 };
 
@@ -90,20 +84,6 @@ export const closeSidebar = () => (dispatch) => {
   dispatch({
     type: 'CLOSE_SIDEBAR',
     payload: false,
-  });
-};
-
-export const runSidebarModal = (payload) => (dispatch) => {
-  dispatch({
-    type: 'RUN_SIDEBAR_MODAL',
-    payload,
-  });
-};
-
-export const runScoringBreakdownModal = (payload) => (dispatch) => {
-  dispatch({
-    type: 'RUN_SCORING_BREAKDOWN_MODAL',
-    payload,
   });
 };
 
@@ -219,11 +199,20 @@ export const tryLogin = ({ name, password }) => async (dispatch) => {
     });
     await dispatch(authLogin());
   } catch (err) {
-    dispatch(runLoginModal(true));
+    dispatch(
+      runModal({
+        isModalShown: true,
+        modalInfo: {
+          title: 'Sorry',
+          body: 'You have entered an invalid username or password.',
+          button2: 'OK',
+        },
+      }),
+    );
   }
 };
 
-export const tryJudgeCheck = ({ tourDateId, position }) => async (dispatch) => {
+export const tryModalJudgeCheck = ({ tourDateId, position }) => async () => {
   try {
     const response = await axios.get(`${CONST.API}/coda/check-judge`, {
       params: {
@@ -232,7 +221,6 @@ export const tryJudgeCheck = ({ tourDateId, position }) => async (dispatch) => {
         position,
       },
     });
-    await dispatch(runJudgeModal(response.data));
     return response;
   } catch (err) {
     // eslint-disable-next-line no-console

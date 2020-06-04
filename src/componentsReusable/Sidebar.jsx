@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Image } from 'react-bootstrap';
 import ReactSidebar from 'react-sidebar';
@@ -7,12 +7,11 @@ import classNames from 'classnames';
 
 import {
   toggleSidebar,
-  runSidebarModal,
+  runModal,
   updateCurrentRoutine,
   resetScoring,
   closeSidebar,
 } from '../redux/actions/appActions';
-import SidebarModal from './modals/SidebarModal';
 import RefreshButton from './buttons/RefreshButton';
 import { formatTourDate, renderRoutineNumber } from '../utils/helpers';
 import CONST from '../utils/constants';
@@ -30,28 +29,31 @@ export default function Sidebar() {
     state.inputs,
     state.sidebar,
   ]);
-  const [clickedRoutine, setClickedRoutine] = useState({});
   const currentTourDate = formatTourDate(
     tourDates.find((city) => city.id === inputs.tourDateId),
   );
-
-  const handlers = {
-    onSidebarModalConfirm: async () => {
-      await dispatch(updateCurrentRoutine(clickedRoutine));
-      Promise.all([dispatch(closeSidebar()), dispatch(resetScoring())]);
-    },
-    onSidebarModalCancel: () => {
-      dispatch(closeSidebar());
-    },
-  };
-
   const handleClick = () => {
     dispatch(toggleSidebar());
   };
 
   const handleButtonClick = (routine) => {
-    setClickedRoutine(routine);
-    dispatch(runSidebarModal(true));
+    dispatch(
+      runModal({
+        isModalShown: true,
+        modalInfo: {
+          title: 'Alert',
+          body:
+            'Are you sure you want to switch routines? Your changes will not be saved.',
+          button1: 'GO BACK',
+          button2: 'YES, SWITCH',
+          confirm: async () => {
+            await dispatch(updateCurrentRoutine(routine));
+            Promise.all([dispatch(closeSidebar()), dispatch(resetScoring())]);
+          },
+          cancel: dispatch(closeSidebar()),
+        },
+      }),
+    );
   };
 
   // const determineRoutineButtonType = ({ score, canceled, routine }) => {
@@ -106,41 +108,30 @@ export default function Sidebar() {
     });
 
   return (
-    <>
-      <SidebarModal
-        title="Alert"
-        body="Are you sure you want to switch routines? Your changes will not be saved."
-        button1="GO BACK"
-        button2="YES, SWITCH"
-        confirm={handlers.onSidebarModalConfirm}
-        cancel={handlers.onSidebarModalCancel}
-      />
-
-      <ReactSidebar
-        sidebar={
-          <div>
-            <Image
-              className="img-event--small navbar__sidebar--heading"
-              src={`${CONST.ASSETS_URL}/coda/${currentEvent.id}.svg`}
-              alt={`${currentEvent.name} logo`}
-            />
-            <span className="navbar__sidebar--heading">{currentTourDate}</span>
-            <div className="navbar__sidebar--buttons">{routineButtons}</div>
-            <RefreshButton />
-          </div>
-        }
-        open={isSidebarOpen}
-        onSetOpen={handleClick}
-        sidebarClassName="navbar__sidebar"
-        styles={{ overlay: { backgroundColor: 'rgba(0,0,0,0)' } }}
-      >
-        <div role="button" tabIndex="0" onClick={handleClick}>
-          <FontAwesomeIcon
-            icon={isSidebarOpen ? ['fas', 'times'] : ['fas', 'bars']}
-            className="icon icon--menu"
+    <ReactSidebar
+      sidebar={
+        <div>
+          <Image
+            className="img-event--small navbar__sidebar--heading"
+            src={`${CONST.ASSETS_URL}/coda/${currentEvent.id}.svg`}
+            alt={`${currentEvent.name} logo`}
           />
+          <span className="navbar__sidebar--heading">{currentTourDate}</span>
+          <div className="navbar__sidebar--buttons">{routineButtons}</div>
+          <RefreshButton />
         </div>
-      </ReactSidebar>
-    </>
+      }
+      open={isSidebarOpen}
+      onSetOpen={handleClick}
+      sidebarClassName="navbar__sidebar"
+      styles={{ overlay: { backgroundColor: 'rgba(0,0,0,0)' } }}
+    >
+      <div role="button" tabIndex="0" onClick={handleClick}>
+        <FontAwesomeIcon
+          icon={isSidebarOpen ? ['fas', 'times'] : ['fas', 'bars']}
+          className="icon icon--menu"
+        />
+      </div>
+    </ReactSidebar>
   );
 }
