@@ -2,31 +2,49 @@ import axios from 'axios';
 
 import CONST from '../../utils/constants';
 import { findNextAvailableRoutine } from '../../utils/helpers';
+import { Event } from '../../utils/models';
 
+// export const createEvents = (payload) => (dispatch) => {
+//   const events = [];
+//   payload.forEach((event) => {
+//     events.push({
+//       id: event.id,
+//       name: event.name,
+//       seasonId: event.current_season_id,
+//     });
+//   });
+//   dispatch({
+//     type: 'CREATE_EVENTS',
+//     payload: events,
+//   });
+// };
+
+// TODO refactored with class
 export const createEvents = (payload) => (dispatch) => {
-  const events = [];
-  payload.forEach((event) => {
-    events.push({
-      id: event.id,
-      name: event.name,
-      seasonId: event.current_season_id,
-    });
-  });
   dispatch({
     type: 'CREATE_EVENTS',
-    payload: events,
+    payload: payload.map((event) => new Event(event)),
   });
 };
+
+// export const updateCurrentEvent = (payload) => (dispatch, getState) => {
+//   const { events } = getState().events;
+//   const currentEvent = events.filter((e) => e.id === payload);
+//   dispatch({
+//     type: 'UPDATE_CURRENT_EVENT',
+//     payload: currentEvent[0],
+//   });
+// };
 
 export const updateCurrentEvent = (payload) => (dispatch, getState) => {
   const { events } = getState().events;
-  const currentEvent = events.filter((e) => e.id === payload);
   dispatch({
     type: 'UPDATE_CURRENT_EVENT',
-    payload: currentEvent[0],
+    payload: events.find((e) => e.id === payload),
   });
 };
 
+// TODO use .map
 export const updateTourDates = (payload) => (dispatch) => {
   const tourDates = [];
   payload.forEach((city) => {
@@ -118,6 +136,7 @@ export const updateScore = (payload) => (dispatch) => {
   });
 };
 
+// TODO add green button property here
 export const makeButtonGreen = (payload) => (dispatch, getState) => {
   const { buttons } = getState().scoring;
   dispatch({
@@ -126,6 +145,7 @@ export const makeButtonGreen = (payload) => (dispatch, getState) => {
   });
 };
 
+// TODO instead of removing old and adding new, use find and change property of it here
 export const makeButtonRed = (payload) => (dispatch, getState) => {
   const { buttons } = getState().scoring;
   const filteredButtons = buttons.filter(
@@ -244,6 +264,7 @@ export const getJudgeList = () => async (dispatch) => {
     const response = await axios.get(`${CONST.API}/coda/judges`);
     await dispatch(
       updateJudgeList(
+        // TODO use destructuring
         response.data.map((judge) => ({
           judge: `${judge.fname} ${judge.lname}`,
           id: judge.id,
@@ -261,6 +282,7 @@ export const getCompetitionGroupList = () => async (dispatch) => {
   try {
     const response = await axios.get(`${CONST.API}/coda/competition-groups`);
     await dispatch(
+      // TODO destructure
       updateCompetitionGroupList(
         response.data.map((group) => ({
           competitionGroup: group.name,
@@ -276,6 +298,7 @@ export const getCompetitionGroupList = () => async (dispatch) => {
 
 export const getRoutineList = (inputs) => async (dispatch) => {
   try {
+    // TODO destructure
     const response = await axios.get(`${CONST.API}/coda/routines`, {
       params: {
         tour_date_id: inputs.tourDateId,

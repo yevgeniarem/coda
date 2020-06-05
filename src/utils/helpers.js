@@ -1,27 +1,46 @@
 import moment from 'moment';
 
+// export const formatTourDate = (t) => {
+//   let dates;
+//   if (
+//     moment.utc(t.startDate).format('MMM') ===
+//     moment.utc(t.endDate).format('MMM')
+//   ) {
+//     dates = `${moment.utc(t.startDate).format('MMM D')}-${moment
+//       .utc(t.endDate)
+//       .format('D, YYYY')}`;
+//   } else {
+//     dates = `${moment.utc(t.startDate).format('MMM D')}-${moment
+//       .utc(t.endDate)
+//       .format('MMM D, YYYY')}`;
+//   }
+//   return `${t.eventCity} - ${dates}`;
+// };
+
+export const getMonth = (date) => moment.utc(date).month();
+
 export const formatTourDate = (t) => {
-  let dates;
-  if (
-    moment.utc(t.startDate).format('MMM') ===
-    moment.utc(t.endDate).format('MMM')
-  ) {
-    dates = `${moment.utc(t.startDate).format('MMM D')}-${moment
-      .utc(t.endDate)
-      .format('D, YYYY')}`;
-  } else {
-    dates = `${moment.utc(t.startDate).format('MMM D')}-${moment
-      .utc(t.endDate)
-      .format('MMM D, YYYY')}`;
-  }
-  return `${t.eventCity} - ${dates}`;
+  const formatWithMonth = 'MMM D';
+  const formatWithoutMonth = 'D';
+
+  return `${t.eventCity} - ${moment
+    .utc(t.startDate)
+    .format(formatWithMonth)}-${moment
+    .utc(t.endDate)
+    .format(
+      `${
+        getMonth(t.startDate) === getMonth(t.endDate)
+          ? formatWithoutMonth
+          : formatWithMonth
+      }, YYYY`,
+    )}`;
 };
 
 export const toCamelCase = (str) =>
   str
     .split(' ')
     .map((word, index) =>
-      index === 0
+      !index
         ? word.toLowerCase()
         : word.charAt(0).toUpperCase() + word.slice(1).toLowerCase(),
     )
@@ -47,10 +66,18 @@ export const splitButtonsIndex = (buttons) => {
   return buttons.indexOf(firstPerformanceButton);
 };
 
+// export const splitButtonsIntoPages = (buttons, splitIndex, type) => {
+//   const foundationButtons = buttons.slice(0, splitIndex);
+//   const perfAndCreativeButtons = buttons.slice(splitIndex);
+//   return { foundationButtons, perfAndCreativeButtons }[type];
+// };
+
 export const splitButtonsIntoPages = (buttons, splitIndex, type) => {
-  const foundationButtons = buttons.slice(0, splitIndex);
-  const perfAndCreativeButtons = buttons.slice(splitIndex);
-  return { foundationButtons, perfAndCreativeButtons }[type];
+  const sliceProps = {
+    foundationButtons: [0, splitIndex],
+    perfAndCreativeButtons: [splitIndex],
+  };
+  return buttons.slice(...sliceProps[type]);
 };
 
 export const isCompetitionOver = (currentRoutine) =>
@@ -98,12 +125,18 @@ export const calculateWeakestCategory = (buttonPercentages) => {
 export const findNextAvailableRoutine = (routineList) =>
   routineList.find((r) => !r.canceled && !r.score && r.score !== 0) || {};
 
+// export const findJudgeNameById = (judgeList, judgeId) => {
+//   const index = judgeList.map((judge) => judge.id === judgeId).indexOf(true);
+//   const currentJudge = judgeList[index] || {};
+//   return currentJudge.judge.toUpperCase();
+// };
+
 export const findJudgeNameById = (judgeList, judgeId) => {
-  const index = judgeList.map((judge) => judge.id === judgeId).indexOf(true);
-  const currentJudge = judgeList[index] || {};
+  const currentJudge = judgeList.find((judge) => judge.id === judgeId) || {};
   return currentJudge.judge.toUpperCase();
 };
 
+// TODO turn 142-144 into a 1 line return using || operator
 export const applyDefaultNote = (judgeList, currentJudge) => {
   const judgeObj = judgeList.find((judge) => judge.id === currentJudge);
   let finalNote = judgeObj.default_notes;
@@ -115,20 +148,28 @@ export const findNextAvailableDate = (inputs) =>
   inputs &&
   inputs.find((i) => moment.utc(i.endDate).isSameOrAfter(moment.utc()));
 
+// TODO shorten if expression
 export const renderRoutineNumber = (routine) =>
   routine.has_a ? `#${routine.number}a` : `#${routine.number}`;
 
-export const determineButtonColorClassName = (reduxButtons, button) => {
-  return reduxButtons.map((b) => {
+// export const determineButtonColorClassName = (reduxButtons, button) => {
+//   return reduxButtons.map((b) => {
+//     if (b.level_4_id !== button.id) return '';
+//     if (b.good) return 'button--scoring--green';
+//     return 'button--scoring--red';
+//   });
+// };
+
+export const determineButtonColorClassName = (reduxButtons, button) =>
+  reduxButtons.map((b) => {
     if (b.level_4_id !== button.id) return '';
-    if (b.good) return 'button--scoring--green';
-    return 'button--scoring--red';
+    return b.good ? 'button--scoring--green' : 'button--scoring--red';
   });
-};
 
 export const determineButtonHeaderLevel = (button) =>
   button.header_level && `button--header-level-${button.header_level}`;
 
+// TODO turn this into 1 line expression
 export const isButtonDisabled = (location, inputs) => {
   if (
     location === 'judges' &&
@@ -138,6 +179,7 @@ export const isButtonDisabled = (location, inputs) => {
   return false;
 };
 
+// TODO destructure
 export const initNavbarContent = (currentRoutine) => ({
   title: isCompetitionOver(currentRoutine)
     ? 'COMPETITION IS OVER'
