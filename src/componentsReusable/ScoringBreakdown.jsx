@@ -92,7 +92,8 @@ export default function ScoringBreakdown() {
                   currentEvent,
                   tourDateId,
                   currentJudge,
-                  finalNote: note || applyDefaultNote(judgeList, currentJudge),
+                  finalNote:
+                    noteValue || applyDefaultNote(judgeList, currentJudge),
                   score,
                   not_friendly,
                   i_choreographed,

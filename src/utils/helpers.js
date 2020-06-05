@@ -137,3 +137,14 @@ export const isButtonDisabled = (location, inputs) => {
     return true;
   return false;
 };
+
+export const initNavbarContent = (currentRoutine) => ({
+  title: isCompetitionOver(currentRoutine)
+    ? 'COMPETITION IS OVER'
+    : `#${currentRoutine.number} - ${currentRoutine.routine}`,
+  subtitle:
+    !isCompetitionOver(currentRoutine) &&
+    `${currentRoutine.age_division} • ${currentRoutine.performance_division} • ${currentRoutine.routine_category}`,
+});
+
+export const doesRoutineHaveScore = ({ score }) => !!score || score === 0;

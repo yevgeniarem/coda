@@ -74,6 +74,8 @@ export default function Judges() {
           },
         }),
       );
+    } else {
+      history.push('/scoring');
     }
   };
 

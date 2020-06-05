@@ -11,8 +11,8 @@ export const positions = [
 ];
 
 export const teacherJudge = [
-  { id: true, teacherJudge: 'IS Teacher Judge' },
-  { id: false, teacherJudge: 'IS NOT Teacher Judge' },
+  { id: 1, teacherJudge: 'IS Teacher Judge' },
+  { id: 2, teacherJudge: 'IS NOT Teacher Judge' },
 ];
 
 export const buttonCategories = [

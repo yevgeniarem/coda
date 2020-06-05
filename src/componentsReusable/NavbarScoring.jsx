@@ -5,7 +5,7 @@ import { Navbar } from 'react-bootstrap';
 import { updateCurrentRoutine } from '../redux/actions/appActions';
 import Sidebar from './Sidebar';
 import JudgeProfile from './JudgeProfile';
-import { isCompetitionOver, findNextAvailableRoutine } from '../utils/helpers';
+import { findNextAvailableRoutine, initNavbarContent } from '../utils/helpers';
 
 export default function NavbarScoring() {
   const dispatch = useDispatch();
@@ -13,17 +13,7 @@ export default function NavbarScoring() {
     (state) => state.routines,
   );
 
-  // TODO refactor to helper function
-  const initContent = (competitionOver) => ({
-    title: competitionOver
-      ? 'COMPETITION IS OVER'
-      : `#${currentRoutine.number} - ${currentRoutine.routine}`,
-    subtitle:
-      !competitionOver &&
-      `${currentRoutine.age_division} • ${currentRoutine.performance_division} • ${currentRoutine.routine_category}`,
-  });
-
-  const content = initContent(isCompetitionOver(currentRoutine));
+  const content = initNavbarContent(currentRoutine);
 
   useEffect(() => {
     if (currentRoutine.routine_id) return;
