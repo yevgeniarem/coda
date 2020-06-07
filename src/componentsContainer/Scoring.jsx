@@ -52,25 +52,13 @@ export default function Scoring() {
   const changeButtonColor = (button, buttonColor) => {
     switch (buttonColor) {
       case 'buttonIsGrey':
-        dispatch(
-          makeButtonGreen({
-            level_4_id: button.id,
-            level_1_id: button.level_1_id,
-            good: true,
-          }),
-        );
+        dispatch(makeButtonGreen(button));
         break;
       case 'buttonIsGreen':
-        dispatch(
-          makeButtonRed({
-            level_4_id: button.id,
-            level_1_id: button.level_1_id,
-            good: false,
-          }),
-        );
+        dispatch(makeButtonRed(button));
         break;
       case 'buttonIsRed':
-        dispatch(makeButtonGrey({ level_4_id: button.id }));
+        dispatch(makeButtonGrey(button));
         break;
       default:
         break;
@@ -124,7 +112,11 @@ export default function Scoring() {
         </div>
       ))}
 
-      <div>{!isCompetitionOver(currentRoutine) && <ScoringBreakdown />}</div>
+      <div>
+        {!isCompetitionOver(currentRoutine.date_routine_id) && (
+          <ScoringBreakdown />
+        )}
+      </div>
     </>
   );
 }

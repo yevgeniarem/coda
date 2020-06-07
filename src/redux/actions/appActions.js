@@ -1,40 +1,23 @@
 import axios from 'axios';
 
 import CONST from '../../utils/constants';
-import { findNextAvailableRoutine } from '../../utils/helpers';
-import { Event } from '../../utils/models';
+import { findNextAvailableRoutine, filterOutButton } from '../../utils/helpers';
+import {
+  Event,
+  TourDate,
+  Button,
+  Modal,
+  Judge,
+  CompetitionGroup,
+  Score,
+} from '../../utils/models';
 
-// export const createEvents = (payload) => (dispatch) => {
-//   const events = [];
-//   payload.forEach((event) => {
-//     events.push({
-//       id: event.id,
-//       name: event.name,
-//       seasonId: event.current_season_id,
-//     });
-//   });
-//   dispatch({
-//     type: 'CREATE_EVENTS',
-//     payload: events,
-//   });
-// };
-
-// TODO refactored with class
 export const createEvents = (payload) => (dispatch) => {
   dispatch({
     type: 'CREATE_EVENTS',
     payload: payload.map((event) => new Event(event)),
   });
 };
-
-// export const updateCurrentEvent = (payload) => (dispatch, getState) => {
-//   const { events } = getState().events;
-//   const currentEvent = events.filter((e) => e.id === payload);
-//   dispatch({
-//     type: 'UPDATE_CURRENT_EVENT',
-//     payload: currentEvent[0],
-//   });
-// };
 
 export const updateCurrentEvent = (payload) => (dispatch, getState) => {
   const { events } = getState().events;
@@ -44,18 +27,11 @@ export const updateCurrentEvent = (payload) => (dispatch, getState) => {
   });
 };
 
-// TODO use .map
 export const updateTourDates = (payload) => (dispatch) => {
-  const tourDates = [];
-  payload.forEach((city) => {
-    tourDates.push({
-      id: city.id,
-      eventCity: city.event_city.name,
-      startDate: city.start_date,
-      endDate: city.end_date,
-    });
+  dispatch({
+    type: 'UPDATE_TOUR_DATES',
+    payload: payload.map((tourDate) => new TourDate(tourDate)),
   });
-  dispatch({ type: 'UPDATE_TOUR_DATES', payload: tourDates });
 };
 
 export const updateInput = (payload) => (dispatch) => {
@@ -136,33 +112,31 @@ export const updateScore = (payload) => (dispatch) => {
   });
 };
 
-// TODO add green button property here
 export const makeButtonGreen = (payload) => (dispatch, getState) => {
   const { buttons } = getState().scoring;
   dispatch({
     type: 'MAKE_BUTTON_GREEN',
-    payload: [...buttons, payload],
+    payload: [...buttons, new Button({ ...payload, good: true })],
   });
 };
 
-// TODO instead of removing old and adding new, use find and change property of it here
 export const makeButtonRed = (payload) => (dispatch, getState) => {
   const { buttons } = getState().scoring;
-  const filteredButtons = buttons.filter(
-    (button) => button.level_4_id !== payload.level_4_id,
-  );
   dispatch({
     type: 'MAKE_BUTTON_RED',
-    payload: [...filteredButtons, payload],
+    payload: [
+      ...filterOutButton(buttons, payload),
+      new Button({ ...payload, good: false }),
+    ],
   });
 };
 
 export const makeButtonGrey = (payload) => (dispatch, getState) => {
   const { buttons } = getState().scoring;
-  const filteredButtons = buttons.filter(
-    (button) => button.level_4_id !== payload.level_4_id,
-  );
-  dispatch({ type: 'MAKE_BUTTON_GREY', payload: filteredButtons });
+  dispatch({
+    type: 'MAKE_BUTTON_GREY',
+    payload: filterOutButton(buttons, payload),
+  });
 };
 
 export const updateScoringBreakdown = (payload) => (dispatch) => {
@@ -220,14 +194,16 @@ export const tryLogin = ({ name, password }) => async (dispatch) => {
     await dispatch(authLogin());
   } catch (err) {
     dispatch(
-      runModal({
-        isModalShown: true,
-        modalInfo: {
-          title: 'Sorry',
-          body: 'You have entered an invalid username or password.',
-          button2: 'OK',
-        },
-      }),
+      runModal(
+        new Modal({
+          isModalShown: true,
+          modalInfo: {
+            title: 'Sorry',
+            body: 'You have entered an invalid username or password.',
+            button2: 'OK',
+          },
+        }),
+      ),
     );
   }
 };
@@ -263,14 +239,7 @@ export const getJudgeList = () => async (dispatch) => {
   try {
     const response = await axios.get(`${CONST.API}/coda/judges`);
     await dispatch(
-      updateJudgeList(
-        // TODO use destructuring
-        response.data.map((judge) => ({
-          judge: `${judge.fname} ${judge.lname}`,
-          id: judge.id,
-          default_notes: judge.default_notes,
-        })),
-      ),
+      updateJudgeList(response.data.map((judge) => new Judge(judge))),
     );
   } catch (err) {
     // eslint-disable-next-line no-console
@@ -282,12 +251,10 @@ export const getCompetitionGroupList = () => async (dispatch) => {
   try {
     const response = await axios.get(`${CONST.API}/coda/competition-groups`);
     await dispatch(
-      // TODO destructure
       updateCompetitionGroupList(
-        response.data.map((group) => ({
-          competitionGroup: group.name,
-          id: group.id,
-        })),
+        response.data.map(
+          (competitionGroup) => new CompetitionGroup(competitionGroup),
+        ),
       ),
     );
   } catch (err) {
@@ -296,14 +263,17 @@ export const getCompetitionGroupList = () => async (dispatch) => {
   }
 };
 
-export const getRoutineList = (inputs) => async (dispatch) => {
+export const getRoutineList = ({
+  tourDateId,
+  competitionGroup,
+  position,
+}) => async (dispatch) => {
   try {
-    // TODO destructure
     const response = await axios.get(`${CONST.API}/coda/routines`, {
       params: {
-        tour_date_id: inputs.tourDateId,
-        competition_group_id: inputs.competitionGroup,
-        position: inputs.position,
+        tour_date_id: tourDateId,
+        competition_group_id: competitionGroup,
+        position,
       },
     });
     await dispatch(updateRoutineList(response.data));
@@ -313,12 +283,12 @@ export const getRoutineList = (inputs) => async (dispatch) => {
   }
 };
 
-export const getTourDates = (currentEvent) => async (dispatch) => {
+export const getTourDates = ({ id, seasonId }) => async (dispatch) => {
   try {
     const response = await axios.get(`${CONST.API}/coda/tour-dates`, {
       params: {
-        event_id: currentEvent.id,
-        season_id: currentEvent.seasonId,
+        event_id: id,
+        season_id: seasonId,
       },
     });
     await dispatch(updateTourDates(response.data));
@@ -328,58 +298,21 @@ export const getTourDates = (currentEvent) => async (dispatch) => {
   }
 };
 
-export const postScore = ({
-  competitionGroup,
-  currentRoutine,
-  currentEvent,
-  tourDateId,
-  currentJudge,
-  finalNote,
-  score,
-  not_friendly,
-  i_choreographed,
-  position,
-  teacherJudge,
-  is_coda,
-  buttons,
-  strongest_level_1_id,
-  weakest_level_1_id,
-  routineList,
-}) => async (dispatch) => {
+export const postScore = (score) => async (dispatch) => {
   try {
-    await axios.post(`${CONST.API}/coda/score`, {
-      isTabulator: false,
-      competition_group_id: competitionGroup,
-      date_routine_id: currentRoutine.date_routine_id,
-      event_id: currentEvent.id,
-      tour_date_id: tourDateId,
-      data: {
-        online_scoring_id: currentRoutine.online_scoring_id,
-        staff_id: currentJudge,
-        note: finalNote,
-        score,
-        not_friendly,
-        i_choreographed,
-        position,
-        teacher_critique: teacherJudge,
-        is_coda,
-        buttons,
-        strongest_level_1_id,
-        weakest_level_1_id,
-      },
-    });
+    await axios.post(`${CONST.API}/coda/score`, new Score(score));
     await axios.post(`${CONST.API}/socket-scoring`, {
-      tour_date_id: tourDateId,
+      tour_date_id: score.tourDateId,
       coda: true,
       data: {
-        competition_group_id: competitionGroup,
-        date_routine_id: currentRoutine.date_routine_id,
+        competition_group_id: score.competitionGroup,
+        date_routine_id: score.currentRoutine.date_routine_id,
       },
     });
-    const routineIndex = routineList.findIndex(
-      (routine) => routine.routine_id === currentRoutine.routine_id,
+    const routineIndex = score.routineList.findIndex(
+      (routine) => routine.routine_id === score.currentRoutine.routine_id,
     );
-    const newRoutineArr = routineList.slice(routineIndex + 1);
+    const newRoutineArr = score.routineList.slice(routineIndex + 1);
     const newCurrentRoutine = findNextAvailableRoutine(newRoutineArr);
     await dispatch(updateCurrentRoutine(newCurrentRoutine));
     window.scrollTo(0, 0);

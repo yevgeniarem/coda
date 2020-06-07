@@ -19,6 +19,7 @@ import {
   doesRoutineHaveScore,
 } from '../utils/helpers';
 import CONST from '../utils/constants';
+import { Modal } from '../utils/models';
 
 export default function Sidebar() {
   const dispatch = useDispatch();
@@ -43,45 +44,25 @@ export default function Sidebar() {
 
   const handleButtonClick = (routine) => {
     dispatch(
-      runModal({
-        isModalShown: true,
-        modalInfo: {
-          title: 'Alert',
-          body:
-            'Are you sure you want to switch routines? Your changes will not be saved.',
-          button1: 'GO BACK',
-          button2: 'YES, SWITCH',
-          confirm: async () => {
-            await dispatch(updateCurrentRoutine(routine));
-            Promise.all([dispatch(closeSidebar()), dispatch(resetScoring())]);
+      runModal(
+        new Modal({
+          isModalShown: true,
+          modalInfo: {
+            title: 'Alert',
+            body:
+              'Are you sure you want to switch routines? Your changes will not be saved.',
+            button1: 'GO BACK',
+            button2: 'YES, SWITCH',
+            confirm: async () => {
+              await dispatch(updateCurrentRoutine(routine));
+              Promise.all([dispatch(closeSidebar()), dispatch(resetScoring())]);
+            },
+            cancel: dispatch(closeSidebar()),
           },
-          cancel: dispatch(closeSidebar()),
-        },
-      }),
+        }),
+      ),
     );
   };
-
-  const routineButtons =
-    routineList &&
-    routineList.map((routine) => {
-      return (
-        <button
-          onClick={() => handleButtonClick(routine)}
-          className={classNames(
-            'navbar__sidebar--button',
-            (doesRoutineHaveScore(routine) || routine.canceled) &&
-              'navbar__sidebar--button--disabled',
-            routine.routine === currentRoutine.routine &&
-              'navbar__sidebar--button--active',
-          )}
-          key={routine.routine_id}
-          type="button"
-        >
-          <span>{renderRoutineNumber(routine)}</span>
-          <span className="navbar__sidebar--routine">{routine.routine}</span>
-        </button>
-      );
-    });
 
   return (
     <ReactSidebar
@@ -93,7 +74,30 @@ export default function Sidebar() {
             alt={`${currentEvent.name} logo`}
           />
           <span className="navbar__sidebar--heading">{currentTourDate}</span>
-          <div className="navbar__sidebar--buttons">{routineButtons}</div>
+          <div className="navbar__sidebar--buttons">
+            {routineList &&
+              routineList.map((routine) => {
+                return (
+                  <button
+                    onClick={() => handleButtonClick(routine)}
+                    className={classNames(
+                      'navbar__sidebar--button',
+                      (doesRoutineHaveScore(routine) || routine.canceled) &&
+                        'navbar__sidebar--button--disabled',
+                      routine.routine === currentRoutine.routine &&
+                        'navbar__sidebar--button--active',
+                    )}
+                    key={routine.routine_id}
+                    type="button"
+                  >
+                    <span>{renderRoutineNumber(routine)}</span>
+                    <span className="navbar__sidebar--routine">
+                      {routine.routine}
+                    </span>
+                  </button>
+                );
+              })}
+          </div>
           <RefreshButton />
         </div>
       }

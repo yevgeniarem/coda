@@ -4,7 +4,8 @@ import PropTypes from 'prop-types';
 
 import SelectInput from './SelectInput';
 import { updateInput } from '../redux/actions/appActions';
-import { formatTourDate, findNextAvailableDate } from '../utils/helpers';
+import { findNextAvailableDate } from '../utils/helpers';
+import { Input } from '../utils/models';
 
 export default function SelectDate({ inputs, variable, name }) {
   const dispatch = useDispatch();
@@ -17,13 +18,7 @@ export default function SelectDate({ inputs, variable, name }) {
 
   return (
     <SelectInput
-      inputs={
-        inputs &&
-        inputs.map((i) => ({
-          id: i.id,
-          tourDateId: formatTourDate(i),
-        }))
-      }
+      inputs={inputs && inputs.map((i) => new Input(i))}
       variable={variable}
       name={name}
     />

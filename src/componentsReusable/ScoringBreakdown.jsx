@@ -17,12 +17,13 @@ import ScoringPopover from './ScoringPopover';
 import SubmitButton from './buttons/SubmitButton';
 import { checkboxInputs, buttonCategories } from '../utils/constants';
 import {
-  filterButtonsById,
+  filterButtonsByLevel,
   calculateGoodBtnPercentage,
   calculateStrongestCategory,
   calculateWeakestCategory,
   applyDefaultNote,
 } from '../utils/helpers';
+import { Modal } from '../utils/models';
 
 export default function ScoringBreakdown() {
   const dispatch = useDispatch();
@@ -54,7 +55,7 @@ export default function ScoringBreakdown() {
 
   const buttonsOrdByCategories = buttonCategories.map((bc) => ({
     name: bc.name,
-    buttons: filterButtonsById(buttons, bc.id),
+    buttons: filterButtonsByLevel(buttons, bc.id),
   }));
 
   const buttonPercentages = buttonsOrdByCategories.map((b) => ({
@@ -77,50 +78,52 @@ export default function ScoringBreakdown() {
     event.preventDefault();
     Promise.all([
       dispatch(
-        runModal({
-          isModalShown: true,
-          modalInfo: {
-            title: 'Alert',
-            body: 'Are you sure you want to save?',
-            button1: 'GO BACK',
-            button2: 'YES, SAVE',
-            confirm: async () => {
-              await dispatch(
-                postScore({
-                  competitionGroup,
-                  currentRoutine,
-                  currentEvent,
-                  tourDateId,
-                  currentJudge,
-                  finalNote:
-                    noteValue || applyDefaultNote(judgeList, currentJudge),
-                  score,
-                  not_friendly,
-                  i_choreographed,
-                  position,
-                  teacherJudge,
-                  is_coda,
-                  buttons,
-                  strongest_level_1_id: calculateStrongestCategory(
-                    buttonPercentages,
-                  ),
-                  weakest_level_1_id: calculateWeakestCategory(
-                    buttonPercentages,
-                  ),
-                  routineList,
-                }),
-              );
-              Promise.all([
-                dispatch(getRoutineList(inputs)),
-                dispatch(closeSidebar()),
-                dispatch(resetScoring()),
-              ]);
+        runModal(
+          new Modal({
+            isModalShown: true,
+            modalInfo: {
+              title: 'Alert',
+              body: 'Are you sure you want to save?',
+              button1: 'GO BACK',
+              button2: 'YES, SAVE',
+              confirm: async () => {
+                await dispatch(
+                  postScore({
+                    competitionGroup,
+                    currentRoutine,
+                    currentEvent,
+                    tourDateId,
+                    currentJudge,
+                    finalNote:
+                      noteValue || applyDefaultNote(judgeList, currentJudge),
+                    score,
+                    not_friendly,
+                    i_choreographed,
+                    position,
+                    teacherJudge,
+                    is_coda,
+                    buttons,
+                    strongest_level_1_id: calculateStrongestCategory(
+                      buttonPercentages,
+                    ),
+                    weakest_level_1_id: calculateWeakestCategory(
+                      buttonPercentages,
+                    ),
+                    routineList,
+                  }),
+                );
+                Promise.all([
+                  dispatch(getRoutineList(inputs)),
+                  dispatch(closeSidebar()),
+                  dispatch(resetScoring()),
+                ]);
+              },
+              cancel: () => {
+                dispatch(closeSidebar());
+              },
             },
-            cancel: () => {
-              dispatch(closeSidebar());
-            },
-          },
-        }),
+          }),
+        ),
       ),
       dispatch(updateNote(noteValue)),
       dispatch(getRoutineList(inputs)),

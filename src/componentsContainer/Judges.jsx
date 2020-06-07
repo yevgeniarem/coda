@@ -13,6 +13,7 @@ import {
 } from '../redux/actions/appActions';
 import { positions, teacherJudge } from '../utils/constants';
 import { toCamelCase } from '../utils/helpers';
+import { Modal } from '../utils/models';
 
 export default function Judges() {
   const dispatch = useDispatch();
@@ -63,16 +64,18 @@ export default function Judges() {
     );
     if (response.data) {
       dispatch(
-        runModal({
-          isModalShown: true,
-          modalInfo: {
-            title: 'Alert',
-            body: `${response.data.fname} ${response.data.lname} already has scores from this position for this tour date. If judges are being swapped, this is fine. Continue?`,
-            button1: 'Cancel',
-            button2: 'YES',
-            confirm: handlers.onModalJudgeCheckConfirmed,
-          },
-        }),
+        runModal(
+          new Modal({
+            isModalShown: true,
+            modalInfo: {
+              title: 'Alert',
+              body: `${response.data.fname} ${response.data.lname} already has scores from this position for this tour date. If judges are being swapped, this is fine. Continue?`,
+              button1: 'Cancel',
+              button2: 'YES',
+              confirm: handlers.onModalJudgeCheckConfirmed,
+            },
+          }),
+        ),
       );
     } else {
       history.push('/scoring');
