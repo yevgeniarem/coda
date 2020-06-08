@@ -65,6 +65,7 @@ export default function Judges() {
     if (response.data) {
       dispatch(
         runModal(
+          // TODO optional: put models in actions/reducers
           new Modal({
             isModalShown: true,
             modalInfo: {

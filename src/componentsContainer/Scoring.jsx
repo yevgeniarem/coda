@@ -37,6 +37,7 @@ export default function Scoring() {
     // eslint-disable-next-line
   }, []);
 
+  // TODO only in useEffect, dont use return the same way as you do functions because useEffect returns have a specific purpose
   useEffect(() => {
     const currentLevelId = currentRoutine.performance_division_level_id;
     if (!currentLevelId) return;
