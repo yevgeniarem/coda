@@ -11,6 +11,11 @@ const modals = (state = initialState, action) => {
         isModalShown: action.isModalShown,
         modalInfo: action.modalInfo,
       };
+    case 'CLOSE_MODAL':
+      return {
+        ...state,
+        isModalShown: false,
+      };
     default:
       return state;
   }

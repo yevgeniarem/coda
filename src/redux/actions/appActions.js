@@ -66,12 +66,17 @@ export const authLogin = () => (dispatch) => {
   });
 };
 
-// TODO make another action for closing the modal
 export const runModal = ({ isModalShown, modalInfo }) => (dispatch) => {
   dispatch({
     type: 'RUN_MODAL',
     isModalShown,
     modalInfo,
+  });
+};
+
+export const closeModal = () => (dispatch) => {
+  dispatch({
+    type: 'CLOSE_MODAL',
   });
 };
 

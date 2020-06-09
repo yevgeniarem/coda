@@ -2,7 +2,7 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Modal as BootstrapModal, Button } from 'react-bootstrap';
 
-import { runModal } from '../redux/actions/appActions';
+import { closeModal } from '../redux/actions/appActions';
 
 export default function Modal() {
   const dispatch = useDispatch();
@@ -10,7 +10,7 @@ export default function Modal() {
 
   const handleClose = async () => {
     Promise.all([
-      dispatch(runModal(false)),
+      dispatch(closeModal()),
       modalInfo.cancel && modalInfo.cancel(),
     ]);
   };

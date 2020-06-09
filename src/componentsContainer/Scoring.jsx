@@ -37,16 +37,17 @@ export default function Scoring() {
     // eslint-disable-next-line
   }, []);
 
-  // TODO only in useEffect, dont use return the same way as you do functions because useEffect returns have a specific purpose
   useEffect(() => {
-    const currentLevelId = currentRoutine.performance_division_level_id;
-    if (!currentLevelId) return;
-    const buttonsToSet =
-      allButtons &&
-      allButtons.find((b) => b.level_id === currentLevelId).level_4;
-    if (!buttonsToSet) return;
-    setButtons(buttonsToSet);
-    setSplitIndex(splitButtonsIndex(buttonsToSet));
+    (() => {
+      const currentLevelId = currentRoutine.performance_division_level_id;
+      if (!currentLevelId) return;
+      const buttonsToSet =
+        allButtons &&
+        allButtons.find((b) => b.level_id === currentLevelId).level_4;
+      if (!buttonsToSet) return;
+      setButtons(buttonsToSet);
+      setSplitIndex(splitButtonsIndex(buttonsToSet));
+    })();
     // eslint-disable-next-line
   }, [currentRoutine, allButtons]);
 

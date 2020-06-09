@@ -16,12 +16,14 @@ export default function NavbarScoring() {
   const content = initNavbarContent(currentRoutine);
 
   useEffect(() => {
-    if (currentRoutine.routine_id) return;
-    dispatch(
-      updateCurrentRoutine(
-        (routineList && findNextAvailableRoutine(routineList)) || {},
-      ),
-    );
+    (() => {
+      if (currentRoutine.routine_id) return;
+      dispatch(
+        updateCurrentRoutine(
+          (routineList && findNextAvailableRoutine(routineList)) || {},
+        ),
+      );
+    })();
     // eslint-disable-next-line
   }, [routineList]);
 
