@@ -33,10 +33,11 @@ export class Modal {
     this.modalInfo = {
       title: modalInfo.title,
       body: modalInfo.body,
-      button1: modalInfo.button1,
-      button2: modalInfo.button2,
-      confirm: modalInfo.confirm,
-      cancel: modalInfo.cancel,
+      cancel: modalInfo.cancel && {
+        text: modalInfo.cancel.text,
+        func: modalInfo.cancel.func,
+      },
+      confirm: { text: modalInfo.confirm.text, func: modalInfo.confirm.func },
     };
   }
 }

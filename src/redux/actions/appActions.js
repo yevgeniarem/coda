@@ -206,7 +206,7 @@ export const tryLogin = ({ name, password }) => async (dispatch) => {
           modalInfo: {
             title: 'Sorry',
             body: 'You have entered an invalid username or password.',
-            button2: 'OK',
+            confirm: { text: 'OK' },
           },
         }),
       ),

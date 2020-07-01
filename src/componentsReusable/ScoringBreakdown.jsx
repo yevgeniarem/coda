@@ -84,42 +84,46 @@ export default function ScoringBreakdown() {
             modalInfo: {
               title: 'Alert',
               body: 'Are you sure you want to save?',
-              button1: 'GO BACK',
-              button2: 'YES, SAVE',
-              confirm: async () => {
-                await dispatch(
-                  postScore({
-                    competitionGroup,
-                    currentRoutine,
-                    currentEvent,
-                    tourDateId,
-                    currentJudge,
-                    finalNote:
-                      noteValue || applyDefaultNote(judgeList, currentJudge),
-                    score,
-                    not_friendly,
-                    i_choreographed,
-                    position,
-                    teacherJudge,
-                    is_coda,
-                    buttons,
-                    strongest_level_1_id: calculateStrongestCategory(
-                      buttonPercentages,
-                    ),
-                    weakest_level_1_id: calculateWeakestCategory(
-                      buttonPercentages,
-                    ),
-                    routineList,
-                  }),
-                );
-                Promise.all([
-                  dispatch(getRoutineList(inputs)),
-                  dispatch(closeSidebar()),
-                  dispatch(resetScoring()),
-                ]);
+              cancel: {
+                text: 'GO BACK',
+                func: () => {
+                  dispatch(closeSidebar());
+                },
               },
-              cancel: () => {
-                dispatch(closeSidebar());
+              confirm: {
+                text: 'YES, SAVE',
+                func: async () => {
+                  await dispatch(
+                    postScore({
+                      competitionGroup,
+                      currentRoutine,
+                      currentEvent,
+                      tourDateId,
+                      currentJudge,
+                      finalNote:
+                        noteValue || applyDefaultNote(judgeList, currentJudge),
+                      score,
+                      not_friendly,
+                      i_choreographed,
+                      position,
+                      teacherJudge,
+                      is_coda,
+                      buttons,
+                      strongest_level_1_id: calculateStrongestCategory(
+                        buttonPercentages,
+                      ),
+                      weakest_level_1_id: calculateWeakestCategory(
+                        buttonPercentages,
+                      ),
+                      routineList,
+                    }),
+                  );
+                  Promise.all([
+                    dispatch(getRoutineList(inputs)),
+                    dispatch(closeSidebar()),
+                    dispatch(resetScoring()),
+                  ]);
+                },
               },
             },
           }),

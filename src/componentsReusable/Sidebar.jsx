@@ -51,13 +51,17 @@ export default function Sidebar() {
             title: 'Alert',
             body:
               'Are you sure you want to switch routines? Your changes will not be saved.',
-            button1: 'GO BACK',
-            button2: 'YES, SWITCH',
-            confirm: async () => {
-              await dispatch(updateCurrentRoutine(routine));
-              Promise.all([dispatch(closeSidebar()), dispatch(resetScoring())]);
+            cancel: { text: 'GO BACK', cancel: dispatch(closeSidebar()) },
+            confirm: {
+              text: 'YES, SWITCH',
+              func: async () => {
+                await dispatch(updateCurrentRoutine(routine));
+                Promise.all([
+                  dispatch(closeSidebar()),
+                  dispatch(resetScoring()),
+                ]);
+              },
             },
-            cancel: dispatch(closeSidebar()),
           },
         }),
       ),

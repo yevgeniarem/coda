@@ -11,46 +11,48 @@ export default function Modal() {
   const handleClose = async () => {
     Promise.all([
       dispatch(closeModal()),
-      modalInfo.cancel && modalInfo.cancel(),
+      modalInfo.cancel && modalInfo.cancel.func && modalInfo.cancel.func(),
     ]);
   };
 
   const handleClick = async () => {
-    await handleClose();
-    if (modalInfo.confirm) modalInfo.confirm();
+    await dispatch(closeModal());
+    if (modalInfo.confirm.func) modalInfo.confirm.func();
   };
 
   return (
-    <BootstrapModal
-      className="modal"
-      show={isModalShown}
-      onHide={handleClose}
-      centered
-    >
-      <BootstrapModal.Header className="modal__header">
-        <BootstrapModal.Title className="modal__title">
-          {modalInfo && modalInfo.title}
-        </BootstrapModal.Title>
-      </BootstrapModal.Header>
-      <BootstrapModal.Body className="modal__body">
-        {modalInfo && modalInfo.body}
-      </BootstrapModal.Body>
-      <BootstrapModal.Footer className="modal__footer">
-        {modalInfo && modalInfo.button1 && (
+    modalInfo && (
+      <BootstrapModal
+        className="modal"
+        show={isModalShown}
+        onHide={handleClose}
+        centered
+      >
+        <BootstrapModal.Header className="modal__header">
+          <BootstrapModal.Title className="modal__title">
+            {modalInfo.title}
+          </BootstrapModal.Title>
+        </BootstrapModal.Header>
+        <BootstrapModal.Body className="modal__body">
+          {modalInfo.body}
+        </BootstrapModal.Body>
+        <BootstrapModal.Footer className="modal__footer">
+          {modalInfo.cancel && (
+            <Button
+              onClick={handleClose}
+              className="button action-button--navigation action-button--grey"
+            >
+              {modalInfo.cancel.text}
+            </Button>
+          )}
           <Button
-            onClick={handleClose}
-            className="button action-button--navigation action-button--grey"
+            onClick={handleClick}
+            className="button action-button--navigation action-button--blue"
           >
-            {modalInfo && modalInfo.button1}
+            {modalInfo.confirm.text}
           </Button>
-        )}
-        <Button
-          onClick={handleClick}
-          className="button action-button--navigation action-button--blue"
-        >
-          {modalInfo && modalInfo.button2}
-        </Button>
-      </BootstrapModal.Footer>
-    </BootstrapModal>
+        </BootstrapModal.Footer>
+      </BootstrapModal>
+    )
   );
 }

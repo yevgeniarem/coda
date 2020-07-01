@@ -70,9 +70,11 @@ export default function Judges() {
             modalInfo: {
               title: 'Alert',
               body: `${response.data.fname} ${response.data.lname} already has scores from this position for this tour date. If judges are being swapped, this is fine. Continue?`,
-              button1: 'Cancel',
-              button2: 'YES',
-              confirm: handlers.onModalJudgeCheckConfirmed,
+              cancel: { text: 'Cancel' },
+              confirm: {
+                text: 'YES',
+                func: handlers.onModalJudgeCheckConfirmed,
+              },
             },
           }),
         ),
