@@ -87,7 +87,7 @@ export default function Sidebar() {
                       'navbar__sidebar--button',
                       (doesRoutineHaveScore(routine) || routine.canceled) &&
                         'navbar__sidebar--button--disabled',
-                      routine.routine === currentRoutine.routine &&
+                      routine.routine_id === currentRoutine.routine_id &&
                         'navbar__sidebar--button--active',
                     )}
                     key={routine.routine_id}
