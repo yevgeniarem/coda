@@ -12,7 +12,6 @@ import {
   resetScoring,
   closeSidebar,
 } from '../redux/actions/appActions';
-import RefreshButton from './buttons/RefreshButton';
 import {
   formatTourDate,
   renderRoutineNumber,
@@ -102,7 +101,6 @@ export default function Sidebar() {
                 );
               })}
           </div>
-          <RefreshButton />
         </div>
       }
       open={isSidebarOpen}
